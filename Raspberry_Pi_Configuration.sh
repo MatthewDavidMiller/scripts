@@ -97,6 +97,3 @@ systemctl disable bluealsa.service
 
 # Delete the scripttemp folder
 rm -rf /scripttemp
-
-# See the script while running
-pause
