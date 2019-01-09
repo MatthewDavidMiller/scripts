@@ -26,8 +26,25 @@
 
 # Run the script as root
 
-/usr/bin/apt-get update && /usr/bin/apt-get upgrade -y
-/usr/bin/rpi-update
+# Create a temporary Directory
+mkdir /temp/scripttemp
+
+# Variable for words to search for when updating.
+search_for_these_words="0 upgraded"
+
+
+# File to search through.
+file_to_search_for_words=/temp/scripttemp/temp.txt
+
+
+/usr/bin/apt-get update && /usr/bin/rpi-update && /usr/bin/apt-get upgrade -y > ${file_to_search_for_words} | (while true ; do
+tail -f -c 0 ${file_to_search_for_words} | read -r apps_updated
+printf ${apps_updated} | grep -q ${search_for_these_words}
+if [ "$?" = "1" ] ; then
 /usr/bin/apt-get autoremove --purge
 /usr/bin/apt-get autoclean
+rm -rf /temp/scripttemp
 /sbin/reboot
+fi
+done
+)
