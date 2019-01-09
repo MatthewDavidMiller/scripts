@@ -31,7 +31,7 @@
 /usr/bin/touch /tmp/scripttemp/temp.txt
 
 # Update the applications
-/usr/bin/apt-get update && /usr/bin/rpi-update && /usr/bin/apt-get upgrade -y |& /usr/bin/tee -a ${file_to_search_for_words}
+/usr/bin/apt-get update && /usr/bin/rpi-update && /usr/bin/apt-get upgrade -y |& /usr/bin/tee -a /tmp/scripttemp/temp.txt
 /bin/grep -qi '0 upgraded' /tmp/scripttemp/temp.txt
 if [ "$?" = "1" ] ; then
 /usr/bin/apt-get autoremove --purge
