@@ -51,8 +51,8 @@ echo 'matthew    ALL= (ALL) ALL' | sudo EDITOR='tee -a' visudo
 deluser -remove-home pi
 
 # Create Directories
-mkdir /home/matthew/scripts
-mkdir /home/matthew/logs
+mkdir -p /home/matthew/scripts
+mkdir -p /home/matthew/logs
 
 # Install and update applications
 /usr/bin/apt-get update && /usr/bin/apt-get upgrade -y 
@@ -64,9 +64,9 @@ read -sp 'Specify SSH Password: ' sshpassword
 ssh-keygen -t rsa -b 2048 -N $sshpassword
 cat /home/matthew/.ssh/id_rsa.pub >> /home/matthew/.ssh/authorized_keys
 chmod 644 /home/matthew/.ssh/authorized_keys
-mkdir /scripttemp
-git clone https://gist.github.com/a297b08ed75e362e7c0ad71e4b8ee4a1.git /scripttemp/ssh_config
-cp /scripttemp/ssh_config/sshd_config /etc/ssh/sshd_config
+mkdir -p /tmp/scripttemp
+git clone https://gist.github.com/a297b08ed75e362e7c0ad71e4b8ee4a1.git /tmp/scripttemp/ssh_config
+cp /tmp/scripttemp/ssh_config/sshd_config /etc/ssh/sshd_config
 service ssh reload
 
 # Configure Fail2ban
@@ -81,19 +81,19 @@ ufw reset
 ufw limit ssh/tcp
 ufw limit 40040/udp
 ufw allow from 10.3.0.0/24
-git clone https://gist.github.com/f72bda03009cf18d114faece6896e0bc.git /scripttemp/ufw_config
-cp /scripttemp/ufw_config/ufw /etc/default/ufw
-cp /scripttemp/ufw_config/ufw_sysctl_config /etc/ufw/sysctl.conf
-cp /scripttemp/ufw_config/ufw_before_rules /etc/ufw/before.rules
+git clone https://gist.github.com/f72bda03009cf18d114faece6896e0bc.git /tmp/scripttemp/ufw_config
+cp /tmp/scripttemp/ufw_config/ufw /etc/default/ufw
+cp /tmp/scripttemp/ufw_config/ufw_sysctl_config /etc/ufw/sysctl.conf
+cp /tmp/scripttemp/ufw_config/ufw_before_rules /etc/ufw/before.rules
 ufw enable
 bash -c "iptables-save > /etc/iptables.rules"
 
 # Disable Bluetooth
-git clone https://gist.github.com/09ff037b0693aa246a0ec2897630cf6f.git /scripttemp/boot_config
-cp /scripttemp/boot_config/raspberry_pi_boot_config /boot/config.txt
+git clone https://gist.github.com/09ff037b0693aa246a0ec2897630cf6f.git /tmp/scripttemp/boot_config
+cp /tmp/scripttemp/boot_config/raspberry_pi_boot_config /boot/config.txt
 systemctl disable hciuart.service
 systemctl disable bluetooth.service
 systemctl disable bluealsa.service
 
 # Delete the scripttemp folder
-rm -rf /scripttemp
+rm -rf /tmp/scripttemp
