@@ -1,5 +1,23 @@
 #!/bin/bash
 
+# This script is used to automatically update the Raspberry Pi when used in cron.
+
+# Run the script as root
+
+# Create a temporary Directory
+/bin/mkdir -p /tmp/scripttemp
+/usr/bin/touch /tmp/scripttemp/temp.txt
+
+# Update the applications
+/usr/bin/apt-get update && /usr/bin/rpi-update && /usr/bin/apt-get upgrade -y |& /usr/bin/tee -a /tmp/scripttemp/temp.txt
+/bin/grep -qi '0 upgraded' /tmp/scripttemp/temp.txt
+if [ "$?" = "1" ] ; then
+/usr/bin/apt-get autoremove --purge
+/usr/bin/apt-get autoclean
+/bin/rm -rf /tmp/scripttemp
+/sbin/reboot
+fi
+
 # MIT License
 
 # Copyright (c) 2019 Matthew David Miller
@@ -21,21 +39,3 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-
-# This script is used to automatically update the Raspberry Pi when used in cron.
-
-# Run the script as root
-
-# Create a temporary Directory
-/bin/mkdir -p /tmp/scripttemp
-/usr/bin/touch /tmp/scripttemp/temp.txt
-
-# Update the applications
-/usr/bin/apt-get update && /usr/bin/rpi-update && /usr/bin/apt-get upgrade -y |& /usr/bin/tee -a /tmp/scripttemp/temp.txt
-/bin/grep -qi '0 upgraded' /tmp/scripttemp/temp.txt
-if [ "$?" = "1" ] ; then
-/usr/bin/apt-get autoremove --purge
-/usr/bin/apt-get autoclean
-/bin/rm -rf /tmp/scripttemp
-/sbin/reboot
-fi
