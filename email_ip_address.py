@@ -1,3 +1,5 @@
+# Script is currently a work in progress.  Some portions of the script may not work yet.
+
 # Run the script as root.
 
 # Libraries to import.
