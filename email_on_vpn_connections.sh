@@ -2,6 +2,8 @@
 
 # This script is used to email the admin when a VPN connection is established on the VPN server.
 
+# Script is currently a work in progress.  Some portions of the script may not work yet.
+
 # Run the script as root
 
 # Variable for words to search for in the log file.
