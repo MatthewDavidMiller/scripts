@@ -4,13 +4,17 @@
 
 # Run the script as root
 
+# Variables
+script_temp="/tmp/scripttemp/temp.txt"
+words_to_look_for="0 upgraded"
+
 # Create a temporary Directory
 /bin/mkdir -p /tmp/scripttemp
-/usr/bin/touch /tmp/scripttemp/temp.txt
+/usr/bin/touch "${script_temp}"
 
 # Update the applications
-/usr/bin/apt-get update && /usr/bin/rpi-update && /usr/bin/apt-get upgrade -y |& /usr/bin/tee -a /tmp/scripttemp/temp.txt
-/bin/grep -qi '0 upgraded' /tmp/scripttemp/temp.txt
+/usr/bin/apt-get update && /usr/bin/rpi-update && /usr/bin/apt-get upgrade -y |& /usr/bin/tee -a "${script_temp}"
+/bin/grep -qi "${words_to_look_for}" "${script_temp}"
 if [ "$?" = "1" ] ; then
 /usr/bin/apt-get autoremove --purge
 /usr/bin/apt-get autoclean
