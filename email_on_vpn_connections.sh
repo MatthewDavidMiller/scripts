@@ -8,19 +8,19 @@
 search_for_these_words="Connection"
 
 # File to search through.
-file_to_search_for_words=/var/log/openvpn.log
+file_to_search_for_words="/var/log/openvpn.log"
 
 # Subject Header of email to send.
 message_subject="Connection Established on VPN"
 
 # Email address to send the email to.
-emailtosendto="matthewdavidmiller1@gmail.com"
+email_to_send_to="matthewdavidmiller1@gmail.com"
 
-tail -f -c 0 ${file_to_search_for_words} | (while true ; do
+tail -f -c 0 "${file_to_search_for_words}" | (while true ; do
 read -r new_connection_established
-printf ${new_connection_established} | grep -q ${search_for_these_words}
+printf "${new_connection_established}" | grep -q "${search_for_these_words}"
 if [ "$?" = "0" ] ; then
-printf "${new_connection_established}" | mail -s ${message_subject} ${emailtosendto}
+printf "${new_connection_established}" | mail -s "${message_subject}" "${emailtosendto}"
 fi
 done
 )
