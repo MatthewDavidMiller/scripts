@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# The Script is a work in progress and some portions of the script may not work.
+
 # This script is used to automatically update the Raspberry Pi when used in cron.
 
 # Run the script as root
