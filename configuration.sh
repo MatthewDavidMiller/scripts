@@ -7,32 +7,44 @@
 # Basic Configuration
 
 # Configure locale
-cp /etc/locale.gen /etc/locale.gen.dist
-sed -i -e "/^[^#]/s/^/#/" -e "/en_US.UTF-8/s/^#//" /etc/locale.gen
-cp /var/cache/debconf/config.dat /var/cache/debconf/config.dat.dist
-sed -i -e "/^Value: en_GB.UTF-8/s/en_GB/en_US/" \
-	-e "/^ locales = en_GB.UTF-8/s/en_GB/en_US/" /var/cache/debconf/config.dat
+locale="LANG=en_US.UTF-8"
+locale_gen_location="/etc/locale.gen"
+locale_gen_backup_location="/etc/locale.gen.backup"
+
+cp "${locale_gen_location}" "${locale_gen_backup_location}"
+sed -i -e "/^[^#]/s/^/#/" -e "/en_US.UTF-8/s/^#//" "${locale_gen_location}"
 locale-gen
-update-locale LANG=en_US.UTF-8
+update-locale "${locale}"
 
 # Configure timezone
-cp /etc/timezone /etc/timezone.dist
-echo "America/New_York" > /etc/timezone
+timezone_location="/etc/timezone"
+timezone_backup_location="/etc/timezone.backup"
+
+cp "${timezone_location}" "${timezone_backup_location}"
+echo "America/New_York" > "${timezone_location}"
 dpkg-reconfigure -f noninteractive tzdata
 
 # Configure Keyboard
-cp /etc/default/keyboard /etc/default/keyboard.dist
-sed -i -e "/XKBLAYOUT=/s/gb/us/" /etc/default/keyboard
+keyboard_location="/etc/default/keyboard"
+keyboard_backup_location="/etc/default/keyboard.backup"
+
+cp "${keyboard_location}" "${keyboard_backup_location}"
+sed -i -e "/XKBLAYOUT=us" "${keyboard_location}"
 service keyboard-setup restart
 
 # Adduser and delete the default user
-adduser matthew
-echo 'matthew    ALL= (ALL) ALL' | sudo EDITOR='tee -a' visudo
+user="matthew"
+
+adduser "${user}"
+echo "${user}    ALL= (ALL) ALL" | sudo EDITOR="tee -a" visudo
 deluser -remove-home pi
 
 # Create Directories
-mkdir -p /home/matthew/scripts
-mkdir -p /home/matthew/logs
+scripts_directory="/home/matthew/scripts"
+logs_directory="/home/matthew/logs"
+
+mkdir -p "${scripts_directory}"
+mkdir -p "${logs_directory}"
 
 # Install and update applications
 /usr/bin/apt-get update && /usr/bin/apt-get upgrade -y 
@@ -40,7 +52,7 @@ mkdir -p /home/matthew/logs
 
 # Create SSH Key and configure SSH
 service ssh start
-read -sp 'Specify SSH Password: ' sshpassword
+read -sp "Specify SSH Password: " sshpassword
 ssh-keygen -t rsa -b 2048 -N $sshpassword
 cat /home/matthew/.ssh/id_rsa.pub >> /home/matthew/.ssh/authorized_keys
 chmod 644 /home/matthew/.ssh/authorized_keys
