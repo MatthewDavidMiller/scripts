@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# The script is a work in progress and some portions of the script may not work yet.
+
 # Simple script to clear log files I have setup.
 
 # Variables

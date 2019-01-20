@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# The script is a work in progress and some parts of the script may not work.
+
 # This script is used to email the admin when a VPN connection is established on the VPN server.
 
 # Run the script as root
