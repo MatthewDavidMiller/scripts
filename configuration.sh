@@ -48,47 +48,65 @@ mkdir -p "${logs_directory}"
 
 # Install and update applications
 /usr/bin/apt-get update && /usr/bin/apt-get upgrade -y 
-/usr/bin/apt-get install ufw fail2ban apt-listchanges ssmtp mailutils git -y
+/usr/bin/apt-get install ufw fail2ban apt-listchanges ssmtp mailutils git curl -y
 
 # Create SSH Key and configure SSH
+ssh_default_public_key_location="/home/matthew/.ssh/id_rsa.pub"
+ssh_authorized_keys_location="/home/matthew/.ssh/authorized_keys"
+script_temp_location="/tmp/scripttemp"
+temp_ssh_config="/tmp/scripttemp/ssh_config"
+sshd_config_location="/etc/ssh/sshd_config"
+
 service ssh start
 read -sp "Specify SSH Password: " sshpassword
-ssh-keygen -t rsa -b 2048 -N $sshpassword
-cat /home/matthew/.ssh/id_rsa.pub >> /home/matthew/.ssh/authorized_keys
-chmod 644 /home/matthew/.ssh/authorized_keys
-mkdir -p /tmp/scripttemp
-git clone https://gist.github.com/a297b08ed75e362e7c0ad71e4b8ee4a1.git /tmp/scripttemp/ssh_config
-cp /tmp/scripttemp/ssh_config/sshd_config /etc/ssh/sshd_config
+ssh-keygen -t rsa -b 2048 -N "${sshpassword}"
+cat "${ssh_default_public_key_location}" >> "${ssh_authorized_keys_location}"
+chmod 644 "${ssh_authorized_keys_location}"
+mkdir -p "${script_temp_location}"
+git clone https://gist.github.com/a297b08ed75e362e7c0ad71e4b8ee4a1.git "${temp_ssh_config}"
+cp "${temp_ssh_config}/sshd_config" "${sshd_config_location}"
 service ssh reload
 
 # Configure Fail2ban
-cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+fail2ban_default_location="/etc/fail2ban/jail.conf"
+fail2ban_new_location="/etc/fail2ban/jail.local"
+
+cp "${fail2ban_default_location}" "${fail2ban_new_location}"
 
 # Configure OpenVPN Server
-curl -L https://install.pivpn.io
-pivpn add matthew
+curl -L https://install.pivpn.io | bash
+pivpn add "${user}"
 
 # Configure firewall rules
+ufw_temp_location="/tmp/scripttemp/ufw_config"
+ufw_default_config_location="/etc/default/ufw"
+ufw_sysctl_location="/etc/ufw/sysctl.conf"
+ufw_before_rules_location="/etc/ufw/before.rules"
+ip_tables_rules_location="/etc/iptables.rules"
+
 ufw reset
 ufw limit ssh/tcp
 ufw limit 40040/udp
 ufw allow from 10.3.0.0/24
-git clone https://gist.github.com/f72bda03009cf18d114faece6896e0bc.git /tmp/scripttemp/ufw_config
-cp /tmp/scripttemp/ufw_config/ufw /etc/default/ufw
-cp /tmp/scripttemp/ufw_config/ufw_sysctl_config /etc/ufw/sysctl.conf
-cp /tmp/scripttemp/ufw_config/ufw_before_rules /etc/ufw/before.rules
+git clone https://gist.github.com/f72bda03009cf18d114faece6896e0bc.git "${ufw_temp_location}"
+cp "${ufw_temp_location}/ufw" "${ufw_default_config_location}"
+cp "${ufw_temp_location}/ufw_sysctl_config" "${ufw_sysctl_location}"
+cp "${ufw_temp_location}/ufw_before_rules" "${ufw_before_rules_location}"
 ufw enable
-bash -c "iptables-save > /etc/iptables.rules"
+bash -c "iptables-save > ${ip_tables_rules_location}"
 
 # Disable Bluetooth
-git clone https://gist.github.com/09ff037b0693aa246a0ec2897630cf6f.git /tmp/scripttemp/boot_config
-cp /tmp/scripttemp/boot_config/raspberry_pi_boot_config /boot/config.txt
+boot_config_temp_location="/tmp/scripttemp/boot_config"
+boot_config_location="/boot/config.txt"
+
+git clone https://gist.github.com/09ff037b0693aa246a0ec2897630cf6f.git "${boot_config_temp_location}"
+cp "${boot_config_temp_location}/raspberry_pi_boot_config" "${boot_config_location}"
 systemctl disable hciuart.service
 systemctl disable bluetooth.service
 systemctl disable bluealsa.service
 
 # Delete the scripttemp folder
-rm -rf /tmp/scripttemp
+rm -rf "${script_temp_location}"
 
 # MIT License
 
