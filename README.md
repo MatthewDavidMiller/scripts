@@ -1,7 +1,6 @@
 # Raspberry_Pi_Scripts
-Matthew's Raspberry Pi scripts.
+This repository contains scripts I have created for use with a Raspberry Pi running Raspbian.
 
-This repository contains script I have created for use with a Raspberry Pi running Raspbian.
 
 MIT License
 
