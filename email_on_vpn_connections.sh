@@ -6,26 +6,33 @@
 
 # Run the script as root
 
-# Variable for words to search for in the log file.
-search_for_these_words="Connection"
+# Variables to edit based on configuration.
+	# Variable for words to search for in the log file.
+	search_for_these_words="Connection"
+	# File to search through.
+	file_to_search_for_words="/var/log/openvpn.log"
+	# Subject Header of email to send.
+	message_subject="Connection Established on VPN"
+	# Email address to send the email to.
+	email_to_send_to="matthewdavidmiller1@gmail.com"
+	# Tail command location.
+	tail_command="/usr/bin/tail"
+	# Printf command location.
+	printf_command="/usr/bin/printf"
+	# Grep command location.
+	grep_command="/bin/grep"
+	# Mail command location.
+	mail_command="/usr/bin/mail"
 
-# File to search through.
-file_to_search_for_words="/var/log/openvpn.log"
-
-# Subject Header of email to send.
-message_subject="Connection Established on VPN"
-
-# Email address to send the email to.
-email_to_send_to="matthewdavidmiller1@gmail.com"
-
-/usr/bin/tail -f -c 0 "${file_to_search_for_words}" | (while true ; do
-read -r new_connection_established
-/usr/bin/printf "${new_connection_established}" | /bin/grep -q "${search_for_these_words}"
-if [ "$?" = "0" ] ; then
-/usr/bin/printf "${new_connection_established}" | /usr/bin/mail -s "${message_subject}" "${emailtosendto}"
-fi
-done
-)
+# Script
+	"${tail_command}" -f -c 0 "${file_to_search_for_words}" | (while true ; do
+		read -r new_connection_established
+		"${printf_command}" "${new_connection_established}" | "${grep_command}" -q "${search_for_these_words}"
+	if [ "$?" = "0" ] ; then
+		"${printf_command}" "${new_connection_established}" | "${mail_command}" -s "${message_subject}" "${emailtosendto}"
+	fi
+	done
+	)
 
 # MIT License
 

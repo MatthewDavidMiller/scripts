@@ -4,19 +4,20 @@
 
 # Simple script to clear log files I have setup.
 
-# Variables
+# Variables to edit based on configuration.
 reload_ufw_log="/home/matthew/logs/reloadufw.log"
 update_log="/home/matthew/logs/update.log"
 send_ip_address_log="/home/matthew/logs/send_ip_address.log"
 freedns_log="/home/matthew/logs/freedns_matthewmiller_us_to.log"
 email_vpn_connections_log="/home/matthew/logs/get_email_from_vpn_connections.log"
+find_command="/usr/bin/find"
 
 # Script to delete logs
-/usr/bin/find "${reload_ufw_log}" -mtime +30 -delete
-/usr/bin/find "${update_log}" -mtime +30 -delete
-/usr/bin/find "${send_ip_address_log}" -mtime +30 -delete
-/usr/bin/find "${freedns_log}" -mtime +30 -delete
-/usr/bin/find "${email_vpn_connections_log}" -mtime +30 -delete
+"${find_command}" "${reload_ufw_log}" -mtime +12 -delete
+"${find_command}" "${update_log}" -mtime +12 -delete
+"${find_command}" "${send_ip_address_log}" -mtime +12 -delete
+"${find_command}" "${freedns_log}" -mtime +12 -delete
+"${find_command}" "${email_vpn_connections_log}" -mtime +12 -delete
 
 # MIT License
 

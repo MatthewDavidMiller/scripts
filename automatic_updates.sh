@@ -6,24 +6,32 @@
 
 # Run the script as root
 
-# Variables
-script_temp="/tmp/scripttemp/temp.txt"
-words_to_look_for="0 upgraded"
+# Variables to edit based on configuration.
+	script_temp_folder="/tmp/scripttemp"
+	script_temp_file="/tmp/scripttemp/temp.txt"
+	words_to_look_for="0 upgraded"
+	mkdir_command="/bin/mkdir"
+	touch_command="/usr/bin/touch"
+	apt_get_command="/usr/bin/apt-get"
+	tee_command="/usr/bin/tee"
+	grep_command="/bin/grep"
+	rm_command="/bin/rm"
+	reboot_command="/sbin/reboot"
 
 # Create a temporary Directory
-/bin/mkdir -p /tmp/scripttemp
-/usr/bin/touch "${script_temp}"
+	"${mkdir_command}" -p "${script_temp_folder}"
+	"${touch_command}" "${script_temp_file}"
 
 # Update the applications
-/usr/bin/apt-get update
-/usr/bin/apt-get upgrade -y |& /usr/bin/tee -a "${script_temp}"
-/bin/grep -qi "${words_to_look_for}" "${script_temp}"
-if [ "$?" = "1" ] ; then
-/usr/bin/apt-get autoremove --purge
-/usr/bin/apt-get autoclean
-/bin/rm -rf /tmp/scripttemp
-/sbin/reboot
-fi
+	"${apt_get_command}" update
+	"${apt_get_command}" upgrade -y |& "${tee_command}" -a "${script_temp}"
+	"${grep_command}" -qi "${words_to_look_for}" "${script_temp}"
+	if [ "$?" = "1" ] ; then
+		"${apt_get_command}" autoremove --purge
+		"${apt_get_command}" autoclean
+		"${rm_command}" -rf "${script_temp_folder}"
+		"${reboot_command}"
+	fi
 
 # MIT License
 
