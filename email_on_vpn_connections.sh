@@ -18,11 +18,11 @@ message_subject="Connection Established on VPN"
 # Email address to send the email to.
 email_to_send_to="matthewdavidmiller1@gmail.com"
 
-tail -f -c 0 "${file_to_search_for_words}" | (while true ; do
+/usr/bin/tail -f -c 0 "${file_to_search_for_words}" | (while true ; do
 read -r new_connection_established
-printf "${new_connection_established}" | grep -q "${search_for_these_words}"
+/usr/bin/printf "${new_connection_established}" | /bin/grep -q "${search_for_these_words}"
 if [ "$?" = "0" ] ; then
-printf "${new_connection_established}" | mail -s "${message_subject}" "${emailtosendto}"
+/usr/bin/printf "${new_connection_established}" | /usr/bin/mail -s "${message_subject}" "${emailtosendto}"
 fi
 done
 )
