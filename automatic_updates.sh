@@ -16,7 +16,6 @@ words_to_look_for="0 upgraded"
 
 # Update the applications
 /usr/bin/apt-get update
-/usr/bin/rpi-update
 /usr/bin/apt-get upgrade -y |& /usr/bin/tee -a "${script_temp}"
 /bin/grep -qi "${words_to_look_for}" "${script_temp}"
 if [ "$?" = "1" ] ; then
