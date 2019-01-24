@@ -1,7 +1,13 @@
 #!/bin/sh
 
 # Simple script to reload the firewall.
-/usr/sbin/ufw reload
+
+# Variables to edit based on configuration.
+	# Ufw command location.
+	ufw_command="/usr/sbin/ufw"
+
+# Script
+	"${ufw_command}" reload
 
 # MIT License
 
