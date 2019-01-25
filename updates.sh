@@ -1,21 +1,37 @@
-#!/bin/sh
+#!/bin/bash
 
-# The script is a work in progress and some portions of the script may not work yet.
+# The Script is a work in progress and some portions of the script may not work.
 
-# Simple script to clear log files I have setup.
+# This script is used to automatically update the Raspberry Pi when used in cron.
+
+# Run the script as root
 
 # Variables to edit based on configuration.
-log_1="/home/matthew/logs/update.log"
-log_2="/home/matthew/logs/send_ip_address.log"
-log_3="/home/matthew/logs/freedns_matthewmiller_us_to.log"
-log_4="/home/matthew/logs/get_email_from_vpn_connections.log"
-find_command="/usr/bin/find"
+	script_temp_folder="/tmp/scripttemp"
+	script_temp_file="/tmp/scripttemp/temp.txt"
+	words_to_look_for="0 upgraded"
+	mkdir_command="/bin/mkdir"
+	touch_command="/usr/bin/touch"
+	apt_get_command="/usr/bin/apt-get"
+	tee_command="/usr/bin/tee"
+	grep_command="/bin/grep"
+	rm_command="/bin/rm"
+	reboot_command="/sbin/reboot"
 
-# Script to delete logs
-"${find_command}" "${log_1}" -mtime +12 -delete
-"${find_command}" "${log_2}" -mtime +12 -delete
-"${find_command}" "${log_3}" -mtime +12 -delete
-"${find_command}" "${log_4}" -mtime +12 -delete
+# Create a temporary Directory
+	"${mkdir_command}" -p "${script_temp_folder}"
+	"${touch_command}" "${script_temp_file}"
+
+# Update the applications
+	"${apt_get_command}" update
+	"${apt_get_command}" upgrade -y |& "${tee_command}" -a "${script_temp_file}"
+	"${grep_command}" -qi "${words_to_look_for}" /tmp/scripttemp/temp.txt
+	if [ "$?" = "1" ] ; then
+		"${apt_get_command}" autoremove --purge
+		"${apt_get_command}" autoclean
+		"${rm_command}" -rf "${script_temp_folder}"
+		"${reboot_command}"
+	fi
 
 # MIT License
 
