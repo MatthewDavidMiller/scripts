@@ -8,32 +8,21 @@ import subprocess
 
 # Variables to edit based on configuration.
 
-script_temp_folder = '/tmp/scripttemp'
-script_temp_file = '/tmp/scripttemp/temp.txt'
 words_to_look_for = '0 upgraded'
-mkdir_command = '/bin/mkdir'
-touch_command = '/usr/bin/touch'
 apt_get_command = '/usr/bin/apt-get'
-tee_command = '/usr/bin/tee'
-grep_command = '/bin/grep'
-rm_command = '/bin/rm'
 reboot_command = '/sbin/reboot'
-
-# Create a temporary Directory
-
-subprocess.check_output([mkdir_command, "-p", script_temp_folder])
-subprocess.check_output([touch_command, script_temp_file])
 
 # Update the applications
 
 subprocess.check_output([apt_get_command, "update"])
-subprocess.check_output([apt_get_command, "upgrade", "-y"]) | subprocess.check_output([tee_command, "-a", script_temp_file])
-grep_output = subprocess.check_output([grep_command, "-qi", words_to_look_for, script_temp_file])
-if grep_output == False:
+proc = subprocess.Popen(apt_get_command, "upgrade", "-y", stdout=subprocess.PIPE)
+update_output = proc.stdout.read()
+if words_to_look_for not in update_output:
     subprocess.check_output([apt_get_command, "autoremove", "--purge"])
     subprocess.check_output([apt_get_command, "autoclean"])
-    subprocess.check_output([rm_command, "-rf", script_temp_folder])
     subprocess.check_output([reboot_command])
+else:
+    print('No updates available.')
 
 # MIT License
 
