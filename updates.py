@@ -15,9 +15,9 @@ reboot_command = '/sbin/reboot'
 # Update the applications
 
 subprocess.check_output([apt_get_command, "update"])
-proc = subprocess.Popen(apt_get_command, "upgrade", "-y", stdout=subprocess.PIPE)
-update_output = proc.stdout.read()
-if words_to_look_for not in update_output:
+upgrade_packages = subprocess.Popen([apt_get_command, "upgrade", "-y"], stdout=subprocess.PIPE)
+update_output = upgrade_packages.stdout.read()
+if bytes(words_to_look_for, encoding='utf-8') not in update_output:
     subprocess.check_output([apt_get_command, "autoremove", "--purge"])
     subprocess.check_output([apt_get_command, "autoclean"])
     subprocess.check_output([reboot_command])
