@@ -1,12 +1,12 @@
-# Script is currently a work in progress.  Some portions of the script may not work.
-
 # Run the script as root.
 
 # Libraries to import.
+
 import smtplib
 import urllib.request
 
 # Variables to edit
+
 ip_address = urllib.request.urlopen("https://api.ipify.org").read()
 email_ssl = smtplib.SMTP_SSL('smtp.gmail.com', 465)
 email_address = 'matthew.miller.secondary@gmail.com'
@@ -14,7 +14,7 @@ email_address_to_send_to = 'matthewdavidmiller1@gmail.com'
 email_subject = 'IP address of Raspberry Pi'
 email_body = ip_address
 email_password = 'Password'
-    full_email = """\
+full_email = """\
     From: %s
     To: %s
     Subject: %s
@@ -24,15 +24,15 @@ email_password = 'Password'
 
 # Script to email ip address.
 
-    try:
-        server_ssl.ehlo()
-        server.login(email_address, email_password)
-        server.sendmail(email_address, email_address_to_send_to, full_email)
-        server.close()
+try:
+    server_ssl.ehlo()
+    server.login(email_address, email_password)
+    server.sendmail(email_address, email_address_to_send_to, full_email)
+    server.close()
 
-            print 'Email successfully sent.'
-                except:
-                    print 'Error detected.'
+    print('Email successfully sent.')
+except:
+    print('Error detected.')
 
 
 # MIT License
