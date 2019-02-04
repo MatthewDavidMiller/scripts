@@ -6,18 +6,18 @@ import subprocess
 
 # Variables to edit based on configuration.
 
-log_1 = "/home/matthew/logs/update.log"
-log_2 = "/home/matthew/logs/send_ip_address.log"
-log_3 = "/home/matthew/logs/freedns_matthewmiller_us_to.log"
-log_4 = "/home/matthew/logs/get_email_from_vpn_connections.log"
-find_command = "/usr/bin/find"
+log_1 = '/home/matthew/logs/update.log'
+log_2 = '/home/matthew/logs/send_ip_address.log'
+log_3 = '/home/matthew/logs/freedns_matthewmiller_us_to.log'
+log_4 = '/home/matthew/logs/get_email_from_vpn_connections.log'
+find_command = '/usr/bin/find'
 
 # Script to delete logs
 
-subprocess.check_output([find_command, log_1, "-mtime", "+12", "-delete"])
-subprocess.check_output([find_command, log_2, "-mtime", "+12", "-delete"])
-subprocess.check_output([find_command, log_3, "-mtime", "+12", "-delete"])
-subprocess.check_output([find_command, log_4, "-mtime", "+12", "-delete"])
+subprocess.check_output([find_command, log_1, '-mtime', '+12', '-delete'])
+subprocess.check_output([find_command, log_2, '-mtime', '+12', '-delete'])
+subprocess.check_output([find_command, log_3, '-mtime', '+12', '-delete'])
+subprocess.check_output([find_command, log_4, '-mtime', '+12', '-delete'])
 
 # MIT License
 
