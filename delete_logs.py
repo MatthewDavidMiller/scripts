@@ -14,10 +14,10 @@ find_command = '/usr/bin/find'
 
 # Script to delete logs
 
-subprocess.check_output([find_command, log_1, '-mtime', '+12', '-delete'])
-subprocess.check_output([find_command, log_2, '-mtime', '+12', '-delete'])
-subprocess.check_output([find_command, log_3, '-mtime', '+12', '-delete'])
-subprocess.check_output([find_command, log_4, '-mtime', '+12', '-delete'])
+subprocess.check_output([find_command, log_1, '-size', '40M', '-delete'])
+subprocess.check_output([find_command, log_2, '-size', '40M', '-delete'])
+subprocess.check_output([find_command, log_3, '-size', '40M', '-delete'])
+subprocess.check_output([find_command, log_4, '-size', '40M', '-delete'])
 
 # MIT License
 
