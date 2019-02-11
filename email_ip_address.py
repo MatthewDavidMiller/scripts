@@ -23,6 +23,12 @@ full_email['Subject'] = email_subject
 full_email.attach(MIMEText(email_body, 'plain'))
 email = full_email.as_string()
 
+# Prints date
+
+date = subprocess.check_output(["date", "+'%m/%d/%Y %H:%M:%S'"])
+
+print(date)
+
 # Script to email ip address.
 
 try:

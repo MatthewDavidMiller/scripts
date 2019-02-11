@@ -12,6 +12,12 @@ words_to_look_for = '0 upgraded'
 apt_get_command = '/usr/bin/apt-get'
 reboot_command = '/sbin/reboot'
 
+# Prints date
+
+date = subprocess.check_output(["date", "+'%m/%d/%Y %H:%M:%S'"])
+
+print(date)
+
 # Update the applications
 
 subprocess.check_output([apt_get_command, "update"])
