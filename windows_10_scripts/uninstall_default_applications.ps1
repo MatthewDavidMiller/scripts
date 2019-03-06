@@ -88,9 +88,9 @@ Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_38)" | Remove-AppxPac
 Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_39)" | Remove-AppxPackage
 Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_40)" | Remove-AppxPackage
 
-# MIT License
+# Copyright (c) 2019 Matthew David Miller. All rights reserved.
 
-# Copyright (c) 2019 Matthew David Miller
+# MIT License
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal

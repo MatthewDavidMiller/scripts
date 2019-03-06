@@ -25,9 +25,9 @@ subprocess.check_output([find_command, log_2, '-size', '40M', '-delete'])
 subprocess.check_output([find_command, log_3, '-size', '40M', '-delete'])
 subprocess.check_output([find_command, log_4, '-size', '40M', '-delete'])
 
-# MIT License
+# Copyright (c) 2019 Matthew David Miller. All rights reserved.
 
-# Copyright (c) 2019 Matthew David Miller
+# MIT License
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal

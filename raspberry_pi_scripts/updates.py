@@ -30,9 +30,9 @@ if bytes(words_to_look_for, encoding='utf-8') not in update_output:
 else:
     print('No updates available.')
 
-# MIT License
+# Copyright (c) 2019 Matthew David Miller. All rights reserved.
 
-# Copyright (c) 2019 Matthew David Miller
+# MIT License
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal

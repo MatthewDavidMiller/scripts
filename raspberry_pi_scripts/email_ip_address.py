@@ -42,9 +42,9 @@ except:
     print('Error detected.')
 
 
-# MIT License
+# Copyright (c) 2019 Matthew David Miller. All rights reserved.
 
-# Copyright (c) 2019 Matthew David Miller
+# MIT License
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
