@@ -1,4 +1,4 @@
-# This script is used to automatically update the Raspberry Pi when used in cron.
+# This script is used to automatically update a debian based distro when used in cron.
 
 # Run the script as root
 
