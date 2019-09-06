@@ -5,8 +5,9 @@
 #!/bin/bash
 
 # This script is used to email the admin when a VPN connection is established on the VPN server.
-
 # Run the script as root
+# Add to /etc/crontab
+# @reboot   root    /bin/bash /usr/local/bin/email_on_vpn_connections.sh
 
 # Variables to edit based on configuration.
 
@@ -31,6 +32,9 @@ grep_command="/bin/grep"
 # Mail command location.
 mail_command="/usr/bin/mail"
 
+# Sleep command location
+sleep_command="/bin/sleep"
+
 # Script
 
 "${tail_command}" -f -c 0 "${file_to_search_for_words}" | (while true ; do
@@ -38,6 +42,7 @@ mail_command="/usr/bin/mail"
 	"${printf_command}" "${new_connection_established}" | "${grep_command}" -q "${search_for_these_words}"
 if [ "$?" = "0" ] ; then
 	"${printf_command}" "${new_connection_established}" | "${mail_command}" -s "${message_subject}" matthewdavidmiller1@gmail.com
+	"${sleep_command}" 720
 fi
 done
 )
