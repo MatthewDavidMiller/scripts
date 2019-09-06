@@ -1,10 +1,10 @@
-# Copyright (c) 2019 Matthew David Miller. All rights reserved.
+#!/bin/bash
 
+# Copyright (c) 2019 Matthew David Miller. All rights reserved.
 # Licensed under the MIT License.
 
-#!/bin/bash
 # Add this cron job to /etc/crontab
-# */2 *   * * *   root    /bin/bash /usr/local/bin/network_reconnect.sh
+# @reboot /bin/bash /usr/local/bin/network_reconnect.sh
 
 # Gateway ip
 gateway='10.2.1.1'
@@ -34,19 +34,22 @@ echo="/bin/echo"
 date="/bin/date"
 
 # Date command output
-time="$(date)"
+time=$("${date}")
 
-# Ping twice and send output to null
-${ping} -c2 ${gateway} > /dev/null
+# Ping twice and send output to null saved in a variable
+network_status=$("${ping}" -c2 "${gateway}" > /dev/null)
 
-if [ $? != 0 ]
-then
-    # Restart the interface
-    ${echo} "Restarting ${interface} at the time of ${time}" >> ${log}
-    ${ifdown} ${interface}
-    ${sleep} 5
-    ${ifup} ${interface}
-    ${sleep} 60
-else
-    ${echo} "Network is up at the time of ${time}" >> ${log}
-fi
+while true; do
+    if [ "${network_status}" == 0 ]; then
+        ${echo} "Network is up at the time of ${time}" >> ${log}
+        ${sleep} 300
+    else
+        # Restart the interface
+        ${echo} "Restarting ${interface} at the time of ${time}" >> ${log}
+        ${ifdown} ${interface}
+        ${sleep} 5
+        ${ifup} ${interface}
+        ${sleep} 120
+    fi
+    ${sleep} 120
+done
