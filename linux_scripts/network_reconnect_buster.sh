@@ -33,11 +33,9 @@ date="/bin/date"
 # Date command output
 time=$("${date}")
 
-# Ping twice and send output to null saved in a variable
-network_status=$("${ping}" -c2 "${gateway}" > /dev/null)
-
 while true; do
-    if [ "${network_status}" == 0 ]; then
+    if "${ping}" -c2 "${gateway}" > /dev/null
+    then
         "${echo}" "Network is up at the time of ${time}" >> "${log}"
         "${sleep}" 300
     else
