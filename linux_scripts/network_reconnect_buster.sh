@@ -4,25 +4,22 @@
 # Licensed under the MIT License.
 
 # Add this cron job to /etc/rc.local
-# /bin/bash /usr/local/bin/network_reconnect.sh
+# /bin/bash /usr/local/bin/network_reconnect_buster.sh
 
 # Gateway ip
 gateway='10.2.1.1'
 
 # Interface
-interface='eth0'
+interface='wlan0'
 
 # Log file location
-log='/var/log/network_reconnect.sh.log'
+log='/var/log/network_reconnect_buster.sh.log'
 
 # Ping command location
 ping="/bin/ping"
 
-# Ifdown command location
-ifdown="/sbin/ifdown"
-
-# Ifup command location
-ifup="/sbin/ifup"
+# Ip command location
+ip="/sbin/ip"
 
 # Sleep command location
 sleep="/bin/sleep"
@@ -46,9 +43,9 @@ while true; do
     else
         # Restart the interface
         "${echo}" "Restarting ${interface} at the time of ${time}" >> "${log}"
-        "${ifdown}" "${interface}"
+        "${ip}" link set "${interface}" down
         "${sleep}" 5
-        "${ifup}" "${interface}"
+        "${ip}" link set "${interface}" up
         "${sleep}" 120
     fi
     "${sleep}" 120
