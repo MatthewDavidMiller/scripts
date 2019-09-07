@@ -16,38 +16,53 @@ interface='eth0'
 log='/var/log/network_reconnect.sh.log'
 
 # Ping command location
-ping="/bin/ping"
-
-# Ifdown command location
-ifdown="/sbin/ifdown"
-
-# Ifup command location
-ifup="/sbin/ifup"
+function ping
+{
+    command "/bin/ping" "$1" "$2"
+}
 
 # Sleep command location
-sleep="/bin/sleep"
+function sleep
+{
+    command "/bin/sleep" "$1"
+}
 
 # Echo command location
-echo="/bin/echo"
+function echo
+{
+    command "/bin/echo" "$1"
+}
 
 # Date command location
-date="/bin/date"
+function date
+{
+    command "/bin/date"
+}
 
-# Date command output
-time=$("${date}")
+# Ifdown command location
+function ifdown
+{
+    command "/sbin/ifdown" "$1"
+}
 
-while true; do
-    if "${ping}" -c2 "${gateway}" > /dev/null
-    then
-        "${echo}" "Network is up at the time of ${time}" >> "${log}"
-        "${sleep}" 300
-    else
-        # Restart the interface
-        "${echo}" "Restarting ${interface} at the time of ${time}" >> "${log}"
-        "${ifdown}" "${interface}"
-        "${sleep}" 5
-        "${ifup}" "${interface}"
-        "${sleep}" 120
+# Ifup command location
+function ifup
+{
+    command "/sbin/ifup" "$1"
+}
+
+while true
+do
+    if "ping" -c2 "${gateway}" > /dev/null
+        then
+            "echo" "Network is up at the time of $(date)" >> "${log}"
+            "sleep" 300
+        else
+            # Restart the interface
+            "echo" "Restarting ${interface} at the time of $(date)" >> "${log}"
+            "ifdown" "${interface}"
+            "sleep" 5
+            "ifup" "${interface}"
+            "sleep" 120
     fi
-    "${sleep}" 120
 done

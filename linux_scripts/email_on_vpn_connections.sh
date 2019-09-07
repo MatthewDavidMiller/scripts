@@ -20,31 +20,47 @@ file_to_search_for_words="/var/log/openvpn.log"
 message_subject="Connection Established on VPN"
 
 # Tail command location.
-tail_command="/usr/bin/tail"
+function tail
+{
+	command "/usr/bin/tail" "$1" "$2" "$3" "$4"
+}
 
 # Printf command location.
-printf_command="/usr/bin/printf"
+function printf
+{
+	command "/usr/bin/printf" "$1"
+}
 
 # Grep command location.
-grep_command="/bin/grep"
+function grep
+{
+	command "/bin/grep" "$1" "$2"
+}
 
 # Mail command location.
-mail_command="/usr/bin/mail"
+function mail
+{
+	command "/usr/bin/mail" "$1" "$2" "$3"
+}
 
 # Sleep command location
-sleep_command="/bin/sleep"
+function sleep
+{
+	command "/bin/sleep" "$1"
+}
 
 # Time to wait after sending an email in seconds
 time='720'
 
 # Script
 
-"${tail_command}" -f -c 0 "${file_to_search_for_words}" | (while true ; do
+"tail" -f -c 0 "${file_to_search_for_words}" | (while true
+do
 	read -r new_connection_established
-if "${printf_command}" "${new_connection_established}" | "${grep_command}" -q "${search_for_these_words}"
-then
-	"${printf_command}" "${new_connection_established}" | "${mail_command}" -s "${message_subject}" matthewdavidmiller1@gmail.com
-	"${sleep_command}" "${time}"
-fi
+		if "printf" "${new_connection_established}" | "grep" -q "${search_for_these_words}"
+		then
+			"printf" "${new_connection_established}" | "mail" -s "${message_subject}" matthewdavidmiller1@gmail.com
+			"sleep" "${time}"
+		fi
 done
 )
