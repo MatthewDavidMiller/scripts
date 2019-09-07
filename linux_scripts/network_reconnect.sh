@@ -3,8 +3,8 @@
 # Copyright (c) 2019 Matthew David Miller. All rights reserved.
 # Licensed under the MIT License.
 
-# Add this cron job to /etc/crontab
-# @reboot /bin/bash /usr/local/bin/network_reconnect.sh
+# Add this cron job to /etc/rc.local
+# /bin/bash /usr/local/bin/network_reconnect.sh
 
 # Gateway ip
 gateway='10.2.1.1'
