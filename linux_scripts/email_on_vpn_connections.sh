@@ -8,59 +8,34 @@
 # Add to /etc/rc.local
 # /bin/bash /usr/local/bin/email_on_vpn_connections.sh
 
-# Variables to edit based on configuration.
-
-# Variable for words to search for in the log file.
-search_for_these_words="Connection Initiated"
+# Words to search for in the log file.
+search_for_these_words='Connection Initiated'
 
 # File to search through.
-file_to_search_for_words="/var/log/openvpn.log"
+file_to_search_for_words='/var/log/openvpn.log'
 
 # Subject Header of email to send.
-message_subject="Connection Established on VPN"
+message_subject='Connection Established on VPN'
 
-# Tail command location.
-function tail
-{
-	command "/usr/bin/tail" "$1" "$2" "$3" "$4"
-}
+# Email address to send mail to.
+email='matthewdavidmiller1@gmail.com'
 
-# Printf command location.
-function printf
-{
-	command "/usr/bin/printf" "$1"
-}
-
-# Grep command location.
-function grep
-{
-	command "/bin/grep" "$1" "$2"
-}
-
-# Mail command location.
-function mail
-{
-	command "/usr/bin/mail" "$1" "$2" "$3"
-}
-
-# Sleep command location
-function sleep
-{
-	command "/bin/sleep" "$1"
-}
-
-# Time to wait after sending an email in seconds
+# Time to wait after sending an email in seconds.
 time='720'
+
+# Define path to commands.
+
+PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
 
 # Script
 
-"tail" -f -c 0 "${file_to_search_for_words}" | (while true
+tail "-f" "-c" "0" "${file_to_search_for_words}" | (while true
 do
-	read -r new_connection_established
-		if "printf" "${new_connection_established}" | "grep" -q "${search_for_these_words}"
+	read "-r" "new_connection_established"
+		if printf "%s" "${new_connection_established}" | grep "-q" "${search_for_these_words}"
 		then
-			"printf" "${new_connection_established}" | "mail" -s "${message_subject}" matthewdavidmiller1@gmail.com
-			"sleep" "${time}"
+			printf "%s" "${new_connection_established}" | mail "-s" "${message_subject}" "${email}"
+			sleep "${time}"
 		fi
 done
 )
