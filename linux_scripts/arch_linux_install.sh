@@ -142,7 +142,7 @@ echo 'Set the password for a new user'
 passwd matthew
 
 # Setup sudo
-echo 'matthewALL=(ALL) ALL' >> '/etc/sudoers'
+echo 'matthew ALL=(ALL) ALL' >> '/etc/sudoers'
 
 # Setup network manager
 systemctl enable NetworkManager.service
