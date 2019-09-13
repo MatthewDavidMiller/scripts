@@ -5,7 +5,7 @@
 
 # Script is used to automatically restart interface if the device can't access the gateway.
 
-# Add this cron job to /etc/rc.local
+# Add this to /etc/rc.local
 # /bin/bash /usr/local/bin/network_reconnect_buster.sh
 
 # Gateway ip
@@ -29,16 +29,16 @@ PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
 
 while true
 do
-    if ping "-c2" "${gateway}" > "/dev/null"
+    if ping -c2 "${gateway}" > "/dev/null"
         then
-            echo "Network is up at the time of $(date)" >> "${log}"
+            echo "Network is up at the time of ""$(date)""" >> "${log}"
             sleep "${ping_time}"
         else
             # Restart the interface
-            echo "Restarting ${interface} at the time of $(date)" >> "${log}"
-            ip "link" "set" "${interface}" "down"
-            sleep "12"
-            ip "link" "set" "${interface}" "up"
+            echo "Restarting ""${interface}"" at the time of ""$(date)""" >> "${log}"
+            ip link set "${interface}" down
+            sleep 12
+            ip link set "${interface}" up
             sleep "${interface_time}"
     fi
 done
