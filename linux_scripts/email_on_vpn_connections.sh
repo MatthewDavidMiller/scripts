@@ -4,7 +4,7 @@
 # Licensed under the MIT License.
 
 # This script is used to email the admin when a VPN connection is established on the VPN server.
-# Run the script as root
+
 # Add to /etc/rc.local
 # /bin/bash /usr/local/bin/email_on_vpn_connections.sh
 
@@ -24,17 +24,15 @@ email='matthewdavidmiller1@gmail.com'
 time='720'
 
 # Define path to commands.
-
 PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
 
-# Script
-
-tail "-f" "-c" "0" "${file_to_search_for_words}" | (while true
+# Searches newlines for a specified string in a file and emails admin if the string is found.
+tail -f -c 0 "${file_to_search_for_words}" | (while true
 do
-	read "-r" "new_connection_established"
-		if printf "%s" "${new_connection_established}" | grep "-q" "${search_for_these_words}"
+	read -r "new_connection_established"
+		if printf "%s" "${new_connection_established}" | grep -q "${search_for_these_words}"
 		then
-			printf "%s" "${new_connection_established}" | mail "-s" "${message_subject}" "${email}"
+			printf "%s" "${new_connection_established}" | mail -s "${message_subject}" "${email}"
 			sleep "${time}"
 		fi
 done
