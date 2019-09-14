@@ -6,16 +6,27 @@
 # Script is used to automatically restart interface if the device can't access the gateway.
 
 # Add this to /etc/rc.local
-# /bin/bash /usr/local/bin/network_reconnect.sh
+# /bin/bash /usr/local/bin/network_reconnect.sh &
+
+
+# Script name
+script_name='network_reconnect.sh'
+
+# Log file location
+log='/var/log/network_reconnect.sh.log'
+
+# Check if script is already running.
+if pidof -x "${script_name}" -o $$ > /dev/null
+    then
+        echo "Process already running" >> "${log}"
+        exit 1
+fi
 
 # Gateway ip
 gateway='10.2.1.1'
 
 # Interface
 interface='eth0'
-
-# Log file location
-log='/var/log/network_reconnect.sh.log'
 
 # Time to wait before pinging again.
 ping_time='300'
