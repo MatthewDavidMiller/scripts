@@ -1,0 +1,16 @@
+# Text files to auto convert line endings
+* text=auto
+
+# Files that are binary
+*.png binary
+*.jpg binary
+*.7z binary
+*.gif binary
+*.sdf binary
+*.pfx binary
+*.snk binary
+*.dll binary
+*.exe binary
+*.lib binary
+*.exp binary
+*.pdb binary
