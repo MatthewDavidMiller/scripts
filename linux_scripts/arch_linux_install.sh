@@ -74,10 +74,14 @@ awk '/^## US$/{f=1}f==0{next}/^$/{exit}{print substr($0, 2)}' /etc/pacman.d/mirr
 pacstrap /mnt base base-devel
 
 # Install recommended packages
-pacstrap /mnt intel-ucode efibootmgr pacman-contrib sudo networkmanager
+pacstrap /mnt intel-ucode efibootmgr pacman-contrib sudo networkmanager ufw wget code chromium nmap
 
-# Install optional packages
-pacstrap /mnt gimp putty libreoffice-fresh code chromium wget plasma-desktop qopenvpn konsole nmap wireshark-qt clamtk kdenetwork-filesharing dolphin kcalc ark kalgebra gwenview spectacle print-manager okular ksystemlog kolourpaint kmix kmail kget kfind kdf kdenlive kcron k3b plasma-wayland-session firefox tlp gufw plasma-nm powerdevil plasma-pa ksysguard kde-cli-tools kwallet-pam plasma-vault sddm-kcm
+read -r -p "Do you want to install optional packages? [y/N] " response2
+if [[ "$response2" =~ ^([yY][eE][sS]|[yY])+$ ]]
+    then
+        # Install optional packages
+        pacstrap /mnt gimp putty libreoffice-fresh plasma-desktop qopenvpn konsole wireshark-qt clamtk kdenetwork-filesharing dolphin kcalc ark kalgebra gwenview spectacle print-manager okular ksystemlog kolourpaint kmix kmail kget kfind kdf kdenlive kcron k3b plasma-wayland-session firefox tlp plasma-nm powerdevil plasma-pa ksysguard kde-cli-tools kwallet-pam plasma-vault sddm-kcm
+fi
 
 # Setup fstab
 genfstab -U /mnt >> '/mnt/etc/fstab'
