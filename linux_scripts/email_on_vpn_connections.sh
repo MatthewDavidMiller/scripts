@@ -27,12 +27,6 @@ search_for_these_words='Connection Initiated'
 # File to search through.
 file_to_search_for_words='/var/log/openvpn.log'
 
-# Subject Header of email to send.
-message_subject='Connection Established on VPN'
-
-# Email address to send mail to.
-email='matthewdavidmiller1@gmail.com'
-
 # Time to wait after sending an email in seconds.
 time='720'
 
@@ -45,7 +39,7 @@ do
 	read -r "new_connection_established"
 		if printf "%s" "${new_connection_established}" | grep -q "${search_for_these_words}"
 			then
-				printf "%s" "${new_connection_established}" | mail -s "${message_subject}" "${email}"
+				python3 "/usr/local/bin/email_on_vpn_connections.py"
 				echo """${new_connection_established}""" >> "${log}"
 				sleep "${time}"
 		fi
