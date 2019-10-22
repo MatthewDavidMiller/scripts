@@ -34,14 +34,13 @@ time='720'
 PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
 
 # Searches newlines for a specified string in a file and emails admin if the string is found.
-tail -f -c 0 "${file_to_search_for_words}" | (while true
-do
-	read -r "new_connection_established"
+
+while read -r "new_connection_established"
+	do
 		if printf "%s" "${new_connection_established}" | grep -q "${search_for_these_words}"
 			then
 				python3 "/usr/local/bin/email_on_vpn_connections.py"
 				echo """${new_connection_established}""" >> "${log}"
 				sleep "${time}"
 		fi
-done
-)
+done < <(tail -f -c 0 "${file_to_search_for_words}")
