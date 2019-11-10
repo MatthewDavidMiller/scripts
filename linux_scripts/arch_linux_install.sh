@@ -26,20 +26,16 @@ read -r -p "Do you want to delete all parititions on ${disk}? [y/N] " response
 if [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
         # Deletes all partitions on disk
-        echo 'write' | sgdisk -w always "${disk}"
-        sgdisk --delete "${disk}"
+        sgdisk -Z "${disk}"
+        sgdisk -og "${disk}"
     else
         exit 1
 fi
 
-# Creates a gpt partition table
-echo 'label: gpt' | sgdisk "${disk}"
-
 # Creates two partitions.  First one is a 512 MB EFI partition while the second uses the rest of the free space avalailable to create a Linux filesystem partition.
-sgdisk "${disk}" << EOF
-    ,512M,C12A7328-F81F-11D2-BA4B-00A0C93EC93B
-    ,,0FC63DAF-8483-4772-8E79-3D69D8477DE4
-EOF
+sgdisk -n 0:0:+512MiB -c 1:"EFI System Partition" -t 1:ef00 "${disk}"
+sgdisk -n 0:0:0 -c 2:"Linux Filesystem" -t 0:8300 "${disk}"
+
 
 # Use luks encryption on partition 2
 read -r -p "Set the password for disk encryption: " response2
