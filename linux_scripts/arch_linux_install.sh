@@ -71,7 +71,7 @@ cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
 awk '/^## US$/{f=1}f==0{next}/^$/{exit}{print substr($0, 2)}' /etc/pacman.d/mirrorlist
 
 # Install base packages
-pacstrap /mnt base base-devel linux linux-firmware e2fsprogs ntfs-3g exfat-utils nano man-db man-pages texinfo
+pacstrap /mnt base base-devel linux linux-firmware systemd e2fsprogs ntfs-3g exfat-utils nano man-db man-pages texinfo
 
 # Install recommended packages
 pacstrap /mnt intel-ucode efibootmgr pacman-contrib sudo networkmanager ufw wget gnome
@@ -118,12 +118,10 @@ cp '/tmp/hosts' '/etc/hosts'
 echo 'Set root password'
 passwd root
 
-# Setup systemd-boot
-bootctl --path="${partition1}" install
-
 # Configure kernel for encryption and lvm
 wget -O '/tmp/mkinitcpio.conf' 'https://gist.githubusercontent.com/MatthewDavidMiller/2fe5b5cef6cd98a24e852db7e6d850fc/raw/38b7099d12da17abecc9b4dda7e9e1878b636f39/mkinitcpio.conf'
 cp '/tmp/mkinitcpio.conf' '/etc/mkinitcpio.conf'
+mkinitcpio -P
 
 # Setup systemd-boot with luks and lvm
 wget -O '/tmp/arch_linux.conf' 'https://gist.githubusercontent.com/MatthewDavidMiller/2fe5b5cef6cd98a24e852db7e6d850fc/raw/38b7099d12da17abecc9b4dda7e9e1878b636f39/arch_linux.conf'
@@ -132,6 +130,9 @@ mkdir '/boot/loader/entries'
 cp '/tmp/arch_linux.conf' '/boot/loader/entries/arch_linux.conf'
 sed -i "s#system_device-UUID#""$uuid""#" '/boot/loader/entries/arch_linux.conf'
 sed -i "s#/dev/lvm1/root_uuid#""${uuid2}""#" '/boot/loader/entries/arch_linux.conf'
+
+# Setup systemd-boot
+bootctl --path="${partition1}" install
 
 # Add a user
 useradd -m matthew
