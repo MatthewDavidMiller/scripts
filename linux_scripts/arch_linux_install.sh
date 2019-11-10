@@ -40,10 +40,10 @@ sgdisk -n 0:0:0 -c 2:"Linux Filesystem" -t 0:8300 "${disk}"
 # Use luks encryption on partition 2
 read -r -p "Set the password for disk encryption: " response2
 printf '%s\n' "${response2}" > '/tmp/disk_password'
-cryptsetup -q luksFormat "${partition2}" --key-file '/tmp/disk_password'
+cryptsetup -q luksFormat "${partition2}" < '/tmp/disk_password'
 
 # Setup lvm on partition 2
-cryptsetup open "${partition2}" --key-file '/tmp/disk_password' cryptlvm
+cryptsetup open "${partition2}" cryptlvm < '/tmp/disk_password'
 pvcreate '/dev/mapper/cryptlvm'
 vgcreate lvm1 '/dev/mapper/cryptlvm'
 lvcreate -L 8G lvm1 -n swap
