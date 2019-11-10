@@ -74,7 +74,7 @@ awk '/^## US$/{f=1}f==0{next}/^$/{exit}{print substr($0, 2)}' /etc/pacman.d/mirr
 pacstrap /mnt base base-devel
 
 # Install recommended packages
-pacstrap /mnt intel-ucode efibootmgr pacman-contrib sudo networkmanager ufw
+pacstrap /mnt intel-ucode efibootmgr pacman-contrib sudo networkmanager ufw wget
 
 # Setup fstab
 genfstab -U /mnt >> '/mnt/etc/fstab'
