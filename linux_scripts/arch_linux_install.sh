@@ -71,7 +71,7 @@ cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
 awk '/^## US$/{f=1}f==0{next}/^$/{exit}{print substr($0, 2)}' /etc/pacman.d/mirrorlist
 
 # Install base packages
-pacstrap /mnt base base-devel
+pacstrap /mnt base base-devel linux linux-firmware e2fsprogs ntfs-3g exfat-utils nano man-db man-pages texinfo
 
 # Install recommended packages
 pacstrap /mnt intel-ucode efibootmgr pacman-contrib sudo networkmanager ufw wget gnome
