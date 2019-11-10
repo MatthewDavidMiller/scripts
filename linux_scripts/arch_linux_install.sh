@@ -128,7 +128,7 @@ sed -i "s#system_device-UUID#""$uuid""#" '/boot/loader/entries/arch_linux.conf'
 sed -i "s#/dev/lvm1/root_uuid#""${uuid2}""#" '/boot/loader/entries/arch_linux.conf'
 
 # Setup systemd-boot
-bootctl --path="${partition1}" install
+bootctl --path=/boot install
 
 # Add a user
 useradd -m matthew
