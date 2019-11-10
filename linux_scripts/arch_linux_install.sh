@@ -26,17 +26,17 @@ read -r -p "Do you want to delete all parititions on ${disk}? [y/N] " response
 if [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
         # Deletes all partitions on disk
-        echo 'write' | sfdisk -w always "${disk}"
-        sfdisk --delete "${disk}"
+        echo 'write' | sgdisk -w always "${disk}"
+        sgdisk --delete "${disk}"
     else
         exit 1
 fi
 
 # Creates a gpt partition table
-echo 'label: gpt' | sfdisk "${disk}"
+echo 'label: gpt' | sgdisk "${disk}"
 
 # Creates two partitions.  First one is a 512 MB EFI partition while the second uses the rest of the free space avalailable to create a Linux filesystem partition.
-sfdisk "${disk}" << EOF
+sgdisk "${disk}" << EOF
     ,512M,C12A7328-F81F-11D2-BA4B-00A0C93EC93B
     ,,0FC63DAF-8483-4772-8E79-3D69D8477DE4
 EOF
