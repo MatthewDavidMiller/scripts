@@ -5,11 +5,6 @@
 
 # Install script for Arch Linux.
 
-# Disks to partition. Script will erase this disk and repartition it.
-disk='/dev/sda'
-partition1="${disk}1"
-partition2="${disk}2"
-
 # Start dhcpcd
 systemctl start "dhcpcd.service"
 
@@ -22,13 +17,27 @@ fi
 # Setup ntp client
 timedatectl set-ntp true
 
-read -r -p "Do you want to delete all parititions on ${disk}? [y/N] " response
-if [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]
+# Specify disk and partitions
+read -r -p "Specify disk to use for install. Example '/dev/sda': " disk
+
+read -r -p "Specify partition number for /boot. Example '1': " response1
+
+read -r -p "Specify partition number for lvm. Example '2': " response2
+
+partition1="${disk}${response1}"
+partition2="${disk}${response2}"
+
+read -r -p "Do you want to delete all parititions on ${disk}? [y/N] " response3
+if [[ "${response3}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
         # Deletes all partitions on disk
         sgdisk -Z "${disk}"
         sgdisk -og "${disk}"
-    else
+fi
+
+read -r -p "Do you want to continue the install? [y/N] " response4
+if [[ "${response4}" =~ ^([nN][oO]|[nN])+$ ]]
+    then
         exit 1
 fi
 
@@ -38,8 +47,8 @@ sgdisk -n 0:0:0 -c 2:"Linux Filesystem" -t 0:8300 "${disk}"
 
 
 # Use luks encryption on partition 2
-read -r -p "Set the password for disk encryption: " response2
-printf '%s\n' "${response2}" > '/tmp/disk_password'
+read -r -p "Set the password for disk encryption: " response5
+printf '%s\n' "${response5}" > '/tmp/disk_password'
 cryptsetup -q luksFormat "${partition2}" < '/tmp/disk_password'
 
 # Setup lvm on partition 2
