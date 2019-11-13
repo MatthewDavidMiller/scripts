@@ -42,9 +42,8 @@ if [[ "${response4}" =~ ^([nN][oO]|[nN])+$ ]]
 fi
 
 # Creates two partitions.  First one is a 512 MB EFI partition while the second uses the rest of the free space avalailable to create a Linux filesystem partition.
-sgdisk -n 0:0:+512MiB -c 1:"EFI System Partition" -t 1:ef00 "${disk}"
-sgdisk -n 0:0:0 -c 2:"Linux Filesystem" -t 0:8300 "${disk}"
-
+sgdisk -n 0:0:+512MiB -c "${response1}":"EFI System Partition" -t "${response1}":ef00 "${disk}"
+sgdisk -n 0:0:0 -c "${response2}":"Linux Filesystem" -t "${response2}":8300 "${disk}"
 
 # Use luks encryption on partition 2
 read -r -p "Set the password for disk encryption: " response5
