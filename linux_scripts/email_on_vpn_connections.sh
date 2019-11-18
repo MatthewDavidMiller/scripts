@@ -43,4 +43,4 @@ while read -r "new_connection_established"
 				echo """${new_connection_established}""" >> "${log}"
 				sleep "${time}"
 		fi
-done < <(tail -f -c 0 "${file_to_search_for_words}")
+done < <(tail -f -c 0 "${file_to_search_for_words}") &
