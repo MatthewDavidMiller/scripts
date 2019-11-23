@@ -8,6 +8,6 @@ if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
         # Updates package lists
         opkg update
 
-        # Upgrades all installed packages
+        # Installs packages
         opkg install luci-app-upnp ipset luci-ssl
 fi
