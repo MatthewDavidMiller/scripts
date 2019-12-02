@@ -54,9 +54,10 @@ cryptsetup -q luksFormat "${partition2}" < '/tmp/disk_password'
 cryptsetup open "${partition2}" cryptlvm < '/tmp/disk_password'
 pvcreate '/dev/mapper/cryptlvm'
 vgcreate lvm1 '/dev/mapper/cryptlvm'
-lvcreate -L 8G lvm1 -n swap
+lvcreate -L 2G lvm1 -n swap
 lvcreate -L 32G lvm1 -n root
 lvcreate -l 100%FREE lvm1 -n home
+rm '/tmp/disk_password'
 
 # Setup and mount filesystems
 mkfs.ext4 '/dev/lvm1/root'
@@ -106,17 +107,31 @@ sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
 # Generate locale
 locale-gen
 
-# Set language
-wget -O '/tmp/locale.conf' 'https://gist.githubusercontent.com/MatthewDavidMiller/2fe5b5cef6cd98a24e852db7e6d850fc/raw/38b7099d12da17abecc9b4dda7e9e1878b636f39/locale.conf'
-cp '/tmp/locale.conf' '/etc/locale.conf'
+# Set language to English
+{
+printf '%s\n' '# language config'
+printf '%s\n' '# file location is /etc/locale.conf'
+printf '%s\n' ''
+printf '%s\n' 'LANG=en_US.UTF-8'
+} >> '/etc/locale.conf'
 
 # Set hostname
-wget -O '/tmp/hostname' 'https://gist.githubusercontent.com/MatthewDavidMiller/2fe5b5cef6cd98a24e852db7e6d850fc/raw/38b7099d12da17abecc9b4dda7e9e1878b636f39/hostname'
-cp '/tmp/hostname' '/etc/hostname'
+read -r -p "Set the device hostname: " response6
+{
+printf '%s\n' '# hostname file'
+printf '%s\n' '# File location is /etc/hostname'
+echo "${response6}"
+} >> '/etc/hostname'
 
 # Setup hosts file
-wget -O '/tmp/hosts' 'https://gist.githubusercontent.com/MatthewDavidMiller/2fe5b5cef6cd98a24e852db7e6d850fc/raw/38b7099d12da17abecc9b4dda7e9e1878b636f39/hosts'
-cp '/tmp/hosts' '/etc/hosts'
+{
+printf '%s\n' '# host file'
+printf '%s\n' '# file location is /etc/hosts'
+printf '%s\n' ''
+printf '%s\n' '127.0.0.1 localhost'
+printf '%s\n' '::1 localhost'
+printf '%s\n' "127.0.1.1 ${response6}.localdomain ${response6}"
+} >> '/etc/hosts'
 
 # Set password
 echo 'Set root password'
