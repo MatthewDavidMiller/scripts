@@ -108,22 +108,27 @@ sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
 locale-gen
 
 # Set language to English
+rm '/etc/locale.conf'
 {
 printf '%s\n' '# language config'
 printf '%s\n' '# file location is /etc/locale.conf'
 printf '%s\n' ''
 printf '%s\n' 'LANG=en_US.UTF-8'
+printf '%s\n' ''
 } >> '/etc/locale.conf'
 
 # Set hostname
 read -r -p "Set the device hostname: " response6
+rm '/etc/hostname'
 {
 printf '%s\n' '# hostname file'
 printf '%s\n' '# File location is /etc/hostname'
-echo "${response6}"
+printf '%s\n' "${response6}"
+printf '%s\n' ''
 } >> '/etc/hostname'
 
 # Setup hosts file
+rm '/etc/hosts'
 {
 printf '%s\n' '# host file'
 printf '%s\n' '# file location is /etc/hosts'
@@ -131,6 +136,7 @@ printf '%s\n' ''
 printf '%s\n' '127.0.0.1 localhost'
 printf '%s\n' '::1 localhost'
 printf '%s\n' "127.0.1.1 ${response6}.localdomain ${response6}"
+printf '%s\n' ''
 } >> '/etc/hosts'
 
 # Set password
@@ -138,15 +144,36 @@ echo 'Set root password'
 passwd root
 
 # Configure kernel for encryption and lvm
-wget -O '/tmp/mkinitcpio.conf' 'https://gist.githubusercontent.com/MatthewDavidMiller/2fe5b5cef6cd98a24e852db7e6d850fc/raw/38b7099d12da17abecc9b4dda7e9e1878b636f39/mkinitcpio.conf'
-cp '/tmp/mkinitcpio.conf' '/etc/mkinitcpio.conf'
+rm '/etc/mkinitcpio.conf'
+{
+printf '%s\n' '# config for kernel'
+printf '%s\n' '# file location is /etc/mkinitcpio.conf'
+printf '%s\n' ''
+printf '%s\n' 'MODULES=()'
+printf '%s\n' ''
+printf '%s\n' 'BINARIES=()'
+printf '%s\n' ''
+printf '%s\n' 'FILES=()'
+printf '%s\n' ''
+printf '%s\n' 'HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt lvm2 filesystems fsck)'
+printf '%s\n' ''
+} >> '/etc/mkinitcpio.conf'
 mkinitcpio -P
 
 # Setup systemd-boot with luks and lvm
-wget -O '/tmp/arch_linux.conf' 'https://gist.githubusercontent.com/MatthewDavidMiller/2fe5b5cef6cd98a24e852db7e6d850fc/raw/38b7099d12da17abecc9b4dda7e9e1878b636f39/arch_linux.conf'
 mkdir '/boot/loader'
 mkdir '/boot/loader/entries'
-cp '/tmp/arch_linux.conf' '/boot/loader/entries/arch_linux.conf'
+{
+printf '%s\n' '# config for systemd-boot'
+printf '%s\n' '# file location is /boot/loader/entries/arch_linux.conf'
+printf '%s\n' ''
+printf '%s\n' 'title   Arch Linux'
+printf '%s\n' 'linux   /vmlinuz-linux'
+printf '%s\n' 'initrd  /intel-ucode.img'
+printf '%s\n' 'initrd  /initramfs-linux.img'
+printf '%s\n' 'options cryptdevice=UUID=system_device-UUID:cryptlvm root=UUID=/dev/lvm1/root_uuid rw'
+printf '%s\n' ''
+} >> '/boot/loader/entries/arch_linux.conf'
 sed -i "s#system_device-UUID#""$uuid""#" '/boot/loader/entries/arch_linux.conf'
 sed -i "s#/dev/lvm1/root_uuid#""${uuid2}""#" '/boot/loader/entries/arch_linux.conf'
 
