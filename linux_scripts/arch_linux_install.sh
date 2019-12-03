@@ -181,12 +181,13 @@ sed -i "s#/dev/lvm1/root_uuid#""${uuid2}""#" '/boot/loader/entries/arch_linux.co
 bootctl --path=/boot install
 
 # Add a user
-useradd -m matthew
-echo 'Set the password for a new user'
-passwd matthew
+read -r -p "Specify a username for a new user: " response7
+useradd -m "${response7}"
+echo "Set the password for ${response7}"
+passwd "${response7}"
 
 # Setup sudo
-echo 'matthew ALL=(ALL) NOPASSWD:ALL' >> '/etc/sudoers'
+printf '%s\n' "${response7} ALL=(ALL) NOPASSWD:ALL" >> '/etc/sudoers'
 
 # Setup network manager
 systemctl enable NetworkManager.service
