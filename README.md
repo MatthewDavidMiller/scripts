@@ -19,6 +19,8 @@ email_on_vpn_connections.py - A python script that it paired with my bash script
 
 email_on_vpn_connections.sh - A bash script that checks the openvpn log file for a certain keyword so I know if a vpn connection was established on my server.
 
+generate_ssh_keys.sh - A bash script that generates keys as well as authorizes the key for ssh use.
+
 network_reconnect.sh - A bash script that restarts a network interface if it can't ping the gateway.  Utilizes ifdown and ifup commands.
 
 network_reconnect_buster.sh - A bash script that restarts a network interface if it can't ping the gateway.  Utilizes iplink command.
@@ -26,6 +28,8 @@ network_reconnect_buster.sh - A bash script that restarts a network interface if
 openwrt_install_packages.sh - Simple script to install some packages in OpenWrt.
 
 openwrt_restrict_luci_access.sh - Simple script to limit access to luci gui as well as redirect http to https.
+
+secure_ssh_access.sh - A bash script that changes the configuration for ssh to not allow password authentication and enables key based authentication. Also disables root login over ssh.
 
 setup wsl gui.sh - Simple bash script to setup the xserver in Windows Subsystem for Linux.
 
