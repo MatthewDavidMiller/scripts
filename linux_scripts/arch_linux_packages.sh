@@ -25,3 +25,15 @@ if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
         pacman -S gimp
 fi
+
+read -r -p "Install libreoffice? [y/N] " response
+if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+    then
+        pacman -S libreoffice-fresh
+fi
+
+read -r -p "Install vscode? [y/N] " response
+if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+    then
+        pacman -S code
+fi
