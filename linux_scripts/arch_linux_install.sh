@@ -76,10 +76,10 @@ cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
 awk '/^## US$/{f=1}f==0{next}/^$/{exit}{print substr($0, 2)}' /etc/pacman.d/mirrorlist
 
 # Install base packages
-pacstrap /mnt base base-devel linux-lts linux-firmware systemd e2fsprogs ntfs-3g exfat-utils nano man-db man-pages texinfo lvm2
+pacstrap /mnt base base-devel linux-lts linux-firmware systemd e2fsprogs ntfs-3g exfat-utils nano man-db man-pages texinfo lvm2 xf86-video-intel xf86-video-amdgpu xf86-video-nouveau
 
 # Install recommended packages
-pacstrap /mnt intel-ucode efibootmgr pacman-contrib sudo networkmanager nm-connection-editor networkmanager-openvpn ufw wget gdm xorg bluez bluez-utils blueman pulseaudio pulseaudio-bluetooth pavucontrol libinput xf86-input-libinput i3 dmenu
+pacstrap /mnt intel-ucode efibootmgr pacman-contrib sudo networkmanager nm-connection-editor networkmanager-openvpn ufw wget gdm xorg xorg-xinit xorg-drivers xorg-server xorg-apps bluez bluez-utils blueman pulseaudio pulseaudio-bluetooth pavucontrol libinput xf86-input-libinput i3 dmenu
 
 # Setup fstab
 genfstab -U /mnt >> '/mnt/etc/fstab'
@@ -189,7 +189,7 @@ bootctl --path=/boot install
 rm '/etc/X11/xorg.conf.d/20-touchpad.conf'
 {
 printf '%s\n' 'Section "InputClass"'
-printf '%s\n' ' libinput touchpad catchall'
+printf '%s\n' ' Identifier "libinput touchpad catchall"'
 printf '%s\n' ' Driver "libinput"'
 printf '%s\n' ' MatchIsTouchpad "on"'
 printf '%s\n' ' MatchDevicePath "/dev/input/event*"'
@@ -218,6 +218,9 @@ systemctl enable ufw.service
 
 # Enable gdm
 systemctl enable gdm.service
+
+# Configure Xorg
+Xorg :0 -configure
 
 # Exit chroot
 exit
