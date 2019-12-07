@@ -2,7 +2,7 @@
 
 # Script to generate a ssh key
 
-user_name=$(who am i | awk '{print $1}')
+user_name=$(who | awk '{print $1}')
 
 # Generate an ecdsa 521 bit key
 ssh-keygen -f "/home/$user_name/ssh_key" -t ecdsa -b 521

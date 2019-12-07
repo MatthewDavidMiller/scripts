@@ -3,7 +3,7 @@
 # Script to configure gdm
 
 # Get username
-user_name=$(who am i | awk '{print $1}')
+user_name=$(who | awk '{print $1}')
 
 # Enable gdm
 systemctl enable gdm.service
