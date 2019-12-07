@@ -92,6 +92,12 @@ chmod +x '/mnt/arch_linux_install_part_2.sh'
 uuid="$(blkid -o value -s UUID "${partition2}")"
 uuid2="$(blkid -o value -s UUID /dev/Archlvm/root)"
 
+# Set hostname
+read -r -p "Set the device hostname: " response6
+
+# Add user
+read -r -p "Specify a username for a new user: " response7
+
 cat <<EOF > /mnt/arch_linux_install_part_2.sh
 #!/bin/bash
 
@@ -118,7 +124,6 @@ printf '%s\n' ''
 } >> '/etc/locale.conf'
 
 # Set hostname
-read -r -p "Set the device hostname: " response6
 rm '/etc/hostname'
 {
 printf '%s\n' '# hostname file'
@@ -195,7 +200,6 @@ printf '%s\n' ''
 } >> '/etc/X11/xorg.conf.d/20-touchpad.conf'
 
 # Add a user
-read -r -p "Specify a username for a new user: " response7
 useradd -m "${response7}"
 echo "Set the password for ${response7}"
 passwd "${response7}"
