@@ -9,6 +9,7 @@ printf '%s\n' "$user_name:x:700:100:$user_name:/home/$user_name:/bin/ash" >> '/e
 mkdir /home
 mkdir /home/$user_name
 passwd $user_name
+chown "$user_name" "/home/$user_name"
 
 # Setup sudo
-printf '%s\n' "${user_name} ALL=(ALL) NOPASSWD:ALL" >> '/etc/sudoers'
+printf '%s\n' "$user_name ALL=(ALL) NOPASSWD:ALL" >> '/etc/sudoers'
