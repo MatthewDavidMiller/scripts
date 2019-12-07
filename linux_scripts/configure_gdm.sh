@@ -22,6 +22,9 @@ EOF
 
 # Setup default session
 cat <<EOF > "/var/lib/AccountsService/users/$user_name"
+[User]
+Language=
+Session=i3
 XSession=i3
 
 EOF
