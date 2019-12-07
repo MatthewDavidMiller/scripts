@@ -53,20 +53,20 @@ cryptsetup -q luksFormat "${partition2}" < '/tmp/disk_password'
 # Setup lvm on partition 2
 cryptsetup open "${partition2}" cryptlvm < '/tmp/disk_password'
 pvcreate '/dev/mapper/cryptlvm'
-vgcreate lvm1 '/dev/mapper/cryptlvm'
-lvcreate -L 2G lvm1 -n swap
-lvcreate -L 32G lvm1 -n root
-lvcreate -l 100%FREE lvm1 -n home
+vgcreate Archlvm '/dev/mapper/cryptlvm'
+lvcreate -L 2G Archlvm -n swap
+lvcreate -L 32G Archlvm -n root
+lvcreate -l 100%FREE Archlvm -n home
 rm '/tmp/disk_password'
 
 # Setup and mount filesystems
-mkfs.ext4 '/dev/lvm1/root'
-mkfs.ext4 '/dev/lvm1/home'
-mkswap '/dev/lvm1/swap'
-mount '/dev/lvm1/root' /mnt
+mkfs.ext4 '/dev/Archlvm/root'
+mkfs.ext4 '/dev/Archlvm/home'
+mkswap '/dev/Archlvm/swap'
+mount '/dev/Archlvm/root' /mnt
 mkdir '/mnt/home'
-mount '/dev/lvm1/home' '/mnt/home'
-swapon '/dev/lvm1/swap'
+mount '/dev/Archlvm/home' '/mnt/home'
+swapon '/dev/Archlvm/swap'
 mkfs.fat -F32 "${partition1}"
 mkdir '/mnt/boot'
 mount "${partition1}" '/mnt/boot'
@@ -76,10 +76,10 @@ cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
 awk '/^## US$/{f=1}f==0{next}/^$/{exit}{print substr($0, 2)}' /etc/pacman.d/mirrorlist
 
 # Install base packages
-pacstrap /mnt base base-devel linux linux-firmware systemd e2fsprogs ntfs-3g exfat-utils nano man-db man-pages texinfo
+pacstrap /mnt base base-devel linux-lts linux-firmware systemd e2fsprogs ntfs-3g exfat-utils nano man-db man-pages texinfo
 
 # Install recommended packages
-pacstrap /mnt intel-ucode efibootmgr pacman-contrib sudo networkmanager ufw wget gnome
+pacstrap /mnt intel-ucode efibootmgr pacman-contrib sudo networkmanager nm-connection-editor networkmanager-openvpn ufw wget gdm xorg bluez bluez-utils blueman pulseaudio pulseaudio-bluetooth pavucontrol libinput xf86-input-libinput i3 dmenu
 
 # Setup fstab
 genfstab -U /mnt >> '/mnt/etc/fstab'
@@ -90,7 +90,7 @@ chmod +x '/mnt/arch_linux_install_part_2.sh'
 
 # Get the uuids
 uuid="$(blkid -o value -s UUID "${partition2}")"
-uuid2="$(blkid -o value -s UUID /dev/lvm1/root)"
+uuid2="$(blkid -o value -s UUID /dev/Archlvm/root)"
 
 cat <<EOF > /mnt/arch_linux_install_part_2.sh
 #!/bin/bash
@@ -167,18 +167,32 @@ mkdir '/boot/loader/entries'
 printf '%s\n' '# config for systemd-boot'
 printf '%s\n' '# file location is /boot/loader/entries/arch_linux.conf'
 printf '%s\n' ''
-printf '%s\n' 'title   Arch Linux'
-printf '%s\n' 'linux   /vmlinuz-linux'
+printf '%s\n' 'title   Arch Linux LTS Kernel'
+printf '%s\n' 'linux   /vmlinuz-linux-lts'
 printf '%s\n' 'initrd  /intel-ucode.img'
-printf '%s\n' 'initrd  /initramfs-linux.img'
-printf '%s\n' 'options cryptdevice=UUID=system_device-UUID:cryptlvm root=UUID=/dev/lvm1/root_uuid rw'
+printf '%s\n' 'initrd  /initramfs-linux-lts.img'
+printf '%s\n' 'options cryptdevice=UUID=system_device-UUID:cryptlvm root=UUID=/dev/Archlvm/root_uuid rw'
 printf '%s\n' ''
 } >> '/boot/loader/entries/arch_linux.conf'
 sed -i "s#system_device-UUID#""$uuid""#" '/boot/loader/entries/arch_linux.conf'
-sed -i "s#/dev/lvm1/root_uuid#""${uuid2}""#" '/boot/loader/entries/arch_linux.conf'
+sed -i "s#/dev/Archlvm/root_uuid#""${uuid2}""#" '/boot/loader/entries/arch_linux.conf'
 
 # Setup systemd-boot
 bootctl --path=/boot install
+
+# Setup touchpad
+rm '/etc/X11/xorg.conf.d/20-touchpad.conf'
+{
+printf '%s\n' 'Section "InputClass"'
+printf '%s\n' ' libinput touchpad catchall'
+printf '%s\n' ' Driver "libinput"'
+printf '%s\n' ' MatchIsTouchpad "on"'
+printf '%s\n' ' MatchDevicePath "/dev/input/event*"'
+printf '%s\n' ' Option "Tapping" "on"'
+printf '%s\n' ' Option "NaturalScrolling" "false"'
+printf '%s\n' 'EndSection'
+printf '%s\n' ''
+} >> '/etc/X11/xorg.conf.d/20-touchpad.conf'
 
 # Add a user
 read -r -p "Specify a username for a new user: " response7
