@@ -2,6 +2,15 @@
 
 # Script to secure ssh access
 
+read -r -p "Dropbear used? [y/N] " response
+if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+    then
+        uci set dropbear.@dropbear[0].PasswordAuth="off"
+        uci set dropbear.@dropbear[0].RootPasswordAuth="off"
+        uci commit dropbear
+        service dropbear restart
+fi
+
 # Turn off password authentication
 sed -i 's,#PasswordAuthentication\s*yes,PasswordAuthentication no,' /etc/ssh/sshd_config
 sed -i 's,#PasswordAuthentication\s*no,PasswordAuthentication no,' /etc/ssh/sshd_config

@@ -9,5 +9,5 @@ if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
         opkg update
 
         # Installs packages
-        opkg install luci-app-upnp ipset luci-ssl iptables-mod-geoip sudo
+        opkg install luci-app-upnp ipset luci-ssl iptables-mod-geoip sudo bash coreutils openssh-keygen shadow-useradd
 fi
