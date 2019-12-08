@@ -9,6 +9,7 @@ if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
         uci set dropbear.@dropbear[0].RootPasswordAuth="off"
         uci commit dropbear
         service dropbear restart
+        exit
 fi
 
 # Turn off password authentication
