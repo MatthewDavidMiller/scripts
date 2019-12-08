@@ -17,6 +17,10 @@ fi
 # Setup ntp client
 timedatectl set-ntp true
 
+# Lists partitions
+sfdisk -l -uM
+df | grep '^/dev'
+
 # Specify disk and partitions
 read -r -p "Specify disk to use for install. Example '/dev/sda': " disk
 
