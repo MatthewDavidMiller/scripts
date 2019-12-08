@@ -84,7 +84,7 @@ cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
 awk '/^## US$/{f=1}f==0{next}/^$/{exit}{print substr($0, 2)}' /etc/pacman.d/mirrorlist
 
 # Install base packages
-pacstrap /mnt base base-devel linux linux-lts linux-firmware systemd e2fsprogs ntfs-3g exfat-utils nano man-db man-pages texinfo lvm2 xf86-video-intel xf86-video-amdgpu xf86-video-nouveau
+pacstrap /mnt base base-devel linux linux-lts linux-firmware systemd e2fsprogs ntfs-3g exfat-utils vi man-db man-pages texinfo lvm2 xf86-video-intel xf86-video-amdgpu xf86-video-nouveau
 
 # Install recommended packages
 pacstrap /mnt intel-ucode efibootmgr pacman-contrib sudo networkmanager nm-connection-editor networkmanager-openvpn ufw wget gdm xorg xorg-xinit xorg-drivers xorg-server xorg-apps bluez bluez-utils blueman pulseaudio pulseaudio-bluetooth pavucontrol libinput xf86-input-libinput i3 dmenu firefox gnome-keyring seahorse termite htop dolphin cron kdenetwork-filesharing

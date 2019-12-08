@@ -11,3 +11,4 @@ time=$(date +"%m_%d_%Y")
 
 # Create tar archive compressed with gzip
 tar -czf "/home/$user_name/config_backup_$time.tar.gz" '/etc'
+tar -czf "/home/$user_name/home_backup_$time.tar.gz" '/home'
