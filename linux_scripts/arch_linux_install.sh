@@ -80,7 +80,7 @@ cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
 awk '/^## US$/{f=1}f==0{next}/^$/{exit}{print substr($0, 2)}' /etc/pacman.d/mirrorlist
 
 # Install base packages
-pacstrap /mnt base base-devel linux-lts linux-firmware systemd e2fsprogs ntfs-3g exfat-utils nano man-db man-pages texinfo lvm2 xf86-video-intel xf86-video-amdgpu xf86-video-nouveau
+pacstrap /mnt base base-devel linux linux-lts linux-firmware systemd e2fsprogs ntfs-3g exfat-utils nano man-db man-pages texinfo lvm2 xf86-video-intel xf86-video-amdgpu xf86-video-nouveau
 
 # Install recommended packages
 pacstrap /mnt intel-ucode efibootmgr pacman-contrib sudo networkmanager nm-connection-editor networkmanager-openvpn ufw wget gdm xorg xorg-xinit xorg-drivers xorg-server xorg-apps bluez bluez-utils blueman pulseaudio pulseaudio-bluetooth pavucontrol libinput xf86-input-libinput i3 dmenu firefox gnome-keyring seahorse termite htop dolphin
@@ -172,19 +172,38 @@ mkinitcpio -P
 # Setup systemd-boot with luks and lvm
 mkdir '/boot/loader'
 mkdir '/boot/loader/entries'
+
 {
-printf '%s\n' '# config for systemd-boot'
-printf '%s\n' '# file location is /boot/loader/entries/arch_linux.conf'
+printf '%s\n' '# kernel entry for systemd-boot'
+printf '%s\n' '# file location is /boot/loader/entries/arch_linux_lts.conf'
 printf '%s\n' ''
 printf '%s\n' 'title   Arch Linux LTS Kernel'
 printf '%s\n' 'linux   /vmlinuz-linux-lts'
 printf '%s\n' 'initrd  /intel-ucode.img'
 printf '%s\n' 'initrd  /initramfs-linux-lts.img'
-printf '%s\n' 'options cryptdevice=UUID=system_device-UUID:cryptlvm root=UUID=/dev/Archlvm/root_uuid rw'
+printf '%s\n' "options cryptdevice=UUID=$uuid:cryptlvm root=UUID=$uuid2 rw"
+printf '%s\n' ''
+} >> '/boot/loader/entries/arch_linux_lts.conf'
+
+{
+printf '%s\n' '# kernel entry for systemd-boot'
+printf '%s\n' '# file location is /boot/loader/entries/arch_linux.conf'
+printf '%s\n' ''
+printf '%s\n' 'title   Arch Linux Default Kernel'
+printf '%s\n' 'linux   /vmlinuz-linux'
+printf '%s\n' 'initrd  /intel-ucode.img'
+printf '%s\n' 'initrd  /initramfs-linux.img'
+printf '%s\n' "options cryptdevice=UUID=$uuid:cryptlvm root=UUID=$uuid2 rw"
 printf '%s\n' ''
 } >> '/boot/loader/entries/arch_linux.conf'
-sed -i "s#system_device-UUID#""$uuid""#" '/boot/loader/entries/arch_linux.conf'
-sed -i "s#/dev/Archlvm/root_uuid#""${uuid2}""#" '/boot/loader/entries/arch_linux.conf'
+
+{
+printf '%s\n' '# config for systemd-boot'
+printf '%s\n' '# file location is /boot/loader/loader.conf'
+printf '%s\n' ''
+printf '%s\n' 'default  arch_linux_lts'
+printf '%s\n' ''
+} >> '/boot/loader/loader.conf'
 
 # Setup systemd-boot
 bootctl --path=/boot install
