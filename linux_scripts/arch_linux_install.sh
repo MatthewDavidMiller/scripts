@@ -34,9 +34,13 @@ partition2="${disk}${response2}"
 read -r -p "Do you want to delete all parititions on ${disk}? [y/N] " response3
 if [[ "${response3}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        # Deletes all partitions on disk
-        sgdisk -Z "${disk}"
-        sgdisk -og "${disk}"
+        read -r -p "Are you sure you want to delete everything on ${disk}? [y/N] " response3
+        if [[ "${response3}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+            then
+                # Deletes all partitions on disk
+                sgdisk -Z "${disk}"
+                sgdisk -og "${disk}"
+        fi
 fi
 
 read -r -p "Do you want to continue the install? [y/N] " response4
