@@ -9,7 +9,13 @@ Licensed under the MIT License.
 
 arch_linux_install.sh - A bash script I wrote to automate my install of Arch Linux.
 
-backup_configs.sh - A bash script I wrote to tar the /etc directory.  Used to automate backing up config files.
+arch_linux_packages.sh - Simple script to install some packages I use.
+
+backup_configs.sh - A bash script I wrote to tar the /etc and /home directory.  Used to automate backing up config files.
+
+configure_gdm.sh - A bash script to configure gdm.
+
+configure_i3.sh - A bash script to configure the i3 window manager.
 
 delete_logs.py - Simple python script to delete some logs files after going over a certain size.
 
@@ -24,6 +30,8 @@ generate_ssh_keys.sh - A bash script that generates keys as well as authorizes t
 network_reconnect.sh - A bash script that restarts a network interface if it can't ping the gateway.  Utilizes ifdown and ifup commands.
 
 network_reconnect_buster.sh - A bash script that restarts a network interface if it can't ping the gateway.  Utilizes iplink command.
+
+openwrt_create_user.sh - Simple script to create an user in OpenWrt.
 
 openwrt_install_packages.sh - Simple script to install some packages in OpenWrt.
 
