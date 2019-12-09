@@ -6,6 +6,9 @@
 # Get username
 user_name=$(id -u -n)
 
+# Specify session for gdm to use
+read -r -p "Specify session to use. Example: i3 " session
+
 # Enable gdm
 systemctl enable gdm.service
 
@@ -25,7 +28,7 @@ EOF
 cat <<EOF > "/var/lib/AccountsService/users/$user_name"
 [User]
 Language=
-Session=i3
-XSession=i3
+Session=$session
+XSession=$session
 
 EOF
