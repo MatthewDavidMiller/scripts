@@ -200,3 +200,6 @@ picom &
 xsetroot -solid "#000000"
 
 EOF
+
+# Allow script to be executable.
+chmod +x '/usr/local/bin/i3_autostart.sh'
