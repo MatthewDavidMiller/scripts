@@ -7,7 +7,7 @@
 user_name=$(id -u -n)
 
 # Install packages
-pacman -S i3-wm i3-bar i3-status perl perl-anyevent-i3 perl-json-xs dmenu network-manager-applet blueman pasystrat paprefs
+pacman -S i3-wm i3-bar i3-status perl perl-anyevent-i3 perl-json-xs dmenu network-manager-applet blueman pasystrat paprefs picom
 
 # Setup i3 config
 mkdir "/home/$user_name/.config"
@@ -196,6 +196,7 @@ termite &
 nm-applet &
 blueman-applet &
 pasystray &
+picom &
 xsetroot -solid "#000000"
 
 EOF
