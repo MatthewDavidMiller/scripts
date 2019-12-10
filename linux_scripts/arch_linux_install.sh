@@ -49,6 +49,14 @@ if [[ "${response4}" =~ ^([nN][oO]|[nN])+$ ]]
         exit 1
 fi
 
+read -r -p "Is the cpu intel? [y/N] " ucode_response
+if [[ "${ucode_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+    then
+        ucode='intel-ucode'
+    else
+        ucode='amd-ucode'
+fi
+
 # Creates two partitions.  First one is a 512 MB EFI partition while the second uses the rest of the free space avalailable to create a Linux filesystem partition.
 sgdisk -n 0:0:+512MiB -c "${response1}":"EFI System Partition" -t "${response1}":ef00 "${disk}"
 sgdisk -n 0:0:0 -c "${response2}":"Linux Filesystem" -t "${response2}":8300 "${disk}"
@@ -87,7 +95,7 @@ awk '/^## US$/{f=1}f==0{next}/^$/{exit}{print substr($0, 2)}' /etc/pacman.d/mirr
 pacstrap /mnt base base-devel linux linux-lts linux-firmware systemd e2fsprogs ntfs-3g exfat-utils vi man-db man-pages texinfo lvm2 xf86-video-intel xf86-video-amdgpu xf86-video-nouveau
 
 # Install recommended packages
-pacstrap /mnt intel-ucode efibootmgr pacman-contrib sudo networkmanager nm-connection-editor networkmanager-openvpn ufw wget gdm xorg xorg-xinit xorg-drivers xorg-server xorg-apps bluez bluez-utils blueman pulseaudio pulseaudio-bluetooth pavucontrol libinput xf86-input-libinput i3 dmenu firefox gnome-keyring seahorse termite htop dolphin cron kdenetwork-filesharing
+pacstrap /mnt ${ucode} efibootmgr pacman-contrib sudo networkmanager nm-connection-editor networkmanager-openvpn ufw wget gdm xorg xorg-xinit xorg-drivers xorg-server xorg-apps bluez bluez-utils blueman pulseaudio pulseaudio-bluetooth pavucontrol libinput xf86-input-libinput i3 dmenu firefox gnome-keyring seahorse termite htop dolphin cron kdenetwork-filesharing
 
 # Setup fstab
 genfstab -U /mnt >> '/mnt/etc/fstab'
@@ -183,9 +191,9 @@ printf '%s\n' '# file location is /boot/loader/entries/arch_linux_lts.conf'
 printf '%s\n' ''
 printf '%s\n' 'title   Arch Linux LTS Kernel'
 printf '%s\n' 'linux   /vmlinuz-linux-lts'
-printf '%s\n' 'initrd  /intel-ucode.img'
+printf '%s\n' "initrd  /${ucode}.img"
 printf '%s\n' 'initrd  /initramfs-linux-lts.img'
-printf '%s\n' "options cryptdevice=UUID=$uuid:cryptlvm root=UUID=$uuid2 rw"
+printf '%s\n' "options cryptdevice=UUID=${uuid}:cryptlvm root=UUID=${uuid2} rw"
 printf '%s\n' ''
 } >> '/boot/loader/entries/arch_linux_lts.conf'
 
@@ -195,9 +203,9 @@ printf '%s\n' '# file location is /boot/loader/entries/arch_linux.conf'
 printf '%s\n' ''
 printf '%s\n' 'title   Arch Linux Default Kernel'
 printf '%s\n' 'linux   /vmlinuz-linux'
-printf '%s\n' 'initrd  /intel-ucode.img'
+printf '%s\n' "initrd  /${ucode}.img"
 printf '%s\n' 'initrd  /initramfs-linux.img'
-printf '%s\n' "options cryptdevice=UUID=$uuid:cryptlvm root=UUID=$uuid2 rw"
+printf '%s\n' "options cryptdevice=UUID=${uuid}:cryptlvm root=UUID=${uuid2} rw"
 printf '%s\n' ''
 } >> '/boot/loader/entries/arch_linux.conf'
 
