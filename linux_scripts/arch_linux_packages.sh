@@ -37,3 +37,9 @@ if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
         pacman -S code
 fi
+
+read -r -p "Install git? [y/N] " response
+if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+    then
+        pacman -S git
+fi
