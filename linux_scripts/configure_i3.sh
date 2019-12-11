@@ -10,10 +10,10 @@ user_name=$(id -u -n)
 pacman -S i3-wm i3-bar i3-status perl perl-anyevent-i3 perl-json-xs dmenu network-manager-applet blueman pasystrat paprefs picom
 
 # Setup i3 config
-mkdir "/home/$user_name/.config"
-mkdir "/home/$user_name/.config/i3"
-rm -r "/home/$user_name/.i3"
-cat <<EOF > "/home/$user_name/.config/i3/config"
+mkdir "/home/${user_name}/.config"
+mkdir "/home/${user_name}/.config/i3"
+rm -r "/home/${user_name}/.i3"
+cat <<EOF > "/home/${user_name}/.config/i3/config"
 # i3 config file (v4)
 
 # Font for window titles. Will also be used by the bar unless a different font
