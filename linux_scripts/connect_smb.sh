@@ -19,4 +19,4 @@ pacman -S samba
 mkdir "${mount_location}"
 
 # Automount smb share
-printf '%s\n' "${share} /mnt/matt-nas cifs rw,user,username=${username},password=${password} 0 0" >> '/etc/fstab'
+printf '%s\n' "${share} /mnt/matt-nas cifs rw,noauto,x-systemd.automount,_netdev,user,username=${username},password=${password} 0 0" >> '/etc/fstab'
