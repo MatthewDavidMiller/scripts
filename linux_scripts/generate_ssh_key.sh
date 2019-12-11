@@ -1,9 +1,8 @@
 #!/bin/bash
 
 # Script to generate a ssh key
-# If using sudo to run the script, specify the user with the -u option.
 
-user_name=$(id -u -n)
+user_name=$(logname)
 
 read -r -p "Generate ecdsa key? [y/N] " response
 if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]

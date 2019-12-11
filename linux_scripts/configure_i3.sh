@@ -1,10 +1,9 @@
 #!/bin/bash
 
 # Script to configure i3 window manager in Arch Linux
-# If using sudo to run the script, specify the user with the -u option.
 
 # Get username
-user_name=$(id -u -n)
+user_name=$(logname)
 
 # Install packages
 pacman -S i3-wm i3-bar i3-status perl perl-anyevent-i3 perl-json-xs dmenu network-manager-applet blueman pasystrat paprefs picom

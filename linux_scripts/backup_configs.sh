@@ -4,7 +4,7 @@
 # Add * 0 * * 1 bash /usr/local/bin/backup_configs.sh & to cron
 # If using sudo to run the script, specify the user with the -u option.
 
-user_name=$(id -u -n)
+user_name=$(logname)
 
 # Output date into a variable
 time=$(date +"%m_%d_%Y")

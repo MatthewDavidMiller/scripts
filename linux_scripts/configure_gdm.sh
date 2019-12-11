@@ -1,10 +1,9 @@
 #!/bin/bash
 
 # Script to configure gdm
-# If using sudo to run the script, specify the user with the -u option.
 
 # Get username
-user_name=$(id -u -n)
+user_name=$(logname)
 
 # Specify session for gdm to use
 read -r -p "Specify session to use. Example: i3 " session

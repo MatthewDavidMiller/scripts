@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Script to setup git
-# If using sudo to run the script, specify the user with the -u option.
 
 # Variables to edit
 # Git username
@@ -14,7 +13,7 @@ key_location='/mnt/a/SSHConfigs/github/github_ssh'
 key='github_ssh'
 
 # Get username
-user_name=$(id -u -n)
+user_name=$(logname)
 
 # Install git
 pacman -S git
