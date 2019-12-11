@@ -19,6 +19,8 @@ configure_i3.sh - A bash script to configure the i3 window manager.
 
 configure_termite.sh - A bash script to configure the termite terminal emulator.
 
+connect_smb.sh - A bash script to connect a samba share and automount it.
+
 delete_logs.py - Simple python script to delete some logs files after going over a certain size.
 
 email_ip_address.py - A simple python script to send an email with the ip address of the device that ran the script.
