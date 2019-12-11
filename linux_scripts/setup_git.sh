@@ -27,5 +27,5 @@ git config --global user.email "${email}"
 # Setup ssh key
 mkdir "/home/${user_name}/ssh_keys"
 cp "${key_location}" "/home/${user_name}/ssh_keys/${key}"
-git config core.sshCommand "ssh -i ""/home/${user_name}/ssh_keys/${key}"" -F /dev/null"
+git config --global core.sshCommand "ssh -i ""/home/${user_name}/ssh_keys/${key}"" -F /dev/null"
 chmod 400 -R "/home/${user_name}/ssh_keys"
