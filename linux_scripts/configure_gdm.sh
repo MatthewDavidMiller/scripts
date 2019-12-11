@@ -19,7 +19,7 @@ gdm gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click true
 cat <<EOF > '/etc/gdm/custom.conf'
 # Enable automatic login for user
 [daemon]
-AutomaticLogin=$user_name
+AutomaticLogin=${user_name}
 AutomaticLoginEnable=True
 
 EOF
@@ -28,7 +28,7 @@ EOF
 cat <<EOF > "/var/lib/AccountsService/users/$user_name"
 [User]
 Language=
-Session=$session
-XSession=$session
+Session=${session}
+XSession=${session}
 
 EOF
