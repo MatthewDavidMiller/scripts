@@ -43,6 +43,8 @@ secure_ssh_access.sh - A bash script that changes the configuration for ssh to n
 
 setup wsl gui.sh - Simple bash script to setup the xserver in Windows Subsystem for Linux.
 
+setup_git.sh - Bash script to configure git.
+
 setup_fwupd.sh - Bash script to setup fwupd in Arch Linux.
 
 update_openwrt.sh - A simple script to update packages in OpenWrt.
