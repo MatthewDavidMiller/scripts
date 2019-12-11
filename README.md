@@ -57,6 +57,8 @@ get_file_hash.ps1 - Powershell script to get the file hashes of all files from w
 
 printer_restart.bat - Script to restart print spooler and clear temporary files from the spooler.
 
+robocopy_backup.bat - Script to copy a directory to another location.
+
 tar_batch_process_files.bat - Places all folders in a tar archive from where the script is run from.
 
 uninstall_default_applications.ps1 - Simple powershell script to remove some of the default apps installed in Windows 10.
