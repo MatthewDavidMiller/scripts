@@ -31,6 +31,8 @@ email_on_vpn_connections.sh - A bash script that checks the openvpn log file for
 
 generate_ssh_keys.sh - A bash script that generates keys as well as authorizes the key for ssh use.
 
+install_aur_packages.sh - Bash script to install aur packages from Arch Linux.
+
 network_reconnect.sh - A bash script that restarts a network interface if it can't ping the gateway.  Utilizes ifdown and ifup commands.
 
 network_reconnect_buster.sh - A bash script that restarts a network interface if it can't ping the gateway.  Utilizes iplink command.
@@ -50,6 +52,8 @@ setup_git.sh - Bash script to configure git.
 setup_aliases.sh - Bash script to configure aliases.
 
 setup_fwupd.sh - Bash script to setup fwupd in Arch Linux.
+
+update_aur_packages.sh - Bash script to update aur packages from Arch Linux.
 
 update_openwrt.sh - A simple script to update packages in OpenWrt.
 
