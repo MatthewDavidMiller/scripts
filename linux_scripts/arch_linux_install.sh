@@ -18,7 +18,7 @@ fi
 timedatectl set-ntp true
 
 # Lists partitions
-sfdisk -l -uM
+sfdisk -l
 df | grep '^/dev'
 
 # Specify disk and partitions
@@ -95,7 +95,7 @@ awk '/^## US$/{f=1}f==0{next}/^$/{exit}{print substr($0, 2)}' /etc/pacman.d/mirr
 pacstrap /mnt base base-devel linux linux-lts linux-firmware systemd e2fsprogs ntfs-3g exfat-utils vi man-db man-pages texinfo lvm2 xf86-video-intel xf86-video-amdgpu xf86-video-nouveau
 
 # Install recommended packages
-pacstrap /mnt ${ucode} efibootmgr pacman-contrib sudo networkmanager nm-connection-editor networkmanager-openvpn ufw wget gdm xorg xorg-xinit xorg-drivers xorg-server xorg-apps bluez bluez-utils blueman pulseaudio pulseaudio-bluetooth pavucontrol libinput xf86-input-libinput i3 dmenu firefox gnome-keyring seahorse termite htop dolphin cron kdenetwork-filesharing
+pacstrap /mnt ${ucode} efibootmgr pacman-contrib sudo networkmanager nm-connection-editor networkmanager-openvpn ufw wget gdm xorg xorg-xinit xorg-drivers xorg-server xorg-apps bluez bluez-utils blueman pulseaudio pulseaudio-bluetooth pavucontrol libinput xf86-input-libinput i3-wm i3-bar i3-status dmenu firefox gnome-keyring seahorse termite htop dolphin cron kdenetwork-filesharing
 
 # Setup fstab
 genfstab -U /mnt >> '/mnt/etc/fstab'
