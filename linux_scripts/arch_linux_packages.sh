@@ -50,8 +50,8 @@ if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
         pacman -S --needed putty
 fi
 
-read -r -p "Install Nvidia driver? [y/N] " response
+read -r -p "Install Nvidia LTS driver? [y/N] " response
 if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        pacman -S --needed nvidia
+        pacman -S --needed nvidia-lts
 fi
