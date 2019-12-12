@@ -12,8 +12,6 @@ pacman -S --needed i3-wm i3-bar i3-status perl perl-anyevent-i3 perl-json-xs dme
 sudo -u "${user_name}" xrandr
 read -r -p "Specify the first display. Example 'HDMI-1': " display1
 read -r -p "Specify the second display. Example 'DVI-D-1': " display2
-sudo -u "${user_name}" xrandr --output "${display1}" --auto --right-of "${display2}"
-sudo -u "${user_name}" xrandr --output "${display2}" --auto --right-of "${display1}"
 
 # Setup i3 config
 mkdir "/home/${user_name}/.config"
@@ -204,6 +202,8 @@ blueman-applet &
 pasystray &
 picom &
 xsetroot -solid "#000000"
+xrandr --output "${display1}" --auto --right-of "${display2}"
+xrandr --output "${display2}" --auto --right-of "${display1}"
 
 EOF
 
