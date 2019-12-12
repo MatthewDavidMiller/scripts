@@ -11,7 +11,7 @@ fi
 read -r -p "Install i3 windows manager? [y/N] " response
 if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        pacman -S i3-gaps i3-bar i3-status dmenu
+        pacman -S i3-wm i3-bar i3-status dmenu
 fi
 
 read -r -p "Install blender? [y/N] " response

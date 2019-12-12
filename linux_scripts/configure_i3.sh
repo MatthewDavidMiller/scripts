@@ -6,7 +6,7 @@
 user_name=$(logname)
 
 # Install packages
-pacman -S i3-gaps i3-bar i3-status perl perl-anyevent-i3 perl-json-xs dmenu network-manager-applet blueman pasystrat paprefs picom
+pacman -S i3-wm i3-bar i3-status perl perl-anyevent-i3 perl-json-xs dmenu network-manager-applet blueman pasystrat paprefs picom
 
 # Setup i3 config
 mkdir "/home/${user_name}/.config"
