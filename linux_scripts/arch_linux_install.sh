@@ -255,7 +255,33 @@ systemctl enable ufw.service
 systemctl enable gdm.service
 
 # Configure Xorg
-Xorg :0 -configure
+sudo -u "${response7}" Xorg :0 -configure
+
+# Run additional scripts
+read -r -p "Run arch_linux_packages script? [y/N] " response
+if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+    then
+        wget 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/arch_linux_packages.sh'
+        chmod +x arch_linux_packages.sh
+        bash arch_linux_packages.sh
+fi
+
+read -r -p "Run configure_i3 script? [y/N] " response
+if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+    then
+        wget 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/configure_i3.sh'
+        chmod +x configure_i3.sh
+        bash configure_i3.sh
+fi
+
+read -r -p "Run connect_smb script? [y/N] " response
+if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+    then
+        wget 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/connect_smb.sh'
+        chmod +x connect_smb.sh
+        bash connect_smb.sh
+fi
+
 
 # Exit chroot
 exit

@@ -17,8 +17,8 @@ if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
         git pull
         read -r -p "Check the contents of the files before installing. Press enter to continue: "
         less PKGBUILD
-        read -r -p "Ready to update? [y/N] " response2
-        if [[ "${response2}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+        read -r -p "Ready to update? [y/N] " response
+        if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
             then
                 sudo -u ${user_name} makepkg -si
         fi

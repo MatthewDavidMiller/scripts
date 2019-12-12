@@ -25,8 +25,8 @@ if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
         cd "/home/${user_name}/aur/freefilesync" || exit
         read -r -p "Check the contents of the files before installing. Press enter to continue: "
         less PKGBUILD
-        read -r -p "Ready to install? [y/N] " response2
-        if [[ "${response2}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+        read -r -p "Ready to install? [y/N] " response
+        if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
             then
                 sudo -u ${user_name} makepkg -si
         fi

@@ -4,18 +4,19 @@
 
 # Variables to edit
 # Share location
-share='//matt-nas.lan/matt_files'
+read -r -p "Specify share location. Example'//matt-nas.lan/matt_files': " share
 # Mount point location
-mount_location='/mnt/matt-nas'
+read -r -p "Specify mount location. Example'/mnt/matt-nas': " mount_location
 # Username
-username='matthew'
+read -r -p "Specify Username. Example'matthew': " username
 # Password
-password='password'
+read -r -p "Specify Password. Example'password': " password
 
 # Install samba
-pacman -S samba
+pacman -S --needed samba
 
 # Make directory to mount the share at
+mkdir '/mnt'
 mkdir "${mount_location}"
 
 # Automount smb share

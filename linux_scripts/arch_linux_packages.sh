@@ -5,47 +5,53 @@
 read -r -p "Install gnome desktiop environment? [y/N] " response
 if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        pacman -S gnome
+        pacman -S --needed gnome
 fi
 
 read -r -p "Install i3 windows manager? [y/N] " response
 if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        pacman -S i3-wm i3-bar i3-status dmenu
+        pacman -S --needed i3-wm i3-bar i3-status dmenu
 fi
 
 read -r -p "Install blender? [y/N] " response
 if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        pacman -S blender
+        pacman -S --needed blender
 fi
 
 read -r -p "Install gimp? [y/N] " response
 if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        pacman -S gimp
+        pacman -S --needed gimp
 fi
 
 read -r -p "Install libreoffice? [y/N] " response
 if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        pacman -S libreoffice-fresh
+        pacman -S --needed libreoffice-fresh
 fi
 
 read -r -p "Install vscode? [y/N] " response
 if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        pacman -S code
+        pacman -S --needed code
 fi
 
 read -r -p "Install git? [y/N] " response
 if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        pacman -S git
+        pacman -S --needed git
 fi
 
 read -r -p "Install putty? [y/N] " response
 if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        pacman -S putty
+        pacman -S --needed putty
+fi
+
+read -r -p "Install Nvidia driver? [y/N] " response
+if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+    then
+        pacman -S --needed nvidia
 fi

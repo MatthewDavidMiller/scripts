@@ -8,7 +8,7 @@ git_name='MatthewDavidMiller'
 # Email address
 email='matthewdavidmiller1@gmail.com'
 # SSH key location
-key_location='/mnt/a/SSHConfigs/github/github_ssh'
+key_location='/mnt/matt-nas/SSHConfigs/github/github_ssh'
 # SSH key filename
 key='github_ssh'
 
@@ -16,7 +16,7 @@ key='github_ssh'
 user_name=$(logname)
 
 # Install git
-pacman -S git
+pacman -S --needed git
 
 # Setup username
 git config --global user.name "${git_name}"
