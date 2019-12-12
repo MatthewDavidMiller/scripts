@@ -47,6 +47,8 @@ setup wsl gui.sh - Simple bash script to setup the xserver in Windows Subsystem 
 
 setup_git.sh - Bash script to configure git.
 
+setup_aliases.sh - Bash script to configure aliases.
+
 setup_fwupd.sh - Bash script to setup fwupd in Arch Linux.
 
 update_openwrt.sh - A simple script to update packages in OpenWrt.
