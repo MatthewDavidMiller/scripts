@@ -188,7 +188,10 @@ exec --no-startup-id bash '/usr/local/bin/i3_autostart.sh'
 
 EOF
 
-cat <<EOF > '/usr/local/bin/i3_autostart.sh'
+read -r -p "Have the wifi autoconnect? [y/N] " response
+if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+    then
+        cat <<EOF > '/usr/local/bin/i3_autostart.sh'
 #!/bin/bash
 
 # Define path to commands.
@@ -205,6 +208,23 @@ sleep 10
 pacman --noconfirm -Syu
 
 EOF
+    else
+        cat <<EOF > '/usr/local/bin/i3_autostart.sh'
+#!/bin/bash
+
+# Define path to commands.
+PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
+
+termite &
+nm-applet &
+blueman-applet &
+pasystray &
+picom &
+xsetroot -solid "#000000"
+pacman --noconfirm -Syu
+
+EOF
+fi
 
 # Allow script to be executable.
 chmod +x '/usr/local/bin/i3_autostart.sh'
