@@ -30,6 +30,8 @@ fi
 # Update spotify
 if [[ "${response3}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
+        read -r -p "Choose the latest key. Press enter to continue: "
+        sudo -u ${user_name} gpg --keyserver 'hkp://keyserver.ubuntu.com' --search-key 'Spotify Public Repository Signing Key'
         cd "/home/${user_name}/aur/spotify" || exit
         git pull
         read -r -p "Check the contents of the files before installing. Press enter to continue: "

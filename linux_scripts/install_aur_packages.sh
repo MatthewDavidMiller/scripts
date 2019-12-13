@@ -42,6 +42,8 @@ if [[ "${response3}" =~ ^([yY][eE][sS]|[yY])+$ ]]
         git clone 'https://aur.archlinux.org/spotify.git' "/home/${user_name}/aur/spotify"
         chown -R "${user_name}" "/home/${user_name}/aur/spotify"
         chmod -R 744 "/home/${user_name}/aur/spotify"
+        read -r -p "Choose the latest key. Press enter to continue: "
+        sudo -u ${user_name} gpg --keyserver 'hkp://keyserver.ubuntu.com' --search-key 'Spotify Public Repository Signing Key'
         cd "/home/${user_name}/aur/spotify" || exit
         read -r -p "Check the contents of the files before installing. Press enter to continue: "
         less PKGBUILD
