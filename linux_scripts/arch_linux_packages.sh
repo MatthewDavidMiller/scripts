@@ -19,6 +19,7 @@ read -r -p "Install wireshark? [y/N] " response13
 read -r -p "Install ntop? [y/N] " response14
 read -r -p "Install jnettop? [y/N] " response15
 read -r -p "Install nethogs? [y/N] " response16
+read -r -p "Install clamav? [y/N] " response17
 
 # Install gnome desktop environment
 if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]
@@ -114,4 +115,10 @@ fi
 if [[ "${response16}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
         pacman -S --noconfirm --needed nethogs
+fi
+
+# Install clamav
+if [[ "${response17}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+    then
+        pacman -S --noconfirm --needed clamav clamtk
 fi
