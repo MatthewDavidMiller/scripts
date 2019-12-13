@@ -5,6 +5,9 @@
 # Get username
 user_name=$(logname)
 
+# Wifi network name
+wifi='Miller Homelab'
+
 # Install packages
 pacman -S --noconfirm --needed i3-wm i3-bar i3-status perl perl-anyevent-i3 perl-json-xs dmenu network-manager-applet blueman pasystrat paprefs picom xorg-xrandr
 
@@ -197,7 +200,8 @@ blueman-applet &
 pasystray &
 picom &
 xsetroot -solid "#000000"
-sleep 20
+nmcli connect up "${wifi}"
+sleep 10
 pacman --noconfirm -Syu
 
 EOF
