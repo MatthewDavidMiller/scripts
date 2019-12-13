@@ -6,6 +6,7 @@
 # Prompts
 read -r -p "Update freefilesync? [y/N] " response1
 read -r -p "Update spotify? [y/N] " response3
+read -r -p "Update vscode? [y/N] " response5
 
 # Get username
 user_name=$(logname)
@@ -38,6 +39,20 @@ if [[ "${response3}" =~ ^([yY][eE][sS]|[yY])+$ ]]
         less PKGBUILD
         read -r -p "Ready to update? [y/N] " response4
         if [[ "${response4}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+            then
+                sudo -u ${user_name} makepkg -si
+        fi
+fi
+
+# Update vscode
+if [[ "${response5}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+    then
+        cd "/home/${user_name}/aur/vscode" || exit
+        git pull
+        read -r -p "Check the contents of the files before installing. Press enter to continue: "
+        less PKGBUILD
+        read -r -p "Ready to update? [y/N] " response6
+        if [[ "${response6}" =~ ^([yY][eE][sS]|[yY])+$ ]]
             then
                 sudo -u ${user_name} makepkg -si
         fi
