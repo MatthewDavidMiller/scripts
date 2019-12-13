@@ -12,7 +12,7 @@ wifi='Miller Homelab'
 read -r -p "Have the wifi autoconnect? [y/N] " response1
 
 # Install packages
-pacman -S --noconfirm --needed i3-wm i3-bar i3-status perl perl-anyevent-i3 perl-json-xs dmenu network-manager-applet blueman pasystrat paprefs picom xorg-xrandr
+pacman -S --noconfirm --needed i3-wm i3-bar i3status perl perl-anyevent-i3 perl-json-xs dmenu network-manager-applet blueman pasystray paprefs picom xorg-xrandr
 
 # Setup i3 config
 mkdir "/home/${user_name}/.config"
