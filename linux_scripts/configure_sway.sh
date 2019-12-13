@@ -11,8 +11,12 @@ wifi='Miller Homelab'
 # Prompts
 read -r -p "Have the wifi autoconnect? [y/N] " response1
 
+# Get the touchpad name
+sudo -u "${user_name}" swaymsg -t get_inputs
+read -r -p "Enter name of touchpad: " touchpad_response
+
 # Install packages
-pacman -S --noconfirm --needed sway swayidle swaylock i3status dmenu network-manager-applet blueman pasystray paprefs xorg-server-xwayland
+pacman -S --noconfirm --needed sway swayidle swaylock i3status dmenu network-manager-applet blueman pasystray paprefs xorg-server-xwayland polkit-gnome
 
 # Setup i3 config
 mkdir "/home/${user_name}/.config"
@@ -190,6 +194,14 @@ exec --no-startup-id bash '/usr/local/bin/sway_autostart.sh'
 
 EOF
 
+cat <<EOF >> "/home/${user_name}/.config/sway/config"
+input "${touchpad_response}" {
+        tap enabled
+        natural_scroll disabled
+}
+
+EOF
+
 # Have the wifi autoconnect
 if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
@@ -204,6 +216,7 @@ nm-applet &
 blueman-applet &
 pasystray &
 xsetroot -solid "#000000"
+'/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1' &
 nmcli connect up "${wifi}"
 sleep 10
 pacman --noconfirm -Syu
@@ -222,6 +235,7 @@ blueman-applet &
 pasystray &
 picom &
 xsetroot -solid "#000000"
+'/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1' &
 pacman --noconfirm -Syu
 
 EOF
