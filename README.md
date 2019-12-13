@@ -47,7 +47,7 @@ openwrt_restrict_luci_access.sh - Simple script to limit access to luci gui as w
 
 secure_ssh_access.sh - A bash script that changes the configuration for ssh to not allow password authentication and enables key based authentication. Also disables root login over ssh.
 
-setup wsl gui.sh - Simple bash script to setup the xserver in Windows Subsystem for Linux.
+setup_wsl_gui.sh - Simple bash script to setup the xserver in Windows Subsystem for Linux.
 
 setup_git.sh - Bash script to configure git.
 
