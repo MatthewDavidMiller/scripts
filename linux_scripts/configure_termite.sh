@@ -14,7 +14,7 @@ mkdir "/home/${user_name}/.config/termite"
 cat <<EOF > "/home/${user_name}/.config/termite/config"
 
 [options]
-font = Monospace 12
+font = Monospace 16
 scrollback_lines = 10000
 
 [colors]
