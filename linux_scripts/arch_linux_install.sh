@@ -21,9 +21,11 @@ timedatectl set-ntp true
 lsblk -f
 
 # Prompts and variables
+# Specify if windows is installed
+read -r -p "Is windows installed? [y/N] " windows_response
 # Specify disk and partition numbers to use for install
 read -r -p "Specify disk to use for install. Example '/dev/sda': " disk
-read -r -p "Specify partition number for /boot. Example '1': " partition_number1
+read -r -p "Specify partition number for /boot. If using windows select the partiton where the EFI folder is located. Example '1': " partition_number1
 read -r -p "Specify partition number for lvm. Example '2': " partition_number2
 partition1="${disk}${partition_number1}"
 partition2="${disk}${partition_number2}"
@@ -39,14 +41,6 @@ read -r -p "Set the password for disk encryption: " disk_password
 read -r -p "Set the device hostname: " device_hostname
 # Specify user name
 read -r -p "Specify a username for a new user: " user_name
-# Specify if windows is installed
-read -r -p "Is windows installed? [y/N] " windows_response
-
-# Configure Windows duel boot
-if [[ "${windows_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-    then
-        read -r -p "Specify windows efi location. Example '/dev/sda2': " windows_boot
-fi
 
 # Delete all parititions on ${disk}
 if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]
@@ -74,9 +68,16 @@ if [[ "${ucode_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
         ucode='amd-ucode'
 fi
 
-# Creates two partitions.  First one is a 512 MB EFI partition while the second uses the rest of the free space avalailable to create a Linux filesystem partition.
-sgdisk -n 0:0:+512MiB -c "${partition_number1}":"EFI System Partition" -t "${partition_number1}":ef00 "${disk}"
-sgdisk -n 0:0:0 -c "${partition_number2}":"Linux Filesystem" -t "${partition_number2}":8300 "${disk}"
+# Configure Windows duel boot
+if [[ "${windows_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+    then
+        # Creates one partition.  Partition uses the rest of the free space avalailable to create a Linux filesystem partition.
+        sgdisk -n 0:0:0 -c "${partition_number2}":"Linux Filesystem" -t "${partition_number2}":8300 "${disk}"
+    else
+        # Creates two partitions.  First one is a 512 MB EFI partition while the second uses the rest of the free space avalailable to create a Linux filesystem partition.
+        sgdisk -n 0:0:+512MiB -c "${partition_number1}":"EFI System Partition" -t "${partition_number1}":ef00 "${disk}"
+        sgdisk -n 0:0:0 -c "${partition_number2}":"Linux Filesystem" -t "${partition_number2}":8300 "${disk}"
+fi
 
 # Use luks encryption on partition 2
 printf '%s\n' "${disk_password}" > '/tmp/disk_password'
@@ -91,17 +92,34 @@ lvcreate -L 32G Archlvm -n root
 lvcreate -l 100%FREE Archlvm -n home
 rm '/tmp/disk_password'
 
-# Setup and mount filesystems
-mkfs.ext4 '/dev/Archlvm/root'
-mkfs.ext4 '/dev/Archlvm/home'
-mkswap '/dev/Archlvm/swap'
-mount '/dev/Archlvm/root' /mnt
-mkdir '/mnt/home'
-mount '/dev/Archlvm/home' '/mnt/home'
-swapon '/dev/Archlvm/swap'
-mkfs.fat -F32 "${partition1}"
-mkdir '/mnt/boot'
-mount "${partition1}" '/mnt/boot'
+# Configure Windows duel boot
+if [[ "${windows_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+    then
+        # Setup and mount filesystems
+        mkfs.ext4 '/dev/Archlvm/root'
+        mkfs.ext4 '/dev/Archlvm/home'
+        mkswap '/dev/Archlvm/swap'
+        mount '/dev/Archlvm/root' /mnt
+        mkdir '/mnt/home'
+        mount '/dev/Archlvm/home' '/mnt/home'
+        swapon '/dev/Archlvm/swap'
+        mkdir '/mnt/boot'
+        mount "${partition1}" '/mnt/boot'
+    else
+        # Setup and mount filesystems
+        mkfs.ext4 '/dev/Archlvm/root'
+        mkfs.ext4 '/dev/Archlvm/home'
+        mkswap '/dev/Archlvm/swap'
+        mount '/dev/Archlvm/root' /mnt
+        mkdir '/mnt/home'
+        mount '/dev/Archlvm/home' '/mnt/home'
+        swapon '/dev/Archlvm/swap'
+        mkfs.fat -F32 "${partition1}"
+        mkdir '/mnt/boot'
+        mount "${partition1}" '/mnt/boot'
+fi
+
+
 
 # Change mirrors to US based ones
 cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
@@ -273,16 +291,6 @@ systemctl enable gdm.service
 sudo -u "${user_name}" Xorg :0 -configure
 EOF
 
-# Setup windows duel boot
-if [[ "${windows_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-    then
-        cat <<EOF >> /mnt/arch_linux_install_part_2.sh
-
-mkdir '/mnt'
-mount "${windows_boot}" '/mnt/windows_boot'
-cp -r '/mnt/windows_boot/EFI/Microsoft' '/boot/EFI/Microsoft'
-EOF
-fi
 # Additional options
 cat <<\EOF >> /mnt/arch_linux_install_part_2.sh
 
