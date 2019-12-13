@@ -256,6 +256,7 @@ systemctl enable bluetooth.service
 
 # Enable ufw
 systemctl enable ufw.service
+ufw enable
 
 # Enable gdm
 systemctl enable gdm.service
