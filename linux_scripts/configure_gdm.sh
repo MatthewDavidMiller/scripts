@@ -2,11 +2,11 @@
 
 # Script to configure gdm
 
-# Get username
-user_name=$(logname)
-
 # Specify session for gdm to use
 read -r -p "Specify session to use. Example: i3 " session
+
+# Get username
+user_name=$(logname)
 
 # Enable gdm
 systemctl enable gdm.service

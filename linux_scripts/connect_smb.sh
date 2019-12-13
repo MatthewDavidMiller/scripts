@@ -2,7 +2,7 @@
 
 # Script to connect and mount a smb share
 
-# Variables to edit
+# Prompts
 # Share location
 read -r -p "Specify share location. Example'//matt-nas.lan/matt_files': " share
 # Mount point location

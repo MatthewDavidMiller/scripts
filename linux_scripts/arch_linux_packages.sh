@@ -2,56 +2,81 @@
 
 # Script to install packages
 
-read -r -p "Install gnome desktiop environment? [y/N] " response
-if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+# Prompts
+read -r -p "Install gnome desktop environment? [y/N] " response1
+read -r -p "Install i3 windows manager? [y/N] " response2
+read -r -p "Install blender? [y/N] " response3
+read -r -p "Install gimp? [y/N] " response4
+read -r -p "Install libreoffice? [y/N] " response5
+read -r -p "Install vscode? [y/N] " response6
+read -r -p "Install git? [y/N] " response7
+read -r -p "Install putty? [y/N] " response8
+read -r -p "Install Nvidia LTS driver? [y/N] " response9
+read -r -p "Install dolphin file manager? [y/N] " response10
+read -r -p "Install audacity? [y/N] " response11
+
+# Install gnome desktop environment
+if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
         pacman -S --noconfirm --needed gnome
 fi
 
-read -r -p "Install i3 windows manager? [y/N] " response
-if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+# Install i3 windows manager
+if [[ "${response2}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
         pacman -S --noconfirm --needed i3-wm i3-bar i3-status dmenu
 fi
 
-read -r -p "Install blender? [y/N] " response
-if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+# Install blender
+if [[ "${response3}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
         pacman -S --noconfirm --needed blender
 fi
 
-read -r -p "Install gimp? [y/N] " response
-if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+# Install gimp
+if [[ "${response4}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
         pacman -S --noconfirm --needed gimp
 fi
 
-read -r -p "Install libreoffice? [y/N] " response
-if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+# Install libreoffice
+if [[ "${response5}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
         pacman -S --noconfirm --needed libreoffice-fresh
 fi
 
-read -r -p "Install vscode? [y/N] " response
-if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+# Install vscode
+if [[ "${response6}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
         pacman -S --noconfirm --needed code
 fi
 
-read -r -p "Install git? [y/N] " response
-if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+# Install git
+if [[ "${response7}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
         pacman -S --noconfirm --needed git
 fi
 
-read -r -p "Install putty? [y/N] " response
-if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+# Install putty
+if [[ "${response8}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
         pacman -S --noconfirm --needed putty
 fi
 
-read -r -p "Install Nvidia LTS driver? [y/N] " response
-if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+# Install Nvidia LTS driver
+if [[ "${response9}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
         pacman -S --noconfirm --needed nvidia-lts
+fi
+
+# Install dolphin file manager
+if [[ "${response10}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+    then
+        pacman -S --noconfirm --needed dolphin
+fi
+
+# Install audacity
+if [[ "${response11}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+    then
+        pacman -S --noconfirm --needed audacity
 fi

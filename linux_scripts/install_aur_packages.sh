@@ -3,6 +3,9 @@
 # Script to to install packages from Arch Linux aur.
 # Verify the source for malicious content before using.
 
+# Prompts
+read -r -p "Install freefilesync? [y/N] " response1
+
 # Get username
 user_name=$(logname)
 
@@ -15,8 +18,7 @@ chown "${user_name}" "/home/${user_name}/aur"
 chmod 744 "/home/${user_name}/aur"
 
 # Install freefilesync
-read -r -p "Install freefilesync? [y/N] " response
-if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
         mkdir "/home/${user_name}/aur/freefilesync"
         git clone 'https://aur.archlinux.org/freefilesync.git' "/home/${user_name}/aur/freefilesync"
@@ -25,8 +27,8 @@ if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
         cd "/home/${user_name}/aur/freefilesync" || exit
         read -r -p "Check the contents of the files before installing. Press enter to continue: "
         less PKGBUILD
-        read -r -p "Ready to install? [y/N] " response
-        if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+        read -r -p "Ready to install? [y/N] " response2
+        if [[ "${response2}" =~ ^([yY][eE][sS]|[yY])+$ ]]
             then
                 sudo -u ${user_name} makepkg -si
         fi

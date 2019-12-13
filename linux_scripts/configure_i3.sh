@@ -8,6 +8,9 @@ user_name=$(logname)
 # Wifi network name
 wifi='Miller Homelab'
 
+# Prompts
+read -r -p "Have the wifi autoconnect? [y/N] " response1
+
 # Install packages
 pacman -S --noconfirm --needed i3-wm i3-bar i3-status perl perl-anyevent-i3 perl-json-xs dmenu network-manager-applet blueman pasystrat paprefs picom xorg-xrandr
 
@@ -188,8 +191,8 @@ exec --no-startup-id bash '/usr/local/bin/i3_autostart.sh'
 
 EOF
 
-read -r -p "Have the wifi autoconnect? [y/N] " response
-if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+# Have the wifi autoconnect
+if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
         cat <<EOF > '/usr/local/bin/i3_autostart.sh'
 #!/bin/bash

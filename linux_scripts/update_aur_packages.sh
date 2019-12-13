@@ -3,6 +3,9 @@
 # Script to to update packages from Arch Linux aur.
 # Verify the source for malicious content before using.
 
+# Prompts
+read -r -p "Update freefilesync? [y/N] " response1
+
 # Get username
 user_name=$(logname)
 
@@ -10,15 +13,14 @@ user_name=$(logname)
 pacman -S --noconfirm --needed base-devel
 
 # Update freefilesync
-read -r -p "Update freefilesync? [y/N] " response
-if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
         cd "/home/${user_name}/aur/freefilesync" || exit
         git pull
         read -r -p "Check the contents of the files before installing. Press enter to continue: "
         less PKGBUILD
-        read -r -p "Ready to update? [y/N] " response
-        if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+        read -r -p "Ready to update? [y/N] " response2
+        if [[ "${response2}" =~ ^([yY][eE][sS]|[yY])+$ ]]
             then
                 sudo -u ${user_name} makepkg -si
         fi
