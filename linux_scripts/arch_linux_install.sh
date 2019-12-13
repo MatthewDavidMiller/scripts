@@ -24,18 +24,18 @@ df | grep '^/dev'
 # Specify disk and partitions
 read -r -p "Specify disk to use for install. Example '/dev/sda': " disk
 
-read -r -p "Specify partition number for /boot. Example '1': " response1
+read -r -p "Specify partition number for /boot. Example '1': " partition1
 
-read -r -p "Specify partition number for lvm. Example '2': " response2
+read -r -p "Specify partition number for lvm. Example '2': " partition2
 
-partition1="${disk}${response1}"
-partition2="${disk}${response2}"
+partition1="${disk}${partition1}"
+partition2="${disk}${partition2}"
 
-read -r -p "Do you want to delete all parititions on ${disk}? [y/N] " response3
-if [[ "${response3}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+read -r -p "Do you want to delete all parititions on ${disk}? [y/N] " response
+if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        read -r -p "Are you sure you want to delete everything on ${disk}? [y/N] " response3
-        if [[ "${response3}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+        read -r -p "Are you sure you want to delete everything on ${disk}? [y/N] " response
+        if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
             then
                 # Deletes all partitions on disk
                 sgdisk -Z "${disk}"
@@ -43,8 +43,8 @@ if [[ "${response3}" =~ ^([yY][eE][sS]|[yY])+$ ]]
         fi
 fi
 
-read -r -p "Do you want to continue the install? [y/N] " response4
-if [[ "${response4}" =~ ^([nN][oO]|[nN])+$ ]]
+read -r -p "Do you want to continue the install? [y/N] " response
+if [[ "${response}" =~ ^([nN][oO]|[nN])+$ ]]
     then
         exit 1
 fi
@@ -58,12 +58,12 @@ if [[ "${ucode_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
 fi
 
 # Creates two partitions.  First one is a 512 MB EFI partition while the second uses the rest of the free space avalailable to create a Linux filesystem partition.
-sgdisk -n 0:0:+512MiB -c "${response1}":"EFI System Partition" -t "${response1}":ef00 "${disk}"
-sgdisk -n 0:0:0 -c "${response2}":"Linux Filesystem" -t "${response2}":8300 "${disk}"
+sgdisk -n 0:0:+512MiB -c "${partition1}":"EFI System Partition" -t "${partition1}":ef00 "${disk}"
+sgdisk -n 0:0:0 -c "${partition2}":"Linux Filesystem" -t "${partition2}":8300 "${disk}"
 
 # Use luks encryption on partition 2
-read -r -p "Set the password for disk encryption: " response5
-printf '%s\n' "${response5}" > '/tmp/disk_password'
+read -r -p "Set the password for disk encryption: " disk_password
+printf '%s\n' "${disk_password}" > '/tmp/disk_password'
 cryptsetup -q luksFormat "${partition2}" < '/tmp/disk_password'
 
 # Setup lvm on partition 2
@@ -109,10 +109,10 @@ uuid="$(blkid -o value -s UUID "${partition2}")"
 uuid2="$(blkid -o value -s UUID /dev/Archlvm/root)"
 
 # Set hostname
-read -r -p "Set the device hostname: " response6
+read -r -p "Set the device hostname: " device_hostname
 
 # Add user
-read -r -p "Specify a username for a new user: " response7
+read -r -p "Specify a username for a new user: " user_name
 
 cat <<EOF > /mnt/arch_linux_install_part_2.sh
 #!/bin/bash
@@ -144,7 +144,7 @@ rm '/etc/hostname'
 {
 printf '%s\n' '# hostname file'
 printf '%s\n' '# File location is /etc/hostname'
-printf '%s\n' "${response6}"
+printf '%s\n' "${device_hostname}"
 printf '%s\n' ''
 } >> '/etc/hostname'
 
@@ -156,7 +156,7 @@ printf '%s\n' '# file location is /etc/hosts'
 printf '%s\n' ''
 printf '%s\n' '127.0.0.1 localhost'
 printf '%s\n' '::1 localhost'
-printf '%s\n' "127.0.1.1 ${response6}.localdomain ${response6}"
+printf '%s\n' "127.0.1.1 ${device_hostname}.localdomain ${device_hostname}"
 printf '%s\n' ''
 } >> '/etc/hosts'
 
@@ -235,12 +235,12 @@ printf '%s\n' ''
 } >> '/etc/X11/xorg.conf.d/20-touchpad.conf'
 
 # Add a user
-useradd -m "${response7}"
-echo "Set the password for ${response7}"
-passwd "${response7}"
+useradd -m "${user_name}"
+echo "Set the password for ${user_name}"
+passwd "${user_name}"
 
 # Setup sudo
-printf '%s\n' "${response7} ALL=(ALL) NOPASSWD:ALL" >> '/etc/sudoers'
+printf '%s\n' "${user_name} ALL=(ALL) NOPASSWD:ALL" >> '/etc/sudoers'
 
 # Setup network manager
 systemctl enable NetworkManager.service
@@ -255,7 +255,11 @@ systemctl enable ufw.service
 systemctl enable gdm.service
 
 # Configure Xorg
-sudo -u "${response7}" Xorg :0 -configure
+sudo -u "${user_name}" Xorg :0 -configure
+EOF
+
+# Additional options
+cat <<\EOF >> /mnt/arch_linux_install_part_2.sh
 
 # Run additional scripts
 read -r -p "Run arch_linux_packages script? [y/N] " response
@@ -282,9 +286,18 @@ if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
         bash connect_smb.sh
 fi
 
+read -r -p "Set a timer to select OS or kernel? [y/N] " response
+if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+    then
+        {
+        printf '%s\n' 'timeout 60'
+        printf '%s\n' ''
+        } >> '/boot/loader/loader.conf'
+fi
 
 # Exit chroot
 exit
+
 EOF
 
 # Move to installation
