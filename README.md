@@ -35,9 +35,11 @@ generate_ssh_keys.sh - A bash script that generates keys as well as authorizes t
 
 install_aur_packages.sh - Bash script to install aur packages from Arch Linux.
 
-network_reconnect.sh - A bash script that restarts a network interface if it can't ping the gateway.  Utilizes ifdown and ifup commands.
+mount_drives.sh - Bash script to mount drives.  Adds an entry to the fstab.
 
 network_reconnect_buster.sh - A bash script that restarts a network interface if it can't ping the gateway.  Utilizes iplink command.
+
+network_reconnect.sh - A bash script that restarts a network interface if it can't ping the gateway.  Utilizes ifdown and ifup commands.
 
 openwrt_create_user.sh - Simple script to create an user in OpenWrt.
 
