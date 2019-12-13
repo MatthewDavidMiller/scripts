@@ -6,7 +6,7 @@
 user_name=$(logname)
 
 # Install packages
-pacman -S --needed termite
+pacman -S --noconfirm --needed termite
 
 # Setup termite config
 mkdir "/home/${user_name}/.config"

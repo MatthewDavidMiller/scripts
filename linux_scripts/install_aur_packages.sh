@@ -7,7 +7,7 @@
 user_name=$(logname)
 
 # Install packages
-pacman -S --needed base-devel
+pacman -S --noconfirm --needed base-devel
 
 # Create a directory to use for compiling aur packages
 mkdir "/home/${user_name}/aur"

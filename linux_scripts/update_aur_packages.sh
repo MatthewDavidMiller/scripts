@@ -7,7 +7,7 @@
 user_name=$(logname)
 
 # Install packages
-pacman -S --needed base-devel
+pacman -S --noconfirm --needed base-devel
 
 # Update freefilesync
 read -r -p "Update freefilesync? [y/N] " response

@@ -16,7 +16,7 @@ key='github_ssh'
 user_name=$(logname)
 
 # Install git
-pacman -S --needed git
+pacman -S --noconfirm --needed git
 
 # Setup username
 git config --global user.name "${git_name}"

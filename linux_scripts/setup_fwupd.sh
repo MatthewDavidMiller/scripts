@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pacman -S fwupd
+pacman -S --noconfirm --needed fwupd
 
 cp -a /usr/lib/fwupd/efi/fwupdx64.efi /boot/EFI/
 

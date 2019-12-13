@@ -6,12 +6,7 @@
 user_name=$(logname)
 
 # Install packages
-pacman -S --needed i3-wm i3-bar i3-status perl perl-anyevent-i3 perl-json-xs dmenu network-manager-applet blueman pasystrat paprefs picom xorg-xrandr
-
-# Setup Duel Monitors
-sudo -u "${user_name}" xrandr
-read -r -p "Specify the first display. Example 'HDMI-1': " display1
-read -r -p "Specify the second display. Example 'DVI-D-1': " display2
+pacman -S --noconfirm --needed i3-wm i3-bar i3-status perl perl-anyevent-i3 perl-json-xs dmenu network-manager-applet blueman pasystrat paprefs picom xorg-xrandr
 
 # Setup i3 config
 mkdir "/home/${user_name}/.config"
@@ -202,8 +197,8 @@ blueman-applet &
 pasystray &
 picom &
 xsetroot -solid "#000000"
-xrandr --output "${display1}" --auto --right-of "${display2}"
-xrandr --output "${display2}" --auto --right-of "${display1}"
+sleep 20
+pacman --noconfirm -Syu
 
 EOF
 

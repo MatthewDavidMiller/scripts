@@ -3,7 +3,7 @@
 # Script to configure kvm in Arch Linux
 
 # Install packages
-pacman -S --needed libvirt gnome-boxes ebtables dnsmasq bridge-utils
+pacman -S --noconfirm --needed libvirt gnome-boxes ebtables dnsmasq bridge-utils
 
 # Enable nested virtualization
 cat <<EOF > '/etc/modprobe.d/kvm_intel.conf'

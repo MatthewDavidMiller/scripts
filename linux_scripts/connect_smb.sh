@@ -13,7 +13,7 @@ read -r -p "Specify Username. Example'matthew': " username
 read -r -p "Specify Password. Example'password': " password
 
 # Install samba
-pacman -S --needed samba
+pacman -S --noconfirm --needed samba
 
 # Make directory to mount the share at
 mkdir '/mnt'
