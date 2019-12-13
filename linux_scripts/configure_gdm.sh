@@ -11,9 +11,6 @@ user_name=$(logname)
 # Enable gdm
 systemctl enable gdm.service
 
-# Enable tap to click
-gdm gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click true
-
 # Enable autologin
 cat <<EOF > '/etc/gdm/custom.conf'
 # Enable automatic login for user
