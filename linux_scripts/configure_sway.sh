@@ -12,7 +12,7 @@ wifi='Miller Homelab'
 read -r -p "Have the wifi autoconnect? [y/N] " response1
 
 # Install packages
-pacman -S --noconfirm --needed sway swayidle swaylock i3status dmenu network-manager-applet blueman pasystray paprefs picom xorg-server-xwayland
+pacman -S --noconfirm --needed sway swayidle swaylock i3status dmenu network-manager-applet blueman pasystray paprefs xorg-server-xwayland
 
 # Setup i3 config
 mkdir "/home/${user_name}/.config"
@@ -203,7 +203,6 @@ termite &
 nm-applet &
 blueman-applet &
 pasystray &
-picom &
 xsetroot -solid "#000000"
 nmcli connect up "${wifi}"
 sleep 10
