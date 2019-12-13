@@ -39,6 +39,14 @@ read -r -p "Set the password for disk encryption: " disk_password
 read -r -p "Set the device hostname: " device_hostname
 # Specify user name
 read -r -p "Specify a username for a new user: " user_name
+# Specify if windows is installed
+read -r -p "Is windows installed? [y/N] " windows_response
+
+# Configure Windows duel boot
+if [[ "${windows_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+    then
+        read -r -p "Specify windows efi location. Example '/dev/sda2': " windows_boot
+fi
 
 # Delete all parititions on ${disk}
 if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]
@@ -219,6 +227,7 @@ printf '%s\n' '# config for systemd-boot'
 printf '%s\n' '# file location is /boot/loader/loader.conf'
 printf '%s\n' ''
 printf '%s\n' 'default  arch_linux_lts'
+printf '%s\n' 'auto-entries 1'
 printf '%s\n' ''
 } >> '/boot/loader/loader.conf'
 
@@ -264,6 +273,16 @@ systemctl enable gdm.service
 sudo -u "${user_name}" Xorg :0 -configure
 EOF
 
+# Setup windows duel boot
+if [[ "${windows_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+    then
+        cat <<EOF >> /mnt/arch_linux_install_part_2.sh
+
+mkdir '/mnt'
+mount "${windows_boot}" '/mnt/windows_boot'
+cp -r '/mnt/windows_boot/EFI/Microsoft' '/boot/EFI/Microsoft'
+EOF
+fi
 # Additional options
 cat <<\EOF >> /mnt/arch_linux_install_part_2.sh
 
