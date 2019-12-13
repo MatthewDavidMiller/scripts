@@ -14,6 +14,11 @@ read -r -p "Install putty? [y/N] " response8
 read -r -p "Install Nvidia LTS driver? [y/N] " response9
 read -r -p "Install dolphin file manager? [y/N] " response10
 read -r -p "Install audacity? [y/N] " response11
+read -r -p "Install nmap? [y/N] " response12
+read -r -p "Install wireshark? [y/N] " response13
+read -r -p "Install ntop? [y/N] " response14
+read -r -p "Install jnettop? [y/N] " response15
+read -r -p "Install nethogs? [y/N] " response16
 
 # Install gnome desktop environment
 if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]
@@ -79,4 +84,34 @@ fi
 if [[ "${response11}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
         pacman -S --noconfirm --needed audacity
+fi
+
+# Install nmap
+if [[ "${response12}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+    then
+        pacman -S --noconfirm --needed nmap
+fi
+
+# Install wireshark
+if [[ "${response13}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+    then
+        pacman -S --noconfirm --needed wireshark-cli wireshark-qt
+fi
+
+# Install ntop
+if [[ "${response14}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+    then
+        pacman -S --noconfirm --needed ntop
+fi
+
+# Install jnettop
+if [[ "${response15}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+    then
+        pacman -S --noconfirm --needed jnettop
+fi
+
+# Install nethogs
+if [[ "${response16}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+    then
+        pacman -S --noconfirm --needed nethogs
 fi
