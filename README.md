@@ -77,4 +77,4 @@ uninstall_default_applications.ps1 - Simple powershell script to remove some of 
 
 view_hard_links.bat - Simple script to see all the hard links of files from where the script is run from.
 
-wsl restart.bat - Simple script to restart Windows Subsystem for Linux.
+wsl_restart.bat - Simple script to restart Windows Subsystem for Linux.
