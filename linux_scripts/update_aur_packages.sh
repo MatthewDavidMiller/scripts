@@ -25,7 +25,7 @@ if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]
         read -r -p "Ready to update? [y/N] " response2
         if [[ "${response2}" =~ ^([yY][eE][sS]|[yY])+$ ]]
             then
-                makepkg -si
+                makepkg -sirc
         fi
 fi
 
@@ -41,7 +41,7 @@ if [[ "${response3}" =~ ^([yY][eE][sS]|[yY])+$ ]]
         read -r -p "Ready to update? [y/N] " response4
         if [[ "${response4}" =~ ^([yY][eE][sS]|[yY])+$ ]]
             then
-                makepkg -si
+                makepkg -sirc
         fi
 fi
 
@@ -55,6 +55,6 @@ if [[ "${response5}" =~ ^([yY][eE][sS]|[yY])+$ ]]
         read -r -p "Ready to update? [y/N] " response6
         if [[ "${response6}" =~ ^([yY][eE][sS]|[yY])+$ ]]
             then
-                makepkg -si
+                makepkg -sirc
         fi
 fi
