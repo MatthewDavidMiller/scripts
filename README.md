@@ -7,6 +7,8 @@ Licensed under the MIT License.
 
 # Linux Scripts:
 
+apt_package_updates.sh - A bash script to update the packages on Debian based distros.
+
 arch_linux_install.sh - A bash script I wrote to automate my install of Arch Linux.
 
 arch_linux_packages.sh - Simple script to install some packages I use.
