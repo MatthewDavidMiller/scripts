@@ -3,6 +3,10 @@
 # Script to configure i3 window manager in Arch Linux
 # Does not need to be executed as root.
 
+# Temporary files
+temp1=$(mktemp)
+temp2=$(mktemp)
+
 # Get username
 user_name=$(logname)
 
@@ -12,14 +16,19 @@ wifi='Miller Homelab'
 # Prompts
 read -r -p "Have the wifi autoconnect? [y/N] " response1
 
+# Setup Duel Monitors
+xrandr
+read -r -p "Specify the first display. Example 'HDMI-1': " display1
+read -r -p "Specify the second display. Example 'DVI-D-1': " display2
+
 # Install packages
 sudo pacman -S --noconfirm --needed i3-wm i3-bar i3status perl perl-anyevent-i3 perl-json-xs dmenu network-manager-applet blueman pasystray paprefs picom xorg-xrandr
 
 # Setup i3 config
-sudo mkdir "/home/${user_name}/.config"
-sudo mkdir "/home/${user_name}/.config/i3"
-sudo rm -r "/home/${user_name}/.i3"
-sudo cat <<\EOF > "/home/${user_name}/.config/i3/config"
+mkdir "/home/${user_name}/.config"
+mkdir "/home/${user_name}/.config/i3"
+rm -r "/home/${user_name}/.i3"
+cat <<\EOF > "${temp1}"
 # i3 config file (v4)
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -191,11 +200,12 @@ bar {
 exec --no-startup-id bash '/usr/local/bin/i3_autostart.sh'
 
 EOF
+sudo cp "${temp1}" "/home/${user_name}/.config/i3/config"
 
 # Have the wifi autoconnect
 if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        sudo cat <<EOF > '/usr/local/bin/i3_autostart.sh'
+        cat <<EOF > "${temp2}"
 #!/bin/bash
 
 # Define path to commands.
@@ -207,13 +217,15 @@ blueman-applet &
 pasystray &
 picom &
 xsetroot -solid "#000000"
+xrandr --output "${display2}" --auto --right-of "${display1}"
 nmcli connect up "${wifi}"
 sleep 10
 pacman --noconfirm -Syu
 
 EOF
+        sudo cp "${temp2}" '/usr/local/bin/i3_autostart.sh'
     else
-        sudo cat <<EOF > '/usr/local/bin/i3_autostart.sh'
+        cat <<EOF > "${temp2}"
 #!/bin/bash
 
 # Define path to commands.
@@ -225,9 +237,11 @@ blueman-applet &
 pasystray &
 picom &
 xsetroot -solid "#000000"
+xrandr --output "${display2}" --auto --right-of "${display1}"
 pacman --noconfirm -Syu
 
 EOF
+        sudo cp "${temp2}" '/usr/local/bin/i3_autostart.sh'
 fi
 
 # Allow script to be executable.
