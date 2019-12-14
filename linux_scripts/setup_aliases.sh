@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Script to configure aliases
+# Does not need to be executed as root.
 
 # Get username
 user_name=$(logname)

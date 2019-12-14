@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Script to install packages
+# Does not need to be executed as root.
 
 # Prompts
 read -r -p "Install gnome desktop environment? [y/N] " response1
@@ -20,105 +21,112 @@ read -r -p "Install ntop? [y/N] " response14
 read -r -p "Install jnettop? [y/N] " response15
 read -r -p "Install nethogs? [y/N] " response16
 read -r -p "Install clamav? [y/N] " response17
+read -r -p "Install vim? [y/N] " response18
 
 # Install gnome desktop environment
 if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        pacman -S --noconfirm --needed gnome
+        sudo pacman -S --noconfirm --needed gnome
 fi
 
 # Install i3 windows manager
 if [[ "${response2}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        pacman -S --noconfirm --needed i3-wm i3-bar i3-status dmenu
+        sudo pacman -S --noconfirm --needed i3-wm i3-bar i3-status dmenu
 fi
 
 # Install blender
 if [[ "${response3}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        pacman -S --noconfirm --needed blender
+        sudo pacman -S --noconfirm --needed blender
 fi
 
 # Install gimp
 if [[ "${response4}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        pacman -S --noconfirm --needed gimp
+        sudo pacman -S --noconfirm --needed gimp
 fi
 
 # Install libreoffice
 if [[ "${response5}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        pacman -S --noconfirm --needed libreoffice-fresh
+        sudo pacman -S --noconfirm --needed libreoffice-fresh
 fi
 
 # Install vscode
 if [[ "${response6}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        pacman -S --noconfirm --needed code
+        sudo pacman -S --noconfirm --needed code
 fi
 
 # Install git
 if [[ "${response7}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        pacman -S --noconfirm --needed git
+        sudo pacman -S --noconfirm --needed git
 fi
 
 # Install putty
 if [[ "${response8}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        pacman -S --noconfirm --needed putty
+        sudo pacman -S --noconfirm --needed putty
 fi
 
 # Install Nvidia LTS driver
 if [[ "${response9}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        pacman -S --noconfirm --needed nvidia-lts
+        sudo pacman -S --noconfirm --needed nvidia-lts
 fi
 
 # Install dolphin file manager
 if [[ "${response10}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        pacman -S --noconfirm --needed dolphin
+        sudo pacman -S --noconfirm --needed dolphin
 fi
 
 # Install audacity
 if [[ "${response11}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        pacman -S --noconfirm --needed audacity
+        sudo pacman -S --noconfirm --needed audacity
 fi
 
 # Install nmap
 if [[ "${response12}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        pacman -S --noconfirm --needed nmap
+        sudo pacman -S --noconfirm --needed nmap
 fi
 
 # Install wireshark
 if [[ "${response13}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        pacman -S --noconfirm --needed wireshark-cli wireshark-qt
+        sudo pacman -S --noconfirm --needed wireshark-cli wireshark-qt
 fi
 
 # Install ntop
 if [[ "${response14}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        pacman -S --noconfirm --needed ntop
+        sudo pacman -S --noconfirm --needed ntop
 fi
 
 # Install jnettop
 if [[ "${response15}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        pacman -S --noconfirm --needed jnettop
+        sudo pacman -S --noconfirm --needed jnettop
 fi
 
 # Install nethogs
 if [[ "${response16}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        pacman -S --noconfirm --needed nethogs
+        sudo pacman -S --noconfirm --needed nethogs
 fi
 
 # Install clamav
 if [[ "${response17}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        pacman -S --noconfirm --needed clamav clamtk
+        sudo pacman -S --noconfirm --needed clamav clamtk
+fi
+
+# Install vim
+if [[ "${response18}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+    then
+        sudo pacman -S --noconfirm --needed vim
 fi

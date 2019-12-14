@@ -1,12 +1,13 @@
 #!/bin/bash
 
 # Script to mount a disk
+# Does not need to be executed as root.
 
 # Instal linux-utils
-pacman -S --noconfirm --needed util-linux
+sudo pacman -S --noconfirm --needed util-linux
 
 # Make /mnt directory
-mkdir '/mnt'
+sudo mkdir '/mnt'
 
 read -r -p "Mount a disk? [y/N] " response
 while [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
@@ -24,19 +25,19 @@ while [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     read -r -p "Specify disk type. Example'ntfs': " disk_type
 
     # Get uuid
-    uuid="$(blkid -o value -s UUID "${disk1}")"
+    uuid="$(sudo blkid -o value -s UUID "${disk1}")"
 
     # Make directory to mount the disk at
-    mkdir "${mount_location}"
+    sudo mkdir "${mount_location}"
 
     # Automount smb share
-    printf '%s\n' "UUID=${uuid} ${mount_location} ${disk_type} rw,noauto,x-systemd.automount 0 0" >> '/etc/fstab'
+    sudo printf '%s\n' "UUID=${uuid} ${mount_location} ${disk_type} rw,noauto,x-systemd.automount 0 0" >> '/etc/fstab'
 
     # Mount another disk
     read -r -p "Do you want to mount another disk? [y/N] " response
         if [[ "${response}" =~ ^([nN][oO]|[nN])+$ ]]
             then
-            printf '%s\n' '' >> '/etc/fstab'
+            sudo printf '%s\n' '' >> '/etc/fstab'
             exit
         fi
 done

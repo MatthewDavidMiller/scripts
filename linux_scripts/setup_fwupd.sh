@@ -1,14 +1,15 @@
 #!/bin/bash
+# Does not need to be executed as root.
 
-pacman -S --noconfirm --needed fwupd
+sudo pacman -S --noconfirm --needed fwupd
 
-cp -a /usr/lib/fwupd/efi/fwupdx64.efi /boot/EFI/
+sudo cp -a /usr/lib/fwupd/efi/fwupdx64.efi /boot/EFI/
 
-mkdir -p '/etc/pacman.d'
-mkdir -p '/etc/pacman.d/hooks'
-touch '/etc/pacman.d/hooks/fwupd-to-esp.hook'
+sudo mkdir -p '/etc/pacman.d'
+sudo mkdir -p '/etc/pacman.d/hooks'
+sudo touch '/etc/pacman.d/hooks/fwupd-to-esp.hook'
 
-cat <<EOF > '/etc/pacman.d/hooks/fwupd-to-esp.hook'
+sudo cat <<EOF > '/etc/pacman.d/hooks/fwupd-to-esp.hook'
 [Trigger]
 Operation = Install
 Operation = Upgrade

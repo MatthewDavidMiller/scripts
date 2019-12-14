@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Script to setup git
+# Does not need to be executed as root.
 
 # Variables to edit
 # Git username
@@ -16,16 +17,16 @@ key='github_ssh'
 user_name=$(logname)
 
 # Install git
-pacman -S --noconfirm --needed git
+sudo pacman -S --noconfirm --needed git
 
 # Setup username
-git config --global user.name "${git_name}"
+sudo git config --global user.name "${git_name}"
 
 # Setup email
-git config --global user.email "${email}"
+sudo git config --global user.email "${email}"
 
 # Setup ssh key
 mkdir "/home/${user_name}/ssh_keys"
-cp "${key_location}" "/home/${user_name}/ssh_keys/${key}"
-git config --global core.sshCommand "ssh -i ""/home/${user_name}/ssh_keys/${key}"" -F /dev/null"
-chmod 400 -R "/home/${user_name}/ssh_keys"
+sudo cp "${key_location}" "/home/${user_name}/ssh_keys/${key}"
+sudo git config --global core.sshCommand "ssh -i ""/home/${user_name}/ssh_keys/${key}"" -F /dev/null"
+sudo chmod 400 -R "/home/${user_name}/ssh_keys"

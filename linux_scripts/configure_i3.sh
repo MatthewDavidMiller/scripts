@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Script to configure i3 window manager in Arch Linux
+# Does not need to be executed as root.
 
 # Get username
 user_name=$(logname)
@@ -12,13 +13,13 @@ wifi='Miller Homelab'
 read -r -p "Have the wifi autoconnect? [y/N] " response1
 
 # Install packages
-pacman -S --noconfirm --needed i3-wm i3-bar i3status perl perl-anyevent-i3 perl-json-xs dmenu network-manager-applet blueman pasystray paprefs picom xorg-xrandr
+sudo pacman -S --noconfirm --needed i3-wm i3-bar i3status perl perl-anyevent-i3 perl-json-xs dmenu network-manager-applet blueman pasystray paprefs picom xorg-xrandr
 
 # Setup i3 config
-mkdir "/home/${user_name}/.config"
-mkdir "/home/${user_name}/.config/i3"
-rm -r "/home/${user_name}/.i3"
-cat <<\EOF > "/home/${user_name}/.config/i3/config"
+sudo mkdir "/home/${user_name}/.config"
+sudo mkdir "/home/${user_name}/.config/i3"
+sudo rm -r "/home/${user_name}/.i3"
+sudo cat <<\EOF > "/home/${user_name}/.config/i3/config"
 # i3 config file (v4)
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -194,7 +195,7 @@ EOF
 # Have the wifi autoconnect
 if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        cat <<EOF > '/usr/local/bin/i3_autostart.sh'
+        sudo cat <<EOF > '/usr/local/bin/i3_autostart.sh'
 #!/bin/bash
 
 # Define path to commands.
@@ -212,7 +213,7 @@ pacman --noconfirm -Syu
 
 EOF
     else
-        cat <<EOF > '/usr/local/bin/i3_autostart.sh'
+        sudo cat <<EOF > '/usr/local/bin/i3_autostart.sh'
 #!/bin/bash
 
 # Define path to commands.
@@ -230,4 +231,4 @@ EOF
 fi
 
 # Allow script to be executable.
-chmod +x '/usr/local/bin/i3_autostart.sh'
+sudo chmod +x '/usr/local/bin/i3_autostart.sh'

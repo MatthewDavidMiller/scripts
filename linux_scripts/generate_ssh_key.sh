@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Script to generate a ssh key
+# Does not need to be executed as root.
 
 # Prompts
 read -r -p "Generate ecdsa key? [y/N] " response1
@@ -24,19 +25,19 @@ if [[ "${response2}" =~ ^([yY][eE][sS]|[yY])+$ ]]
 fi
 
 # Authorize the key for use with ssh
-mkdir "/home/$user_name/.ssh"
-chmod 700 "/home/$user_name/.ssh"
-touch "/home/$user_name/.ssh/authorized_keys"
-chmod 600 "/home/$user_name/.ssh/authorized_keys"
-cat "/home/$user_name/ssh_key.pub" >> "/home/$user_name/.ssh/authorized_keys"
-printf '%s\n' '' >> "/home/$user_name/.ssh/authorized_keys"
-chown -R "$user_name" "/home/$user_name"
+sudo mkdir "/home/$user_name/.ssh"
+sudo chmod 700 "/home/$user_name/.ssh"
+sudo touch "/home/$user_name/.ssh/authorized_keys"
+sudo chmod 600 "/home/$user_name/.ssh/authorized_keys"
+sudo cat "/home/$user_name/ssh_key.pub" >> "/home/$user_name/.ssh/authorized_keys"
+sudo printf '%s\n' '' >> "/home/$user_name/.ssh/authorized_keys"
+sudo chown -R "$user_name" "/home/$user_name"
 
 # Dropbear setup
 if [[ "${response3}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        cat "/home/$user_name/ssh_key.pub" >> '/etc/dropbear/authorized_keys'
-        printf '%s\n' '' >> '/etc/dropbear/authorized_keys'
-        chmod 0700 /etc/dropbear
-        chmod 0600 /etc/dropbear/authorized_keys
+        sudo cat "/home/$user_name/ssh_key.pub" >> '/etc/dropbear/authorized_keys'
+        sudo printf '%s\n' '' >> '/etc/dropbear/authorized_keys'
+        sudo chmod 0700 /etc/dropbear
+        sudo chmod 0600 /etc/dropbear/authorized_keys
 fi
