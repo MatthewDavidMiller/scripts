@@ -31,7 +31,7 @@ while [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     read -r -p "Do you want to mount another samba share? [y/N] " response
     if [[ "${response}" =~ ^([nN][oO]|[nN])+$ ]]
         then
-            sudo printf '%s\n' '' >> '/etc/fstab'
+            sudo bash -c "printf '%s\n' '' >> '/etc/fstab'"
             exit
     fi
 done

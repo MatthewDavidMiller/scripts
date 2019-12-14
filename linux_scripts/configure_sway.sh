@@ -224,7 +224,7 @@ pasystray &
 xsetroot -solid \"#000000\"
 xrandr --output \"${display2}\" --auto --right-of \"${display1}\"
 '/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1' &
-nmcli connect up "${wifi}"
+nmcli connect up \"${wifi}\"
 sleep 10
 pacman --noconfirm -Syu
 
