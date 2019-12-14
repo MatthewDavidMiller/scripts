@@ -12,4 +12,4 @@ sudo passwd "${user_name}"
 sudo chown "${user_name}" "/home/${user_name}"
 
 # Setup sudo
-sudo printf '%s\n' "${user_name} ALL=(ALL) ALL" >> '/etc/sudoers'
+sudo bash -c "printf '%s\n' \"${user_name} ALL=(ALL) ALL\" >> '/etc/sudoers'"

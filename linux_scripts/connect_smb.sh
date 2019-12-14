@@ -25,8 +25,7 @@ while [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     sudo mkdir "${mount_location}"
 
     # Automount smb share
-    sudo printf '%s\n' "${share} ${mount_location} cifs rw,noauto,x-systemd.automount,_netdev,user,username=${username},password=${password} 0 0" >> '/etc/fstab'
-    sudo printf '%s\n' ''
+    sudo bash -c "printf '%s\n' \"${share} ${mount_location} cifs rw,noauto,x-systemd.automount,_netdev,user,username=${username},password=${password} 0 0\" >> '/etc/fstab'"
 
     # Mount another disk
     read -r -p "Do you want to mount another samba share? [y/N] " response

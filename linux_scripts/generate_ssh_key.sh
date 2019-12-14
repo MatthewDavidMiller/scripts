@@ -29,15 +29,15 @@ sudo mkdir "/home/$user_name/.ssh"
 sudo chmod 700 "/home/$user_name/.ssh"
 sudo touch "/home/$user_name/.ssh/authorized_keys"
 sudo chmod 600 "/home/$user_name/.ssh/authorized_keys"
-sudo cat "/home/$user_name/ssh_key.pub" >> "/home/$user_name/.ssh/authorized_keys"
-sudo printf '%s\n' '' >> "/home/$user_name/.ssh/authorized_keys"
+sudo bash -c "cat \"/home/$user_name/ssh_key.pub\" >> \"/home/$user_name/.ssh/authorized_keys\""
+sudo bash -c "printf '%s\n' '' >> \"/home/$user_name/.ssh/authorized_keys\""
 sudo chown -R "$user_name" "/home/$user_name"
 
 # Dropbear setup
 if [[ "${response3}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        sudo cat "/home/$user_name/ssh_key.pub" >> '/etc/dropbear/authorized_keys'
-        sudo printf '%s\n' '' >> '/etc/dropbear/authorized_keys'
+        sudo bash -c "cat \"/home/$user_name/ssh_key.pub\" >> '/etc/dropbear/authorized_keys'"
+        sudo bash -c "printf '%s\n' '' >> '/etc/dropbear/authorized_keys'"
         sudo chmod 0700 /etc/dropbear
         sudo chmod 0600 /etc/dropbear/authorized_keys
 fi

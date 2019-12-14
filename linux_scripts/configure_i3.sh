@@ -3,10 +3,6 @@
 # Script to configure i3 window manager in Arch Linux
 # Does not need to be executed as root.
 
-# Temporary files
-temp1=$(mktemp)
-temp2=$(mktemp)
-
 # Get username
 user_name=$(logname)
 
@@ -28,7 +24,7 @@ sudo pacman -S --noconfirm --needed i3-wm i3-bar i3status perl perl-anyevent-i3 
 mkdir "/home/${user_name}/.config"
 mkdir "/home/${user_name}/.config/i3"
 rm -r "/home/${user_name}/.i3"
-cat <<\EOF > "${temp1}"
+sudo bash -c "cat <<\EOF > \"/home/${user_name}/.config/i3/config\"
 # i3 config file (v4)
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -117,16 +113,16 @@ bindsym Mod1+minus scratchpad show
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
-set $ws1 "1"
-set $ws2 "2"
-set $ws3 "3"
-set $ws4 "4"
-set $ws5 "5"
-set $ws6 "6"
-set $ws7 "7"
-set $ws8 "8"
-set $ws9 "9"
-set $ws10 "10"
+set $ws1 \"1\"
+set $ws2 \"2\"
+set $ws3 \"3\"
+set $ws4 \"4\"
+set $ws5 \"5\"
+set $ws6 \"6\"
+set $ws7 \"7\"
+set $ws8 \"8\"
+set $ws9 \"9\"
+set $ws10 \"10\"
 
 # switch to workspace
 bindsym Mod1+1 workspace number $ws1
@@ -159,10 +155,10 @@ bindsym Mod1+Shift+c reload
 bindsym Mod1+Shift+r restart
 
 # exit i3 (logs you out of your X session)
-bindsym Mod1+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+bindsym Mod1+Shift+e exec \"i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'\"
 
 # resize window (you can also use the mouse for that)
-mode "resize" {
+mode \"resize\" {
         # These bindings trigger as soon as you enter the resize mode
 
         # Pressing left will shrink the window’s width.
@@ -181,12 +177,12 @@ mode "resize" {
         bindsym Right       resize grow width 10 px or 10 ppt
 
         # back to normal: Enter or Escape or Mod1+r
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-        bindsym Mod1+r mode "default"
+        bindsym Return mode \"default\"
+        bindsym Escape mode \"default\"
+        bindsym Mod1+r mode \"default\"
 }
 
-bindsym Mod1+r mode "resize"
+bindsym Mod1+r mode \"resize\"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
@@ -199,49 +195,46 @@ bar {
 
 exec --no-startup-id bash '/usr/local/bin/i3_autostart.sh'
 
-EOF
-sudo cp "${temp1}" "/home/${user_name}/.config/i3/config"
+EOF"
 
 # Have the wifi autoconnect
 if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        cat <<EOF > "${temp2}"
+        sudo bash -c "cat <<EOF > '/usr/local/bin/i3_autostart.sh'
 #!/bin/bash
 
 # Define path to commands.
-PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
+PATH=\"/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin\"
 
 termite &
 nm-applet &
 blueman-applet &
 pasystray &
 picom &
-xsetroot -solid "#000000"
-xrandr --output "${display2}" --auto --right-of "${display1}"
-nmcli connect up "${wifi}"
+xsetroot -solid \"#000000\"
+xrandr --output \"${display2}\" --auto --right-of \"${display1}\"
+nmcli connect up \"${wifi}\"
 sleep 10
 pacman --noconfirm -Syu
 
-EOF
-        sudo cp "${temp2}" '/usr/local/bin/i3_autostart.sh'
+EOF"
     else
-        cat <<EOF > "${temp2}"
+        sudo bash -c "cat <<EOF > '/usr/local/bin/i3_autostart.sh'
 #!/bin/bash
 
 # Define path to commands.
-PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
+PATH=\"/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin\"
 
 termite &
 nm-applet &
 blueman-applet &
 pasystray &
 picom &
-xsetroot -solid "#000000"
-xrandr --output "${display2}" --auto --right-of "${display1}"
+xsetroot -solid \"#000000\"
+xrandr --output \"${display2}\" --auto --right-of \"${display1}\"
 pacman --noconfirm -Syu
 
-EOF
-        sudo cp "${temp2}" '/usr/local/bin/i3_autostart.sh'
+EOF"
 fi
 
 # Allow script to be executable.

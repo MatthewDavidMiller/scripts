@@ -12,7 +12,7 @@ sudo pacman -S --noconfirm --needed termite
 # Setup termite config
 sudo mkdir "/home/${user_name}/.config"
 sudo mkdir "/home/${user_name}/.config/termite"
-sudo cat <<EOF > "/home/${user_name}/.config/termite/config"
+sudo bash -c "cat <<EOF > \"/home/${user_name}/.config/termite/config\"
 
 [options]
 font = Monospace 16
@@ -28,4 +28,4 @@ color0 = #000000
 
 [hints]
 
-EOF
+EOF"

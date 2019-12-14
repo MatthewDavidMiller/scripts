@@ -16,13 +16,18 @@ read -r -p "Have the wifi autoconnect? [y/N] " response1
 swaymsg -t get_inputs
 read -r -p "Enter name of touchpad: " touchpad_response
 
+# Setup Duel Monitors
+xrandr
+read -r -p "Specify the first display. Example 'HDMI-1': " display1
+read -r -p "Specify the second display. Example 'DVI-D-1': " display2
+
 # Install packages
-sudo pacman -S --noconfirm --needed sway swayidle swaylock i3status dmenu network-manager-applet blueman pasystray paprefs xorg-server-xwayland polkit-gnome
+sudo pacman -S --noconfirm --needed sway swayidle swaylock i3status dmenu network-manager-applet blueman pasystray paprefs xorg-server-xwayland polkit-gnome xorg-xrandr
 
 # Setup i3 config
 sudo mkdir "/home/${user_name}/.config"
 sudo mkdir "/home/${user_name}/.config/sway"
-sudo cat <<\EOF > "/home/${user_name}/.config/sway/config"
+sudo bash -c "cat <<\EOF > \"/home/${user_name}/.config/sway/config\"
 # i3 config file (v4)
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -111,16 +116,16 @@ bindsym Mod1+minus scratchpad show
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
-set $ws1 "1"
-set $ws2 "2"
-set $ws3 "3"
-set $ws4 "4"
-set $ws5 "5"
-set $ws6 "6"
-set $ws7 "7"
-set $ws8 "8"
-set $ws9 "9"
-set $ws10 "10"
+set $ws1 \"1\"
+set $ws2 \"2\"
+set $ws3 \"3\"
+set $ws4 \"4\"
+set $ws5 \"5\"
+set $ws6 \"6\"
+set $ws7 \"7\"
+set $ws8 \"8\"
+set $ws9 \"9\"
+set $ws10 \"10\"
 
 # switch to workspace
 bindsym Mod1+1 workspace number $ws1
@@ -153,10 +158,10 @@ bindsym Mod1+Shift+c reload
 bindsym Mod1+Shift+r restart
 
 # exit i3 (logs you out of your X session)
-bindsym Mod1+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+bindsym Mod1+Shift+e exec \"i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'\"
 
 # resize window (you can also use the mouse for that)
-mode "resize" {
+mode \"resize\" {
         # These bindings trigger as soon as you enter the resize mode
 
         # Pressing left will shrink the window’s width.
@@ -175,12 +180,12 @@ mode "resize" {
         bindsym Right       resize grow width 10 px or 10 ppt
 
         # back to normal: Enter or Escape or Mod1+r
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-        bindsym Mod1+r mode "default"
+        bindsym Return mode \"default\"
+        bindsym Escape mode \"default\"
+        bindsym Mod1+r mode \"default\"
 }
 
-bindsym Mod1+r mode "resize"
+bindsym Mod1+r mode \"resize\"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
@@ -193,53 +198,55 @@ bar {
 
 exec --no-startup-id bash '/usr/local/bin/sway_autostart.sh'
 
-EOF
+EOF"
 
-sudo cat <<EOF >> "/home/${user_name}/.config/sway/config"
-input "${touchpad_response}" {
+sudo bash -c "cat <<EOF >> \"/home/${user_name}/.config/sway/config\"
+input \"${touchpad_response}\" {
         tap enabled
         natural_scroll disabled
 }
 
-EOF
+EOF"
 
 # Have the wifi autoconnect
 if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        sudo cat <<EOF > '/usr/local/bin/sway_autostart.sh'
+        sudo bash -c "cat <<EOF > '/usr/local/bin/sway_autostart.sh'
 #!/bin/bash
 
 # Define path to commands.
-PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
+PATH=\"/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin\"
 
 termite &
 nm-applet &
 blueman-applet &
 pasystray &
-xsetroot -solid "#000000"
+xsetroot -solid \"#000000\"
+xrandr --output \"${display2}\" --auto --right-of \"${display1}\"
 '/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1' &
 nmcli connect up "${wifi}"
 sleep 10
 pacman --noconfirm -Syu
 
-EOF
+EOF"
     else
-        sudo cat <<EOF > '/usr/local/bin/sway_autostart.sh'
+        sudo bash -c "cat <<EOF > '/usr/local/bin/sway_autostart.sh'
 #!/bin/bash
 
 # Define path to commands.
-PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
+PATH=\"/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin\"
 
 termite &
 nm-applet &
 blueman-applet &
 pasystray &
 picom &
-xsetroot -solid "#000000"
+xsetroot -solid \"#000000\"
+xrandr --output \"${display2}\" --auto --right-of \"${display1}\"
 '/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1' &
 pacman --noconfirm -Syu
 
-EOF
+EOF"
 fi
 
 # Allow script to be executable.

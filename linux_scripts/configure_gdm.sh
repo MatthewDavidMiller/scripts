@@ -13,19 +13,19 @@ user_name=$(logname)
 sudo systemctl enable gdm.service
 
 # Enable autologin
-sudo cat <<EOF > '/etc/gdm/custom.conf'
+sudo bash -c "cat <<EOF > '/etc/gdm/custom.conf'
 # Enable automatic login for user
 [daemon]
 AutomaticLogin=${user_name}
 AutomaticLoginEnable=True
 
-EOF
+EOF"
 
 # Setup default session
-sudo cat <<EOF > "/var/lib/AccountsService/users/$user_name"
+sudo bash -c "cat <<EOF > \"/var/lib/AccountsService/users/$user_name\"
 [User]
 Language=
 Session=${session}
 XSession=${session}
 
-EOF
+EOF"

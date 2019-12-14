@@ -31,7 +31,7 @@ while [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     sudo mkdir "${mount_location}"
 
     # Automount smb share
-    sudo printf '%s\n' "UUID=${uuid} ${mount_location} ${disk_type} rw,noauto,x-systemd.automount 0 0" >> '/etc/fstab'
+    sudo bash -c "printf '%s\n' \"UUID=${uuid} ${mount_location} ${disk_type} rw,noauto,x-systemd.automount 0 0\" >> '/etc/fstab'"
 
     # Mount another disk
     read -r -p "Do you want to mount another disk? [y/N] " response
