@@ -1,9 +1,6 @@
 #!/bin/bash
 # Does not need to be executed as root.
 
-# Create temporary file
-temp=$(mktemp)
-
 # Install fwupd
 sudo pacman -S --noconfirm --needed fwupd
 
@@ -14,7 +11,7 @@ sudo cp -a /usr/lib/fwupd/efi/fwupdx64.efi /boot/EFI/
 sudo mkdir -p '/etc/pacman.d'
 sudo mkdir -p '/etc/pacman.d/hooks'
 sudo touch '/etc/pacman.d/hooks/fwupd-to-esp.hook'
-cat <<EOF > "${temp}"
+sudo bash -c "cat <<EOF > '/etc/pacman.d/hooks/fwupd-to-esp.hook'
 [Trigger]
 Operation = Install
 Operation = Upgrade
@@ -25,6 +22,4 @@ Target = usr/lib/fwupd/efi/fwupdx64.efi
 When = PostTransaction
 Exec = /usr/bin/cp -a /usr/lib/fwupd/efi/fwupdx64.efi /boot/EFI/
 
-EOF
-
-sudo cp "${temp}" '/etc/pacman.d/hooks/fwupd-to-esp.hook'
+EOF"
