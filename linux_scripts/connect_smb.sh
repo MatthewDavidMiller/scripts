@@ -10,7 +10,7 @@ sudo mkdir '/mnt'
 # Script to connect and mount a smb share
 read -r -p "Mount a samba share? [y/N] " response
 while [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-    do
+do
     # Prompts
     # Share location
     read -r -p "Specify share location. Example'//matt-nas.lan/matt_files': " share
@@ -20,18 +20,18 @@ while [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     read -r -p "Specify Username. Example'matthew': " username
     # Password
     read -r -p "Specify Password. Example'password': " password
-
+    
     # Make directory to mount the share at
     sudo mkdir "${mount_location}"
-
+    
     # Automount smb share
     sudo bash -c "printf '%s\n' \"${share} ${mount_location} cifs rw,noauto,x-systemd.automount,_netdev,user,username=${username},password=${password} 0 0\" >> '/etc/fstab'"
-
+    
     # Mount another disk
     read -r -p "Do you want to mount another samba share? [y/N] " response
     if [[ "${response}" =~ ^([nN][oO]|[nN])+$ ]]
-        then
-            sudo bash -c "printf '%s\n' '' >> '/etc/fstab'"
-            exit
+    then
+        sudo bash -c "printf '%s\n' '' >> '/etc/fstab'"
+        exit
     fi
 done

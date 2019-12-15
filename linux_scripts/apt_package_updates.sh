@@ -17,13 +17,13 @@ touch "${temp}"
 apt-get update
 apt-get upgrade -y |& tee -a "${temp}"
 if grep -qi "${words_to_look_for}" "${temp}"
-	then
-		printf '%s\n' 'No updates.' >> "${log}"
-		rm -rf "${temp}"
-	else
-		printf '%s\n' 'Updated' >> "${log}"
-		apt-get autoremove --purge
-		apt-get autoclean
-		rm -rf "${temp}"
-		reboot
+then
+    printf '%s\n' 'No updates.' >> "${log}"
+    rm -rf "${temp}"
+else
+    printf '%s\n' 'Updated' >> "${log}"
+    apt-get autoremove --purge
+    apt-get autoclean
+    rm -rf "${temp}"
+    reboot
 fi

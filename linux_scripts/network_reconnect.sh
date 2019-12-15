@@ -17,9 +17,9 @@ log='/var/log/network_reconnect.sh.log'
 
 # Check if script is already running.
 if pidof -x "${script_name}" -o $$ > /dev/null
-    then
-        echo "Process already running" >> "${log}"
-        exit 1
+then
+    echo "Process already running" >> "${log}"
+    exit 1
 fi
 
 # Gateway ip
@@ -41,15 +41,15 @@ PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
 while true
 do
     if ping -c2 "${gateway}" > "/dev/null"
-        then
-            echo "Network is up at the time of ""$(date)""" >> "${log}"
-            sleep "${ping_time}"
-        else
-            # Restart the interface
-            echo "Restarting ""${interface}"" at the time of ""$(date)""" >> "${log}"
-            ifdown "${interface}"
-            sleep 12
-            ifup "${interface}"
-            sleep "${interface_time}"
+    then
+        echo "Network is up at the time of ""$(date)""" >> "${log}"
+        sleep "${ping_time}"
+    else
+        # Restart the interface
+        echo "Restarting ""${interface}"" at the time of ""$(date)""" >> "${log}"
+        ifdown "${interface}"
+        sleep 12
+        ifup "${interface}"
+        sleep "${interface_time}"
     fi
 done

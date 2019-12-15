@@ -22,6 +22,7 @@ read -r -p "Install jnettop? [y/N] " response15
 read -r -p "Install nethogs? [y/N] " response16
 read -r -p "Install clamav? [y/N] " response17
 read -r -p "Install vim? [y/N] " response18
+read -r -p "Install shellcheck? [y/N] " response19
 
 # Install gnome desktop environment
 if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]
@@ -129,4 +130,10 @@ fi
 if [[ "${response18}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
         sudo pacman -S --noconfirm --needed vim
+fi
+
+# Install shellcheck
+if [[ "${response19}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+    then
+        sudo pacman -S --noconfirm --needed shellcheck
 fi

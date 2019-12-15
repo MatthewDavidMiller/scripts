@@ -5,12 +5,12 @@
 
 read -r -p "Dropbear used? [y/N] " response
 if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-    then
-        sudo uci set dropbear.@dropbear[0].PasswordAuth="off"
-        sudo uci set dropbear.@dropbear[0].RootPasswordAuth="off"
-        sudo uci commit dropbear
-        sudo service dropbear restart
-        exit
+then
+    sudo uci set dropbear.@dropbear[0].PasswordAuth="off"
+    sudo uci set dropbear.@dropbear[0].RootPasswordAuth="off"
+    sudo uci commit dropbear
+    sudo service dropbear restart
+    exit
 fi
 
 # Turn off password authentication

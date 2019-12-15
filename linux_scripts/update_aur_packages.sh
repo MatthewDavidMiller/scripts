@@ -17,44 +17,44 @@ sudo pacman -S --noconfirm --needed base-devel
 
 # Update freefilesync
 if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+then
+    cd "/home/${user_name}/aur/freefilesync" || exit
+    sudo git pull
+    read -r -p "Check the contents of the files before installing. Press enter to continue: "
+    less PKGBUILD
+    read -r -p "Ready to update? [y/N] " response2
+    if [[ "${response2}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        cd "/home/${user_name}/aur/freefilesync" || exit
-        sudo git pull
-        read -r -p "Check the contents of the files before installing. Press enter to continue: "
-        less PKGBUILD
-        read -r -p "Ready to update? [y/N] " response2
-        if [[ "${response2}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-            then
-                makepkg -sirc
-        fi
+        makepkg -sirc
+    fi
 fi
 
 # Update spotify
 if [[ "${response3}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+then
+    read -r -p "Choose the latest key. Press enter to continue: "
+    gpg --keyserver 'hkp://keyserver.ubuntu.com' --search-key 'Spotify Public Repository Signing Key'
+    cd "/home/${user_name}/aur/spotify" || exit
+    sudo git pull
+    read -r -p "Check the contents of the files before installing. Press enter to continue: "
+    less PKGBUILD
+    read -r -p "Ready to update? [y/N] " response4
+    if [[ "${response4}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        read -r -p "Choose the latest key. Press enter to continue: "
-        gpg --keyserver 'hkp://keyserver.ubuntu.com' --search-key 'Spotify Public Repository Signing Key'
-        cd "/home/${user_name}/aur/spotify" || exit
-        sudo git pull
-        read -r -p "Check the contents of the files before installing. Press enter to continue: "
-        less PKGBUILD
-        read -r -p "Ready to update? [y/N] " response4
-        if [[ "${response4}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-            then
-                makepkg -sirc
-        fi
+        makepkg -sirc
+    fi
 fi
 
 # Update vscode
 if [[ "${response5}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+then
+    cd "/home/${user_name}/aur/vscode" || exit
+    sudo git pull
+    read -r -p "Check the contents of the files before installing. Press enter to continue: "
+    less PKGBUILD
+    read -r -p "Ready to update? [y/N] " response6
+    if [[ "${response6}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        cd "/home/${user_name}/aur/vscode" || exit
-        sudo git pull
-        read -r -p "Check the contents of the files before installing. Press enter to continue: "
-        less PKGBUILD
-        read -r -p "Ready to update? [y/N] " response6
-        if [[ "${response6}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-            then
-                makepkg -sirc
-        fi
+        makepkg -sirc
+    fi
 fi
