@@ -232,7 +232,7 @@ EOF"
 if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]
 then
     sudo cp '/usr/local/bin/i3_autostart.sh' '/tmp/sway_autostart.sh'
-    sudo bash -c "awk '/xsetroot -solid \"#000000\"/ { print; print \"nmcli connect up ${wifi}\"; next }1' '/tmp/sway_autostart.sh' > '/usr/local/bin/sway_autostart.sh'"
+    sudo bash -c "awk '/xsetroot -solid \"#000000\"/ { print; print \"nmcli connect up '\"'${wifi}'\"'\"; next }1' '/tmp/sway_autostart.sh' > '/usr/local/bin/sway_autostart.sh'"
 fi
 
 # Setup duel monitors
