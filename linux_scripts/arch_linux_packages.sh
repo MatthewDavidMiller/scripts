@@ -23,6 +23,7 @@ read -r -p "Install nethogs? [y/N] " response16
 read -r -p "Install clamav? [y/N] " response17
 read -r -p "Install vim? [y/N] " response18
 read -r -p "Install shellcheck? [y/N] " response19
+read -r -p "Install tftpd? [y/N] " response20
 
 # Install gnome desktop environment
 if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]
@@ -33,7 +34,7 @@ fi
 # Install i3 windows manager
 if [[ "${response2}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
-        sudo pacman -S --noconfirm --needed i3-wm i3-bar i3-status dmenu
+        sudo pacman -S --noconfirm --needed i3-wm i3blocks i3lock i3status dmenu
 fi
 
 # Install blender
@@ -136,4 +137,10 @@ fi
 if [[ "${response19}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
         sudo pacman -S --noconfirm --needed shellcheck
+fi
+
+# Install tftpd
+if [[ "${response20}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+    then
+        sudo pacman -S --noconfirm --needed tftp-hpa
 fi

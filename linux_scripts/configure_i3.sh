@@ -22,7 +22,7 @@ then
 fi
 
 # Install packages
-sudo pacman -S --noconfirm --needed i3-wm i3-bar i3status perl perl-anyevent-i3 perl-json-xs dmenu network-manager-applet blueman pasystray paprefs picom xorg-xrandr
+sudo pacman -S --noconfirm --needed i3-wm i3blocks i3lock i3status perl perl-anyevent-i3 perl-json-xs dmenu network-manager-applet blueman pasystray paprefs picom xorg-xrandr
 
 # Setup i3 config
 mkdir "/home/${user_name}/.config"
