@@ -13,7 +13,7 @@ while [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
 do
     # Prompts
     # Share location
-    read -r -p "Specify share location. Example'//matt-nas.lan/matt_files': " share
+    read -r -p "Specify share location. Example'//matt-nas.miller.lan/matt_files': " share
     # Mount point location
     read -r -p "Specify mount location. Example'/mnt/matt-nas': " mount_location
     # Username
