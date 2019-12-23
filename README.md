@@ -5,6 +5,26 @@ Copyright (c) 2019 Matthew David Miller. All rights reserved.
 
 Licensed under the MIT License.
 
+# Windows Scripts:
+
+batch_process_hard_links.bat - Simple script to make hard links of all files from where the script is run from.
+
+configure_windows_10.ps1 - Powershell script to configure Windows 10 settings I use such as disabling telemetry, disabling cortana, and configuring the firewall.
+
+get_file_hash.ps1 - Powershell script to get the file hashes of all files from where the script is run from.
+
+printer_restart.bat - Script to restart print spooler and clear temporary files from the spooler.
+
+robocopy_backup.bat - Script to copy a directory to another location.
+
+tar_batch_process_files.bat - Places all folders in a tar archive from where the script is run from.
+
+uninstall_default_applications.ps1 - Simple powershell script to remove some of the default apps installed in Windows 10.
+
+view_hard_links.bat - Simple script to see all the hard links of files from where the script is run from.
+
+wsl_restart.bat - Simple script to restart Windows Subsystem for Linux.
+
 # Linux Scripts:
 
 apt_package_updates.sh - A bash script to update the packages on Debian based distros.
@@ -16,6 +36,8 @@ arch_linux_packages.sh - Simple script to install some packages I use.
 backup_configs.sh - A bash script I wrote to tar the /etc and /home directory.  Used to automate backing up config files.
 
 configure_gdm.sh - A bash script to configure gdm.
+
+configure_hyper_v_guest.sh - Bash script to configure the hyper-v guest.
 
 configure_i3.sh - A bash script to configure the i3 window manager.
 
@@ -64,21 +86,3 @@ update_aur_packages.sh - Bash script to update aur packages from Arch Linux.
 update_openwrt.sh - A simple script to update packages in OpenWrt.
 
 updates.py - Python script to update packages with the apt-get package manager.
-
-# Windows Scripts:
-
-batch_process_hard_links.bat - Simple script to make hard links of all files from where the script is run from.
-
-get_file_hash.ps1 - Powershell script to get the file hashes of all files from where the script is run from.
-
-printer_restart.bat - Script to restart print spooler and clear temporary files from the spooler.
-
-robocopy_backup.bat - Script to copy a directory to another location.
-
-tar_batch_process_files.bat - Places all folders in a tar archive from where the script is run from.
-
-uninstall_default_applications.ps1 - Simple powershell script to remove some of the default apps installed in Windows 10.
-
-view_hard_links.bat - Simple script to see all the hard links of files from where the script is run from.
-
-wsl_restart.bat - Simple script to restart Windows Subsystem for Linux.
