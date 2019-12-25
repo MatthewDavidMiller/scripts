@@ -87,6 +87,7 @@ mount "${partition1}" '/mnt/boot'
 uuid="$(blkid -o value -s UUID /dev/VPNLvm/root)"
 uuid2="$(blkid -o value -s UUID /dev/VPNLvm/home)"
 uuid3="$(blkid -o value -s UUID /dev/VPNLvm/swap)"
+uuid4="$(blkid -o value -s UUID ${partition1})"
 
 # Install base packages
 debootstrap --arch amd64 --components=main,contrib,non-free stable /mnt 'http://ftp.us.debian.org/debian'
@@ -110,6 +111,7 @@ cd /
     printf '%s\n' "UUID=${uuid} / ext4 defaults 0 0"
     printf '%s\n' "UUID=${uuid2} /home ext4 defaults 0 0"
     printf '%s\n' "UUID=${uuid3} none swap sw 0 0"
+    printf '%s\n' "UUID=${uuid4} /boot vfat defaults 0 0"
 } >> '/etc/fstab'
 
 # Mount drives
