@@ -12,6 +12,12 @@ apt-get install gdisk lvm2 binutils debootstrap dosfstools
 # Lists partitions
 lsblk -f
 
+# Add proc and sys to mount
+{
+    printf '%s\n' 'proc /proc proc defaults 0 0'
+    printf '%s\n' 'sysfs  /sys  sysfs  defaults  0 0'
+} >> '/etc/fstab'
+
 # Prompts and variables
 # Specify disk and partition numbers to use for install
 read -r -p "Specify disk to use for install. Example '/dev/sda': " disk
@@ -100,12 +106,12 @@ cat <<EOF > /mnt/vpn_server_install_part_2.sh
 #!/bin/bash
 
 # Create device files
+mount /proc
+mount /sys
 apt-get install makedev
-mount none /proc -t proc
 cd /dev
 MAKEDEV generic
 cd /
-mount -t sysfs sysfs /sys
 
 # Setup fstab
 {
