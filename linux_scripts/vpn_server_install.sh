@@ -7,10 +7,18 @@
 
 # Install needed packages
 apt-get update
-apt-get install gdisk lvm2 binutils debootstrap dosfstools
+apt-get install -y gdisk lvm2 binutils debootstrap dosfstools
 
 # Lists partitions
 lsblk -f
+
+# Mount proc and sysfs
+{
+    printf '%s\n' 'proc /mnt/proc proc defaults 0 0'
+    printf '%s\n' 'sysfs /mnt/sys sysfs defaults 0 0'
+} >> '/etc/fstab'
+mount proc /mnt/proc -t proc
+mount sysfs /mnt/sys -t sysfs
 
 # Prompts and variables
 # Specify disk and partition numbers to use for install
@@ -21,15 +29,12 @@ partition1="${disk}${partition_number1}"
 partition2="${disk}${partition_number2}"
 # Specify whether to delete all partitions
 read -r -p "Do you want to delete all parititions on ${disk}? [y/N] " response1
-# Specify whether to continue install
-read -r -p "Do you want to continue the install? [y/N] " response3
 # Specify if cpu is intel
 read -r -p "Is the cpu intel? [y/N] " ucode_response
 # Specify device hostname
 read -r -p "Set the device hostname: " device_hostname
 # Specify user name
 read -r -p "Specify a username for a new user: " user_name
-
 # Enter code for dynamic dns
 read -r -p "Enter code for dynamic dns: " dynamic_dns
 
@@ -108,7 +113,7 @@ mount /proc
 mount /sys
 
 # Create device files
-apt-get install makedev
+apt-get install -y makedev
 cd /dev
 MAKEDEV generic
 cd /
@@ -171,10 +176,10 @@ deb-src 'http://security.debian.org/' stable/updates main
 
 # Install standard packages
 tasksel install standard
-apt-get install systemd linux-image-4.19.0-6-amd64 ${ucode} grub-pc efibootmgr
+apt-get install -y systemd linux-image-4.19.0-6-amd64 ${ucode} grub-pc efibootmgr
 
 # Install recommended packages
-apt-get install wget vim git ufw ntp ssh
+apt-get install -y wget vim git ufw ntp ssh
 
 # Clean download cache
 aptitude clean
@@ -243,7 +248,7 @@ chmod +x '/usr/local/bin/backup_configs.sh'
 
 # Configure cron jobs
 {
-    printf '%s\n' '@reboot apt-get update && apt-get install openvpn &'
+    printf '%s\n' '@reboot apt-get update && apt-get install -y openvpn &'
     printf '%s\n' '@reboot nohup bash /usr/local/bin/email_on_vpn_connections.sh &'
     printf '%s\n' "3,8,13,18,23,28,33,38,43,48,53,58 * * * * sleep 29 ; wget --no-check-certificate -O - https://freedns.afraid.org/dynamic/update.php?${dynamic_dns} >> /tmp/freedns_mattm_mooo_com.log 2>&1 &"
     printf '%s\n' '* 0 * * 1 bash /usr/local/bin/backup_configs.sh &'
