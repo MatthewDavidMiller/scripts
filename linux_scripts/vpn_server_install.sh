@@ -97,6 +97,7 @@ uuid4="$(blkid -o value -s UUID "${partition1}")"
 mount proc /mnt/proc -t proc
 mount sysfs /mnt/sys -t sysfs
 mkdir /mnt/etc
+mkdir /mnt/etc/mtab
 cp /proc/mounts /mnt/etc/mtab
 
 # Install base packages
