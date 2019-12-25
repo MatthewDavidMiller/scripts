@@ -7,7 +7,7 @@
 
 # Install needed packages
 apt-get update
-apt-get install gdisk lvm2
+apt-get install gdisk lvm2 binutils debootstrap
 
 # Lists partitions
 lsblk -f
@@ -83,9 +83,18 @@ mkfs.fat -F32 "${partition1}"
 mkdir '/mnt/boot'
 mount "${partition1}" '/mnt/boot'
 
-# Setup debootstrap
-apt-get update
-apt-get install debootstrap
+# Get the uuids
+uuid="$(blkid -o value -s UUID /dev/VPNLvm/root)"
+uuid2="$(blkid -o value -s UUID /dev/VPNLvm/home)"
+uuid3="$(blkid -o value -s UUID /dev/VPNLvm/swap)"
+
+# Setup fstab
+mkdir '/mnt/etc'
+{
+    printf '%s\n' "UUID=${uuid} / ext4 defaults 0 0"
+    printf '%s\n' "UUID=${uuid2} /home ext4 defaults 0 0"
+    printf '%s\n' "UUID=${uuid3} none swap sw 0 0"
+} >> '/mnt/etc/fstab'
 
 # Install base packages
 debootstrap --arch amd64 --components=main,contrib,non-free buster /mnt 'http://ftp.us.debian.org/debian'
@@ -94,32 +103,14 @@ debootstrap --arch amd64 --components=main,contrib,non-free buster /mnt 'http://
 touch '/mnt/vpn_server_install_part_2.sh'
 chmod +x '/mnt/vpn_server_install_part_2.sh'
 
-# Get the uuids
-uuid="$(blkid -o value -s UUID /dev/VPNLvm/root)"
-uuid2="$(blkid -o value -s UUID /dev/VPNLvm/home)"
-uuid3="$(blkid -o value -s UUID /dev/VPNLvm/swap)"
-
 cat <<EOF > /mnt/vpn_server_install_part_2.sh
 #!/bin/bash
-
-# Install standard packages
-tasksel install standard
-apt-get install systemd linux-image-4.19.0-6-amd64 ${ucode}
-
-# Install recommended packages
-apt-get install wget vi git ufw ntp ssh
-
-# Clean download cache
-aptitude clean
 
 # Set the timezone
 ln -sf '/usr/share/zoneinfo/America/New_York' '/etc/localtime'
 
 # Set the clock
 hwclock --systohc
-
-# Setup ntp client
-systemctl enable ntpd.service
 
 # Setup locale config
 sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
@@ -130,43 +121,48 @@ locale-gen
 # Set language to English
 rm '/etc/locale.conf'
 {
-printf '%s\n' '# language config'
-printf '%s\n' '# file location is /etc/locale.conf'
-printf '%s\n' ''
-printf '%s\n' 'LANG=en_US.UTF-8'
+    printf '%s\n' '# language config'
+    printf '%s\n' '# file location is /etc/locale.conf'
+    printf '%s\n' ''
+    printf '%s\n' 'LANG=en_US.UTF-8'
 } >> '/etc/locale.conf'
 
 # Set hostname
 rm '/etc/hostname'
 {
-printf '%s\n' '# hostname file'
-printf '%s\n' '# File location is /etc/hostname'
-printf '%s\n' "${device_hostname}"
+    printf '%s\n' '# hostname file'
+    printf '%s\n' '# File location is /etc/hostname'
+    printf '%s\n' "${device_hostname}"
 } >> '/etc/hostname'
 
 # Setup hosts file
 rm '/etc/hosts'
 {
-printf '%s\n' '# host file'
-printf '%s\n' '# file location is /etc/hosts'
-printf '%s\n' ''
-printf '%s\n' '127.0.0.1 localhost'
-printf '%s\n' '::1 localhost'
-printf '%s\n' "127.0.1.1 ${device_hostname}.localdomain ${device_hostname}"
+    printf '%s\n' '# host file'
+    printf '%s\n' '# file location is /etc/hosts'
+    printf '%s\n' ''
+    printf '%s\n' '127.0.0.1 localhost'
+    printf '%s\n' '::1 localhost'
+    printf '%s\n' "127.0.1.1 ${device_hostname}.localdomain ${device_hostname}"
 } >> '/etc/hosts'
 
 # Setup mirrors and sources
-deb-src 'http://ftp.us.debian.org/debian' stable main
-deb 'http://security.debian.org/' stable/updates main
-deb-src 'http://security.debian.org/' stable/updates main
+deb-src 'http://ftp.us.debian.org/debian' buster main
+deb 'http://security.debian.org/' buster/updates main
+deb-src 'http://security.debian.org/' buster/updates main
 
-# Setup fstab
-rm '/etc/fstab'
-{
-printf '%s\n' "UUID=${uuid} / ext4 defaults 0 0"
-printf '%s\n' "UUID=${uuid2} /home ext4 defaults 0 0"
-printf '%s\n' "UUID=${uuid3} none swap sw 0 0"
-} >> '/etc/fstab'
+# Install standard packages
+tasksel install standard
+apt-get install systemd linux-image-4.19.0-6-amd64 ${ucode}
+
+# Install recommended packages
+apt-get install wget vim git ufw ntp ssh
+
+# Clean download cache
+aptitude clean
+
+# Setup ntp client
+systemctl enable ntpd.service
 
 # Set password
 echo 'Set root password'
@@ -175,16 +171,16 @@ passwd root
 # Configure kernel for lvm
 rm '/etc/mkinitcpio.conf'
 {
-printf '%s\n' '# config for kernel'
-printf '%s\n' '# file location is /etc/mkinitcpio.conf'
-printf '%s\n' ''
-printf '%s\n' 'MODULES=()'
-printf '%s\n' ''
-printf '%s\n' 'BINARIES=()'
-printf '%s\n' ''
-printf '%s\n' 'FILES=()'
-printf '%s\n' ''
-printf '%s\n' 'HOOKS=(base udev autodetect keyboard keymap consolefont modconf block lvm2 filesystems fsck)'
+    printf '%s\n' '# config for kernel'
+    printf '%s\n' '# file location is /etc/mkinitcpio.conf'
+    printf '%s\n' ''
+    printf '%s\n' 'MODULES=()'
+    printf '%s\n' ''
+    printf '%s\n' 'BINARIES=()'
+    printf '%s\n' ''
+    printf '%s\n' 'FILES=()'
+    printf '%s\n' ''
+    printf '%s\n' 'HOOKS=(base udev autodetect keyboard keymap consolefont modconf block lvm2 filesystems fsck)'
 } >> '/etc/mkinitcpio.conf'
 mkinitcpio -P
 
@@ -193,22 +189,22 @@ mkdir '/boot/loader'
 mkdir '/boot/loader/entries'
 
 {
-printf '%s\n' '# kernel entry for systemd-boot'
-printf '%s\n' '# file location is /boot/loader/entries/vpn_server.conf'
-printf '%s\n' ''
-printf '%s\n' 'title   VPN Server Kernel'
-printf '%s\n' 'linux   /vmlinuz-linux-image-4.19.0-6-amd64'
-printf '%s\n' "initrd  /${ucode}.img"
-printf '%s\n' 'initrd  /initramfs-linux-image-4.19.0-6-amd64.img'
-printf '%s\n' "options root=UUID=${uuid} rw"
+    printf '%s\n' '# kernel entry for systemd-boot'
+    printf '%s\n' '# file location is /boot/loader/entries/vpn_server.conf'
+    printf '%s\n' ''
+    printf '%s\n' 'title   VPN Server Kernel'
+    printf '%s\n' 'linux   /vmlinuz-linux-image-4.19.0-6-amd64'
+    printf '%s\n' "initrd  /${ucode}.img"
+    printf '%s\n' 'initrd  /initramfs-linux-image-4.19.0-6-amd64.img'
+    printf '%s\n' "options root=UUID=${uuid} rw"
 } >> '/boot/loader/entries/vpn_server.conf'
 
 {
-printf '%s\n' '# config for systemd-boot'
-printf '%s\n' '# file location is /boot/loader/loader.conf'
-printf '%s\n' ''
-printf '%s\n' 'default  vpn_server'
-printf '%s\n' 'auto-entries 1'
+    printf '%s\n' '# config for systemd-boot'
+    printf '%s\n' '# file location is /boot/loader/loader.conf'
+    printf '%s\n' ''
+    printf '%s\n' 'default  vpn_server'
+    printf '%s\n' 'auto-entries 1'
 } >> '/boot/loader/loader.conf'
 
 # Setup systemd-boot
@@ -251,11 +247,11 @@ chmod +x '/usr/local/bin/backup_configs.sh'
 
 # Configure cron jobs
 {
-printf '%s\n' '@reboot apt-get update && apt-get install openvpn &'
-printf '%s\n' '@reboot nohup bash /usr/local/bin/email_on_vpn_connections.sh &'
-printf '%s\n' "3,8,13,18,23,28,33,38,43,48,53,58 * * * * sleep 29 ; wget --no-check-certificate -O - https://freedns.afraid.org/dynamic/update.php?${dynamic_dns} >> /tmp/freedns_mattm_mooo_com.log 2>&1 &"
-printf '%s\n' '* 0 * * 1 bash /usr/local/bin/backup_configs.sh &'
-printf '%s\n' '* 0 * * 0 reboot'
+    printf '%s\n' '@reboot apt-get update && apt-get install openvpn &'
+    printf '%s\n' '@reboot nohup bash /usr/local/bin/email_on_vpn_connections.sh &'
+    printf '%s\n' "3,8,13,18,23,28,33,38,43,48,53,58 * * * * sleep 29 ; wget --no-check-certificate -O - https://freedns.afraid.org/dynamic/update.php?${dynamic_dns} >> /tmp/freedns_mattm_mooo_com.log 2>&1 &"
+    printf '%s\n' '* 0 * * 1 bash /usr/local/bin/backup_configs.sh &'
+    printf '%s\n' '* 0 * * 0 reboot'
 } >> jobs.cron
 crontab jobs.cron
 rm jobs.cron
