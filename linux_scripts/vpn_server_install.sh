@@ -5,10 +5,6 @@
 # Needs to be run as root.
 # Install script for a vpn server. Use with Debian live installer. Run the script when in the live installer.
 
-# Install needed packages
-apt-get update
-apt-get install -y gdisk lvm2 binutils debootstrap dosfstools
-
 # Lists partitions
 lsblk -f
 
@@ -37,6 +33,10 @@ read -r -p "Set the device hostname: " device_hostname
 read -r -p "Specify a username for a new user: " user_name
 # Enter code for dynamic dns
 read -r -p "Enter code for dynamic dns: " dynamic_dns
+
+# Install needed packages
+apt-get update
+apt-get install -y gdisk lvm2 binutils debootstrap dosfstools
 
 # Delete all parititions on ${disk}
 if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]
@@ -104,12 +104,6 @@ chmod +x '/mnt/vpn_server_install_part_2.sh'
 cat <<EOF > /mnt/vpn_server_install_part_2.sh
 #!/bin/bash
 
-# Create device files
-apt-get install -y makedev
-cd /dev
-MAKEDEV generic
-cd /
-
 # Mount proc and sysfs
 {
     printf '%s\n' 'proc /mnt/proc proc defaults 0 0'
@@ -117,6 +111,12 @@ cd /
 } >> '/etc/fstab'
 mount /proc
 mount /sys
+
+# Create device files
+apt-get install -y makedev
+cd /dev
+MAKEDEV generic
+cd /
 
 # Setup fstab
 {
