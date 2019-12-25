@@ -78,7 +78,8 @@ mount '/dev/VPNLvm/home' '/mnt/home'
 swapon '/dev/VPNLvm/swap'
 mkfs.fat -F32 "${partition1}"
 mkdir '/mnt/boot'
-mount "${partition1}" '/mnt/boot'
+mkdir '/mnt/boot/efi'
+mount "${partition1}" '/mnt/boot/efi'
 
 # Get the uuids
 uuid="$(blkid -o value -s UUID /dev/VPNLvm/root)"
@@ -115,7 +116,7 @@ cd /
     printf '%s\n' "UUID=${uuid} / ext4 defaults 0 0"
     printf '%s\n' "UUID=${uuid2} /home ext4 defaults 0 0"
     printf '%s\n' "UUID=${uuid3} none swap sw 0 0"
-    printf '%s\n' "UUID=${uuid4} /boot vfat defaults 0 0"
+    printf '%s\n' "UUID=${uuid4} /boot/efi vfat defaults 0 0"
 } >> '/etc/fstab'
 
 # Mount drives
@@ -162,9 +163,11 @@ rm '/etc/hosts'
 } >> '/etc/hosts'
 
 # Setup mirrors and sources
-deb-src 'http://ftp.us.debian.org/debian' stable main
-deb 'http://security.debian.org/' stable/updates main
-deb-src 'http://security.debian.org/' stable/updates main
+{
+    printf '%s\n' 'deb-src http://ftp.us.debian.org/debian stable main'
+    printf '%s\n' 'deb http://security.debian.org/ stable/updates main'
+    printf '%s\n' 'deb-src http://security.debian.org/ stable/updates main'
+} >> '/etc/apt/sources.list'
 
 # Install standard packages
 tasksel install standard
@@ -200,8 +203,16 @@ rm '/etc/mkinitcpio.conf'
 mkinitcpio -P
 
 # Setup grub
-grub-install ${disk}
+
+{
+    printf '%s\n' 'GRUB_DEFAULT=0'
+    printf '%s\n' 'GRUB_TIMEOUT=0'
+    printf '%s\n' 'GRUB_DISTRIBUTOR=`lsb_release -i -s 2> /dev/null || echo Debian`'
+    printf '%s\n' 'GRUB_CMDLINE_LINUX_DEFAULT="quiet"'
+    printf '%s\n' "GRUB_CMDLINE_LINUX=\"cryptlvm root=UUID=${uuid}\""
+} >> '/etc/default/grub'
 update-grub
+grub-install ${disk}
 
 # Add a user
 useradd -m "${user_name}"
