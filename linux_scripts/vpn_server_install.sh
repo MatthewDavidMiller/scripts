@@ -8,14 +8,6 @@
 # Lists partitions
 lsblk -f
 
-# Mount proc and sysfs
-{
-    printf '%s\n' 'proc /mnt/proc proc defaults 0 0'
-    printf '%s\n' 'sysfs /mnt/sys sysfs defaults 0 0'
-} >> '/etc/fstab'
-mount proc /mnt/proc -t proc
-mount sysfs /mnt/sys -t sysfs
-
 # Prompts and variables
 # Specify disk and partition numbers to use for install
 read -r -p "Specify disk to use for install. Example '/dev/sda': " disk
@@ -88,6 +80,14 @@ mkfs.fat -F32 "${partition1}"
 mkdir '/mnt/boot'
 mount "${partition1}" '/mnt/boot'
 
+# Mount proc and sysfs
+{
+    printf '%s\n' 'proc /mnt/proc proc defaults 0 0'
+    printf '%s\n' 'sysfs /mnt/sys sysfs defaults 0 0'
+} >> '/etc/fstab'
+mount proc /mnt/proc -t proc
+mount sysfs /mnt/sys -t sysfs
+
 # Get the uuids
 uuid="$(blkid -o value -s UUID /dev/VPNLvm/root)"
 uuid2="$(blkid -o value -s UUID /dev/VPNLvm/home)"
@@ -103,14 +103,6 @@ chmod +x '/mnt/vpn_server_install_part_2.sh'
 
 cat <<EOF > /mnt/vpn_server_install_part_2.sh
 #!/bin/bash
-
-# Mount proc and sysfs
-{
-    printf '%s\n' 'proc /proc proc defaults 0 0'
-    printf '%s\n' 'sysfs /sys sysfs defaults 0 0'
-} >> '/etc/fstab'
-mount /proc
-mount /sys
 
 # Create device files
 apt-get install -y makedev
