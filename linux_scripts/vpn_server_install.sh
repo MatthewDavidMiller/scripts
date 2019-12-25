@@ -80,14 +80,6 @@ mkfs.fat -F32 "${partition1}"
 mkdir '/mnt/boot'
 mount "${partition1}" '/mnt/boot'
 
-# Mount proc and sysfs
-{
-    printf '%s\n' 'proc /mnt/proc proc defaults 0 0'
-    printf '%s\n' 'sysfs /mnt/sys sysfs defaults 0 0'
-} >> '/etc/fstab'
-mount proc /mnt/proc -t proc
-mount sysfs /mnt/sys -t sysfs
-
 # Get the uuids
 uuid="$(blkid -o value -s UUID /dev/VPNLvm/root)"
 uuid2="$(blkid -o value -s UUID /dev/VPNLvm/home)"
@@ -96,6 +88,14 @@ uuid4="$(blkid -o value -s UUID "${partition1}")"
 
 # Install base packages
 debootstrap --arch amd64 --components=main,contrib,non-free stable /mnt 'http://ftp.us.debian.org/debian'
+
+# Mount proc and sysfs
+{
+    printf '%s\n' 'proc /mnt/proc proc defaults 0 0'
+    printf '%s\n' 'sysfs /mnt/sys sysfs defaults 0 0'
+} >> '/etc/fstab'
+mount proc /mnt/proc -t proc
+mount sysfs /mnt/sys -t sysfs
 
 # Setup part 2 script
 touch '/mnt/vpn_server_install_part_2.sh'
