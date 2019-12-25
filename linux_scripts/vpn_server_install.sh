@@ -97,7 +97,7 @@ mkdir '/mnt/etc'
 } >> '/mnt/etc/fstab'
 
 # Install base packages
-debootstrap --arch amd64 --components=main,contrib,non-free buster /mnt 'http://ftp.us.debian.org/debian'
+debootstrap --arch amd64 --components=main,contrib,non-free stable /mnt 'http://ftp.us.debian.org/debian'
 
 # Setup part 2 script
 touch '/mnt/vpn_server_install_part_2.sh'
@@ -147,13 +147,13 @@ rm '/etc/hosts'
 } >> '/etc/hosts'
 
 # Setup mirrors and sources
-deb-src 'http://ftp.us.debian.org/debian' buster main
-deb 'http://security.debian.org/' buster/updates main
-deb-src 'http://security.debian.org/' buster/updates main
+deb-src 'http://ftp.us.debian.org/debian' stable main
+deb 'http://security.debian.org/' stable/updates main
+deb-src 'http://security.debian.org/' stable/updates main
 
 # Install standard packages
 tasksel install standard
-apt-get install systemd linux-image-4.19.0-6-amd64 ${ucode}
+apt-get install systemd linux-image-4.19.0-6-amd64 ${ucode} grub-pc
 
 # Install recommended packages
 apt-get install wget vim git ufw ntp ssh
@@ -184,31 +184,9 @@ rm '/etc/mkinitcpio.conf'
 } >> '/etc/mkinitcpio.conf'
 mkinitcpio -P
 
-# Setup systemd-boot with lvm
-mkdir '/boot/loader'
-mkdir '/boot/loader/entries'
-
-{
-    printf '%s\n' '# kernel entry for systemd-boot'
-    printf '%s\n' '# file location is /boot/loader/entries/vpn_server.conf'
-    printf '%s\n' ''
-    printf '%s\n' 'title   VPN Server Kernel'
-    printf '%s\n' 'linux   /vmlinuz-linux-image-4.19.0-6-amd64'
-    printf '%s\n' "initrd  /${ucode}.img"
-    printf '%s\n' 'initrd  /initramfs-linux-image-4.19.0-6-amd64.img'
-    printf '%s\n' "options root=UUID=${uuid} rw"
-} >> '/boot/loader/entries/vpn_server.conf'
-
-{
-    printf '%s\n' '# config for systemd-boot'
-    printf '%s\n' '# file location is /boot/loader/loader.conf'
-    printf '%s\n' ''
-    printf '%s\n' 'default  vpn_server'
-    printf '%s\n' 'auto-entries 1'
-} >> '/boot/loader/loader.conf'
-
-# Setup systemd-boot
-bootctl --path=/boot install
+# Setup grub
+grub-install ${disk}
+update-grub
 
 # Add a user
 useradd -m "${user_name}"
@@ -266,7 +244,6 @@ bash '/usr/local/bin/pivn_installer.sh'
 pivpn add
 pivpn add
 pivpn add
-
 
 # Setup ssh
 
