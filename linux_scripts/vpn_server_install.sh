@@ -105,6 +105,7 @@ mount none /proc -t proc
 cd /dev
 MAKEDEV generic
 cd /
+mount -t sysfs sysfs /sys
 
 # Setup fstab
 {
@@ -164,7 +165,7 @@ deb-src 'http://security.debian.org/' stable/updates main
 
 # Install standard packages
 tasksel install standard
-apt-get install systemd linux-image-4.19.0-6-amd64 ${ucode} grub-pc
+apt-get install systemd linux-image-4.19.0-6-amd64 ${ucode} grub-pc efibootmgr
 
 # Install recommended packages
 apt-get install wget vim git ufw ntp ssh
