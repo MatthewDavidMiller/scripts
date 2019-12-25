@@ -78,8 +78,7 @@ mount '/dev/VPNLvm/home' '/mnt/home'
 swapon '/dev/VPNLvm/swap'
 mkfs.fat -F32 "${partition1}"
 mkdir '/mnt/boot'
-mkdir '/mnt/boot/efi'
-mount "${partition1}" '/mnt/boot/efi'
+mount "${partition1}" '/mnt/boot'
 
 # Get the uuids
 uuid="$(blkid -o value -s UUID /dev/VPNLvm/root)"
@@ -116,7 +115,7 @@ cd /
     printf '%s\n' "UUID=${uuid} / ext4 defaults 0 0"
     printf '%s\n' "UUID=${uuid2} /home ext4 defaults 0 0"
     printf '%s\n' "UUID=${uuid3} none swap sw 0 0"
-    printf '%s\n' "UUID=${uuid4} /boot/efi vfat defaults 0 0"
+    printf '%s\n' "UUID=${uuid4} /boot vfat defaults 0 0"
 } >> '/etc/fstab'
 
 # Mount drives
@@ -171,7 +170,7 @@ rm '/etc/hosts'
 
 # Install standard packages
 tasksel install standard
-apt-get install -y systemd linux-image-4.19.0-6-amd64 ${ucode} grub-pc efibootmgr
+apt-get install -y systemd linux-image-4.19.0-6-amd64 ${ucode} efibootmgr
 
 # Install recommended packages
 apt-get install -y wget vim git ufw ntp ssh
@@ -202,17 +201,28 @@ rm '/etc/mkinitcpio.conf'
 } >> '/etc/mkinitcpio.conf'
 mkinitcpio -P
 
-# Setup grub
-rm '/etc/default/grub'
+# Setup systemd-boot with lvm
+mkdir '/boot/loader'
+mkdir '/boot/loader/entries'
 {
-    printf '%s\n' 'GRUB_DEFAULT=0'
-    printf '%s\n' 'GRUB_TIMEOUT=0'
-    printf '%s\n' 'GRUB_DISTRIBUTOR=`lsb_release -i -s 2> /dev/null || echo Debian`'
-    printf '%s\n' 'GRUB_CMDLINE_LINUX_DEFAULT="quiet"'
-    printf '%s\n' "GRUB_CMDLINE_LINUX=\"cryptlvm root=UUID=${uuid}\""
-} > '/etc/default/grub'
-update-grub
-grub-install ${disk}
+    printf '%s\n' '# kernel entry for systemd-boot'
+    printf '%s\n' '# file location is /boot/loader/entries/vpn_server.conf'
+    printf '%s\n' ''
+    printf '%s\n' 'title   VPN Server Kernel'
+    printf '%s\n' 'linux   /vmlinuz-linux-image-4.19.0-6-amd64'
+    printf '%s\n' "initrd  /${ucode}.img"
+    printf '%s\n' 'initrd  /initramfs-linux-image-4.19.0-6-amd64.img'
+    printf '%s\n' "options root=UUID=${uuid} rw"
+} >> '/boot/loader/entries/vpn_server.conf'
+{
+    printf '%s\n' '# config for systemd-boot'
+    printf '%s\n' '# file location is /boot/loader/loader.conf'
+    printf '%s\n' ''
+    printf '%s\n' 'default  vpn_server'
+    printf '%s\n' 'auto-entries 1'
+} >> '/boot/loader/loader.conf'
+# Setup systemd-boot
+bootctl --path=/boot install
 
 # Add a user
 useradd -m "${user_name}"
