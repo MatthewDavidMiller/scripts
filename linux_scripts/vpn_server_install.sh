@@ -203,7 +203,7 @@ rm '/etc/mkinitcpio.conf'
 mkinitcpio -P
 
 # Setup grub
-
+rm '/etc/default/grub'
 {
     printf '%s\n' 'GRUB_DEFAULT=0'
     printf '%s\n' 'GRUB_TIMEOUT=0'
