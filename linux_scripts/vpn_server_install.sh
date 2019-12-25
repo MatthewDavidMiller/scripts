@@ -88,14 +88,6 @@ uuid="$(blkid -o value -s UUID /dev/VPNLvm/root)"
 uuid2="$(blkid -o value -s UUID /dev/VPNLvm/home)"
 uuid3="$(blkid -o value -s UUID /dev/VPNLvm/swap)"
 
-# Setup fstab
-mkdir '/mnt/etc'
-{
-    printf '%s\n' "UUID=${uuid} / ext4 defaults 0 0"
-    printf '%s\n' "UUID=${uuid2} /home ext4 defaults 0 0"
-    printf '%s\n' "UUID=${uuid3} none swap sw 0 0"
-} >> '/mnt/etc/fstab'
-
 # Install base packages
 debootstrap --arch amd64 --components=main,contrib,non-free stable /mnt 'http://ftp.us.debian.org/debian'
 
@@ -105,6 +97,23 @@ chmod +x '/mnt/vpn_server_install_part_2.sh'
 
 cat <<EOF > /mnt/vpn_server_install_part_2.sh
 #!/bin/bash
+
+# Create device files
+apt-get install makedev
+mount none /proc -t proc
+cd /dev
+MAKEDEV generic
+cd /
+
+# Setup fstab
+{
+    printf '%s\n' "UUID=${uuid} / ext4 defaults 0 0"
+    printf '%s\n' "UUID=${uuid2} /home ext4 defaults 0 0"
+    printf '%s\n' "UUID=${uuid3} none swap sw 0 0"
+} >> '/etc/fstab'
+
+# Mount drives
+mount -a
 
 # Set the timezone
 ln -sf '/usr/share/zoneinfo/America/New_York' '/etc/localtime'
@@ -296,4 +305,4 @@ exit
 EOF
 
 # Move to installation
-chroot /mnt "./vpn_server_install_part_2.sh"
+LANG=C.UTF-8 chroot /mnt "./vpn_server_install_part_2.sh"
