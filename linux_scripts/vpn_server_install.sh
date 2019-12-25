@@ -7,7 +7,7 @@
 
 # Install needed packages
 apt-get update
-apt-get install gdisk lvm2 binutils debootstrap
+apt-get install gdisk lvm2 binutils debootstrap dosfstools
 
 # Lists partitions
 lsblk -f
@@ -87,7 +87,7 @@ mount "${partition1}" '/mnt/boot'
 uuid="$(blkid -o value -s UUID /dev/VPNLvm/root)"
 uuid2="$(blkid -o value -s UUID /dev/VPNLvm/home)"
 uuid3="$(blkid -o value -s UUID /dev/VPNLvm/swap)"
-uuid4="$(blkid -o value -s UUID ${partition1})"
+uuid4="$(blkid -o value -s UUID "${partition1}")"
 
 # Install base packages
 debootstrap --arch amd64 --components=main,contrib,non-free stable /mnt 'http://ftp.us.debian.org/debian'
