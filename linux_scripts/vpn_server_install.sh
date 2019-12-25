@@ -89,17 +89,6 @@ uuid2="$(blkid -o value -s UUID /dev/VPNLvm/home)"
 uuid3="$(blkid -o value -s UUID /dev/VPNLvm/swap)"
 uuid4="$(blkid -o value -s UUID "${partition1}")"
 
-# Mount proc and sysfs
-{
-    printf '%s\n' 'proc /mnt/proc proc defaults 0 0'
-    printf '%s\n' 'sysfs /mnt/sys sysfs defaults 0 0'
-} >> '/etc/fstab'
-mount proc /mnt/proc -t proc
-mount sysfs /mnt/sys -t sysfs
-mkdir /mnt/etc
-mkdir /mnt/etc/mtab
-cp /proc/mounts /mnt/etc/mtab
-
 # Install base packages
 debootstrap --arch amd64 --components=main,contrib,non-free stable /mnt 'http://ftp.us.debian.org/debian'
 
@@ -109,6 +98,14 @@ chmod +x '/mnt/vpn_server_install_part_2.sh'
 
 cat <<EOF > /mnt/vpn_server_install_part_2.sh
 #!/bin/bash
+
+# Mount proc and sysfs
+{
+    printf '%s\n' 'proc /mnt/proc proc defaults 0 0'
+    printf '%s\n' 'sysfs /mnt/sys sysfs defaults 0 0'
+} >> '/etc/fstab'
+mount /proc
+mount /sys
 
 # Create device files
 apt-get install makedev
