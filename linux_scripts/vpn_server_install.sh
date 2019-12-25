@@ -2,8 +2,12 @@
 
 # Copyright (c) 2019 Matthew David Miller. All rights reserved.
 # Licensed under the MIT License.
-
+# Needs to be run as root.
 # Install script for a vpn server. Use with Debian live installer. Run the script when in the live installer.
+
+# Install needed packages
+apt-get update
+apt-get install gdisk lvm2
 
 # Lists partitions
 lsblk -f
@@ -14,6 +18,7 @@ read -r -p "Specify disk to use for install. Example '/dev/sda': " disk
 read -r -p "Specify partition number for /boot. Example '1': " partition_number1
 read -r -p "Specify partition number for lvm. Example '2': " partition_number2
 partition1="${disk}${partition_number1}"
+partition2="${disk}${partition_number2}"
 # Specify whether to delete all partitions
 read -r -p "Do you want to delete all parititions on ${disk}? [y/N] " response1
 # Specify whether to continue install
@@ -60,8 +65,8 @@ sgdisk -n 0:0:+512MiB -c "${partition_number1}":"EFI System Partition" -t "${par
 sgdisk -n 0:0:+12GiB -c "${partition_number2}":"Linux Filesystem" -t "${partition_number2}":8300 "${disk}"
 
 # Setup lvm on partition 2
-pvcreate '/dev/mapper/cryptlvm'
-vgcreate VPNLvm '/dev/mapper/cryptlvm'
+pvcreate "${partition2}"
+vgcreate VPNLvm "${partition2}"
 lvcreate -L 2G VPNLvm -n swap
 lvcreate -L 5G VPNLvm -n root
 lvcreate -l 100%FREE VPNLvm -n home
