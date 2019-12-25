@@ -210,7 +210,7 @@ mkinitcpio -P
     printf '%s\n' 'GRUB_DISTRIBUTOR=`lsb_release -i -s 2> /dev/null || echo Debian`'
     printf '%s\n' 'GRUB_CMDLINE_LINUX_DEFAULT="quiet"'
     printf '%s\n' "GRUB_CMDLINE_LINUX=\"cryptlvm root=UUID=${uuid}\""
-} >> '/etc/default/grub'
+} > '/etc/default/grub'
 update-grub
 grub-install ${disk}
 
