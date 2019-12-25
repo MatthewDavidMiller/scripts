@@ -12,12 +12,6 @@ apt-get install gdisk lvm2 binutils debootstrap dosfstools
 # Lists partitions
 lsblk -f
 
-# Add proc and sys to mount
-{
-    printf '%s\n' 'proc /proc proc defaults 0 0'
-    printf '%s\n' 'sysfs  /sys  sysfs  defaults  0 0'
-} >> '/etc/fstab'
-
 # Prompts and variables
 # Specify disk and partition numbers to use for install
 read -r -p "Specify disk to use for install. Example '/dev/sda': " disk
@@ -95,6 +89,15 @@ uuid2="$(blkid -o value -s UUID /dev/VPNLvm/home)"
 uuid3="$(blkid -o value -s UUID /dev/VPNLvm/swap)"
 uuid4="$(blkid -o value -s UUID "${partition1}")"
 
+# Mount proc and sysfs
+{
+    printf '%s\n' 'proc /mnt/proc proc defaults 0 0'
+    printf '%s\n' 'sysfs /mnt/sys sysfs defaults 0 0'
+} >> '/etc/fstab'
+mount proc /mnt/proc -t proc
+mount sysfs /mnt/sys -t sysfs
+cp /proc/mounts /mnt/etc/mtab
+
 # Install base packages
 debootstrap --arch amd64 --components=main,contrib,non-free stable /mnt 'http://ftp.us.debian.org/debian'
 
@@ -106,8 +109,6 @@ cat <<EOF > /mnt/vpn_server_install_part_2.sh
 #!/bin/bash
 
 # Create device files
-mount /proc
-mount /sys
 apt-get install makedev
 cd /dev
 MAKEDEV generic
