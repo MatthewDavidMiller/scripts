@@ -106,8 +106,8 @@ cat <<EOF > /mnt/vpn_server_install_part_2.sh
 
 # Mount proc and sysfs
 {
-    printf '%s\n' 'proc /mnt/proc proc defaults 0 0'
-    printf '%s\n' 'sysfs /mnt/sys sysfs defaults 0 0'
+    printf '%s\n' 'proc /proc proc defaults 0 0'
+    printf '%s\n' 'sysfs /sys sysfs defaults 0 0'
 } >> '/etc/fstab'
 mount /proc
 mount /sys
