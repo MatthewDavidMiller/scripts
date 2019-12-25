@@ -104,6 +104,12 @@ chmod +x '/mnt/vpn_server_install_part_2.sh'
 cat <<EOF > /mnt/vpn_server_install_part_2.sh
 #!/bin/bash
 
+# Create device files
+apt-get install -y makedev
+cd /dev
+MAKEDEV generic
+cd /
+
 # Mount proc and sysfs
 {
     printf '%s\n' 'proc /mnt/proc proc defaults 0 0'
@@ -111,12 +117,6 @@ cat <<EOF > /mnt/vpn_server_install_part_2.sh
 } >> '/etc/fstab'
 mount /proc
 mount /sys
-
-# Create device files
-apt-get install -y makedev
-cd /dev
-MAKEDEV generic
-cd /
 
 # Setup fstab
 {
