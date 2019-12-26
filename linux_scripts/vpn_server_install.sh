@@ -67,11 +67,8 @@ mkfs.ext4 '/dev/VPNLvm/home'
 mkswap '/dev/VPNLvm/swap'
 mount '/dev/VPNLvm/root' /mnt
 mkdir '/mnt/home'
-mount '/dev/VPNLvm/home' '/mnt/home'
-swapon '/dev/VPNLvm/swap'
 mkfs.fat -F32 "${partition1}"
 mkdir '/mnt/boot'
-mount "${partition1}" '/mnt/boot'
 
 # Get the uuids
 uuid="$(blkid -o value -s UUID /dev/VPNLvm/root)"
