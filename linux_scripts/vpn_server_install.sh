@@ -12,9 +12,11 @@ lsblk -f
 # Specify disk and partition numbers to use for install
 read -r -p "Specify disk to use for install. Example '/dev/sda': " disk
 read -r -p "Specify partition number for /boot. Example '1': " partition_number1
-read -r -p "Specify partition number for lvm. Example '2': " partition_number2
+read -r -p "Specify partition number for swap. Example '2': " partition_number2
+read -r -p "Specify partition number for root /. Example '3': " partition_number3
 partition1="${disk}${partition_number1}"
 partition2="${disk}${partition_number2}"
+partition3="${disk}${partition_number3}"
 # Specify whether to delete all partitions
 read -r -p "Do you want to delete all parititions on ${disk}? [y/N] " response1
 # Specify if cpu is intel
@@ -23,12 +25,10 @@ read -r -p "Is the cpu intel? [y/N] " ucode_response
 read -r -p "Set the device hostname: " device_hostname
 # Specify user name
 read -r -p "Specify a username for a new user: " user_name
-# Enter code for dynamic dns
-read -r -p "Enter code for dynamic dns: " dynamic_dns
 
 # Install needed packages
 apt-get update
-apt-get install -y gdisk lvm2 binutils debootstrap dosfstools
+apt-get install -y gdisk binutils debootstrap dosfstools
 
 # Delete all parititions on ${disk}
 if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]
@@ -50,31 +50,16 @@ else
     ucode='amd64-microcode'
 fi
 
-# Creates two partitions.  First one is a 512 MB EFI partition while the second is a 10 GB Linux filesystem partition.
+# Creates three partitions.  First one is a 512 MB EFI partition, second is a 2GB Linux filesystem partition partition, and third is a 10 GB Linux filesystem partition.
 sgdisk -n 0:0:+512MiB -c "${partition_number1}":"EFI System Partition" -t "${partition_number1}":ef00 "${disk}"
-sgdisk -n 0:0:+12GiB -c "${partition_number2}":"Linux Filesystem" -t "${partition_number2}":8300 "${disk}"
-
-# Setup lvm on partition 2
-pvcreate "${partition2}"
-vgcreate VPNLvm "${partition2}"
-lvcreate -L 2G VPNLvm -n swap
-lvcreate -L 5G VPNLvm -n root
-lvcreate -l 100%FREE VPNLvm -n home
+sgdisk -n 0:0:+2GiB -c "${partition_number2}":"Linux Filesystem" -t "${partition_number2}":8300 "${disk}"
+sgdisk -n 0:0:+10GiB -c "${partition_number3}":"Linux Filesystem" -t "${partition_number3}":8300 "${disk}"
 
 # Setup and mount filesystems
-mkfs.ext4 '/dev/VPNLvm/root'
-mkfs.ext4 '/dev/VPNLvm/home'
-mkswap '/dev/VPNLvm/swap'
-mount '/dev/VPNLvm/root' /mnt
-mkdir '/mnt/home'
+mkfs.ext4 "${partition3}"
+mount "${partition3}" /mnt
+mkswap "${partition2}"
 mkfs.fat -F32 "${partition1}"
-mkdir '/mnt/boot'
-
-# Get the uuids
-uuid="$(blkid -o value -s UUID /dev/VPNLvm/root)"
-uuid2="$(blkid -o value -s UUID /dev/VPNLvm/home)"
-uuid3="$(blkid -o value -s UUID /dev/VPNLvm/swap)"
-uuid4="$(blkid -o value -s UUID "${partition1}")"
 
 # Install base packages
 debootstrap --arch amd64 --components=main,contrib,non-free stable /mnt 'http://ftp.us.debian.org/debian'
@@ -86,6 +71,11 @@ debootstrap --arch amd64 --components=main,contrib,non-free stable /mnt 'http://
 } >> '/etc/fstab'
 mount proc /mnt/proc -t proc
 mount sysfs /mnt/sys -t sysfs
+
+# Get the uuids
+uuid="$(blkid -o value -s UUID "${partition1}")"
+uuid2="$(blkid -o value -s UUID "${partition2}")"
+uuid3="$(blkid -o value -s UUID "${partition3}")"
 
 # Setup part 2 script
 touch '/mnt/vpn_server_install_part_2.sh'
@@ -102,11 +92,15 @@ cd /
 
 # Setup fstab
 {
-    printf '%s\n' "UUID=${uuid} / ext4 defaults 0 0"
-    printf '%s\n' "UUID=${uuid2} /home ext4 defaults 0 0"
-    printf '%s\n' "UUID=${uuid3} none swap sw 0 0"
-    printf '%s\n' "UUID=${uuid4} /boot vfat defaults 0 0"
+    printf '%s\n' "UUID=${uuid} /boot vfat defaults 0 0"
+    printf '%s\n' "UUID=${uuid2} none swap sw 0 0"
+    printf '%s\n' "UUID=${uuid3} / ext4 defaults 0 0"
 } >> '/etc/fstab'
+
+# Make directories
+mkdir '/boot'
+mkdir '/boot/EFI'
+mkdir '/boot/EFI/debian'
 
 # Mount drives
 mount -a
@@ -160,57 +154,29 @@ rm '/etc/hosts'
 
 # Install standard packages
 tasksel install standard
-apt-get install -y systemd linux-image-4.19.0-6-amd64 ${ucode} efibootmgr
+apt-get install -y systemd linux-image-4.19.0-6-amd64 ${ucode} efibootmgr grub-efi initramfs-tools
 
-# Install recommended packages
-apt-get install -y wget vim git ufw ntp ssh
+# Update kernel
+update-initramfs -u
 
 # Clean download cache
 aptitude clean
-
-# Setup ntp client
-systemctl enable ntpd.service
 
 # Set password
 echo 'Set root password'
 passwd root
 
-# Configure kernel for lvm
-rm '/etc/mkinitcpio.conf'
+# Setup grub
+rm '/etc/default/grub'
 {
-    printf '%s\n' '# config for kernel'
-    printf '%s\n' '# file location is /etc/mkinitcpio.conf'
-    printf '%s\n' ''
-    printf '%s\n' 'MODULES=()'
-    printf '%s\n' ''
-    printf '%s\n' 'BINARIES=()'
-    printf '%s\n' ''
-    printf '%s\n' 'FILES=()'
-    printf '%s\n' ''
-    printf '%s\n' 'HOOKS=(base udev autodetect keyboard keymap consolefont modconf block lvm2 filesystems fsck)'
-} >> '/etc/mkinitcpio.conf'
-mkinitcpio -P
-
-# Setup efistub
-mkdir /boot/efi
-mkdir /boot/efi/EFI
-mkdir /boot/efi/EFI/debian
-{
-    printf '%s\n' '#!/bin/sh'
-    printf '%s\n' 'cp /vmlinuz /boot/efi/EFI/debian/'
-} >> '/etc/kernel/postinst.d/zz-update-efistub'
-chmod +x /etc/kernel/postinst.d/zz-update-efistub
-/etc/kernel/postinst.d/zz-update-efistub
-
-mkdir /etc/initramfs
-mkdir /etc/initramfs/post-update.d
-{
-    printf '%s\n' '#!/bin/sh'
-    printf '%s\n' 'cp /initrd.img /boot/efi/EFI/debian/'
-} >> '/etc/initramfs/post-update.d/zz-update-efistub'
-chmod +x /etc/initramfs/post-update.d/zz-update-efistub
-/etc/initramfs/post-update.d/zz-update-efistub
-efibootmgr --disk ${partition1} -c -g -L "Debian (EFI stub)" -l '\EFI\debian\vmlinuz' -u "root=UUID=${uuid} ro quiet rootfstype=ext4 add_efi_memmap initrd=\\EFI\\debian\\initrd.img"
+    printf '%s\n' 'GRUB_DEFAULT=0'
+    printf '%s\n' 'GRUB_TIMEOUT=0'
+    printf '%s\n' 'GRUB_DISTRIBUTOR=$(lsb_release -i -s 2> /dev/null || echo Debian)'
+    printf '%s\n' 'GRUB_CMDLINE_LINUX_DEFAULT="quiet"'
+    printf '%s\n' "GRUB_CMDLINE_LINUX=\"\""
+} > '/etc/default/grub'
+grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=debian
+update-grub
 
 # Add a user
 useradd -m "${user_name}"
@@ -219,100 +185,6 @@ passwd "${user_name}"
 
 # Setup sudo
 printf '%s\n' "${user_name} ALL=(ALL) ALL" >> '/etc/sudoers'
-
-# Configure ufw
-
-# Limit max connections to vpn server
-ufw limit udp 64640 0.0.0.0/0 any 0.0.0.0/0 in
-
-# Limit max connections to ssh server and allow it only on private networks
-ufw limit tcp 22 0.0.0.0/0 any 10.0.0.0/8 in
-
-# Enable ufw
-systemctl enable ufw.service
-ufw enable
-
-# Get scripts
-
-# Script to get emails on vpn connections
-wget 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/email_on_vpn_connections.sh'
-mv 'email_on_vpn_connections.sh' '/usr/local/bin/email_on_vpn_connections.sh'
-chmod +x '/usr/local/bin/email_on_vpn_connections.sh'
-wget 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/email_on_vpn_connections.py'
-mv 'email_on_vpn_connections.py' '/usr/local/bin/email_on_vpn_connections.py'
-chmod +x '/usr/local/bin/email_on_vpn_connections.py'
-
-# Script to archive config files for backup
-wget 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/backup_configs.sh'
-mv 'backup_configs.sh' '/usr/local/bin/backup_configs.sh'
-chmod +x '/usr/local/bin/backup_configs.sh'
-
-# Configure cron jobs
-{
-    printf '%s\n' '@reboot apt-get update && apt-get install -y openvpn &'
-    printf '%s\n' '@reboot nohup bash /usr/local/bin/email_on_vpn_connections.sh &'
-    printf '%s\n' "3,8,13,18,23,28,33,38,43,48,53,58 * * * * sleep 29 ; wget --no-check-certificate -O - https://freedns.afraid.org/dynamic/update.php?${dynamic_dns} >> /tmp/freedns_mattm_mooo_com.log 2>&1 &"
-    printf '%s\n' '* 0 * * 1 bash /usr/local/bin/backup_configs.sh &'
-    printf '%s\n' '* 0 * * 0 reboot'
-} >> jobs.cron
-crontab jobs.cron
-rm jobs.cron
-
-# Setup vpn with PiVPN
-wget 'https://raw.githubusercontent.com/pivpn/pivpn/master/auto_install/install.sh'
-mv 'install.sh' '/usr/local/bin/pivn_installer.sh'
-chmod +x '/usr/local/bin/pivn_installer.sh'
-bash '/usr/local/bin/pivn_installer.sh'
-
-# Add three openvpn users
-pivpn add
-pivpn add
-pivpn add
-
-# Setup ssh
-
-# Generate an ecdsa 521 bit key
-ssh-keygen -f "/home/${user_name}/ssh_key" -t ecdsa -b 521
-
-# Authorize the key for use with ssh
-mkdir "/home/${user_name}/.ssh"
-chmod 700 "/home/${user_name}/.ssh"
-touch "/home/${user_name}/.ssh/authorized_keys"
-chmod 600 "/home/${user_name}/.ssh/authorized_keys"
-cat "/home/${user_name}/ssh_key.pub" >> "/home/${user_name}/.ssh/authorized_keys"
-printf '%s\n' '' >> "/home/${user_name}/.ssh/authorized_keys"
-chown -R "${user_name}" "/home/${user_name}"
-read -r -p "Remember to copy the ssh private key to the client before restarting the device after install: " >> '/dev/null'
-
-# Secure ssh access
-
-# Turn off password authentication
-sed -i 's,#PasswordAuthentication\s*yes,PasswordAuthentication no,' /etc/ssh/sshd_config
-sed -i 's,#PasswordAuthentication\s*no,PasswordAuthentication no,' /etc/ssh/sshd_config
-sed -i 's,PasswordAuthentication\s*yes,PasswordAuthentication no,' /etc/ssh/sshd_config
-
-# Do not allow empty passwords
-sed -i 's,#PermitEmptyPasswords\s*yes,PermitEmptyPasswords no,' /etc/ssh/sshd_config
-sed -i 's,#PermitEmptyPasswords\s*no,PermitEmptyPasswords no,' /etc/ssh/sshd_config
-sed -i 's,PermitEmptyPasswords\s*yes,PermitEmptyPasswords no,' /etc/ssh/sshd_config
-
-# Turn off PAM
-sed -i 's,#UsePAM\s*yes,UsePAM no,' /etc/ssh/sshd_config
-sed -i 's,#UsePAM\s*no,UsePAM no,' /etc/ssh/sshd_config
-sed -i 's,UsePAM\s*yes,UsePAM no,' /etc/ssh/sshd_config
-
-# Turn off root ssh access
-sed -i 's,#PermitRootLogin\s*prohibit-password,PermitRootLogin no,' /etc/ssh/sshd_config
-sed -i 's,PermitRootLogin\s*prohibit-password,PermitRootLogin no,' /etc/ssh/sshd_config
-sed -i 's,#PermitRootLogin\s*yes,PermitRootLogin no,' /etc/ssh/sshd_config
-sed -i 's,PermitRootLogin\s*yes,PermitRootLogin no,' /etc/ssh/sshd_config
-sed -i 's,#PermitRootLogin\s*no,PermitRootLogin no,' /etc/ssh/sshd_config
-
-# Enable public key authentication
-sed -i 's,#AuthorizedKeysFile\s*.ssh/authorized_keys\s*.ssh/authorized_keys2,AuthorizedKeysFile .ssh/authorized_keys,' /etc/ssh/sshd_config
-sed -i 's,#PubkeyAuthentication\s*no,PubkeyAuthentication yes,' /etc/ssh/sshd_config
-sed -i 's,#PubkeyAuthentication\s*yes,PubkeyAuthentication yes,' /etc/ssh/sshd_config
-sed -i 's,PubkeyAuthentication\s*no,PubkeyAuthentication yes,' /etc/ssh/sshd_config
 
 # Exit chroot
 exit
