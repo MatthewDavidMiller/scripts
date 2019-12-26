@@ -27,9 +27,17 @@ wsl_restart.bat - Simple script to restart Windows Subsystem for Linux.
 
 # Linux Scripts:
 
-apt_package_updates.sh - A bash script to update the packages on Debian based distros.
+# Large Scripts:
 
-arch_linux_install.sh - A bash script I wrote to automate my install of Arch Linux.
+arch_linux_install.sh - Bash script to automate my install of Arch Linux.
+
+vpn_server_install.sh - Bash script to automate the install of my vpn server.
+
+vpn_server_configure.sh - Bash script to automate the configuration of my vpn server.
+
+# Small Scripts:
+
+apt_package_updates.sh - A bash script to update the packages on Debian based distros.
 
 arch_linux_packages.sh - Simple script to install some packages I use.
 
