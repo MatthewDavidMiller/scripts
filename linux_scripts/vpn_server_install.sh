@@ -42,12 +42,6 @@ then
     fi
 fi
 
-# Continue install
-if [[ "${response3}" =~ ^([nN][oO]|[nN])+$ ]]
-then
-    exit 1
-fi
-
 # Get cpu type
 if [[ "${ucode_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
 then
@@ -55,7 +49,6 @@ then
 else
     ucode='amd64-microcode'
 fi
-
 
 # Creates two partitions.  First one is a 512 MB EFI partition while the second is a 10 GB Linux filesystem partition.
 sgdisk -n 0:0:+512MiB -c "${partition_number1}":"EFI System Partition" -t "${partition_number1}":ef00 "${disk}"
