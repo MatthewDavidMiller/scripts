@@ -201,28 +201,26 @@ rm '/etc/mkinitcpio.conf'
 } >> '/etc/mkinitcpio.conf'
 mkinitcpio -P
 
-# Setup systemd-boot with lvm
-mkdir '/boot/loader'
-mkdir '/boot/loader/entries'
+# Setup efistub
+mkdir /boot/efi
+mkdir /boot/efi/EFI
+mkdir /boot/efi/EFI/debian
 {
-    printf '%s\n' '# kernel entry for systemd-boot'
-    printf '%s\n' '# file location is /boot/loader/entries/vpn_server.conf'
-    printf '%s\n' ''
-    printf '%s\n' 'title   VPN Server Kernel'
-    printf '%s\n' 'linux   /vmlinuz-linux-image-4.19.0-6-amd64'
-    printf '%s\n' "initrd  /${ucode}.img"
-    printf '%s\n' 'initrd  /initramfs-linux-image-4.19.0-6-amd64.img'
-    printf '%s\n' "options root=UUID=${uuid} rw"
-} >> '/boot/loader/entries/vpn_server.conf'
+    printf '%s\n' '#!/bin/sh'
+    printf '%s\n' 'cp /vmlinuz /boot/efi/EFI/debian/'
+} >> '/etc/kernel/postinst.d/zz-update-efistub'
+chmod +x /etc/kernel/postinst.d/zz-update-efistub
+/etc/kernel/postinst.d/zz-update-efistub
+
+mkdir /etc/initramfs
+mkdir /etc/initramfs/post-update.d
 {
-    printf '%s\n' '# config for systemd-boot'
-    printf '%s\n' '# file location is /boot/loader/loader.conf'
-    printf '%s\n' ''
-    printf '%s\n' 'default  vpn_server'
-    printf '%s\n' 'auto-entries 1'
-} >> '/boot/loader/loader.conf'
-# Setup systemd-boot
-bootctl --path=/boot install
+    printf '%s\n' '#!/bin/sh'
+    printf '%s\n' 'cp /initrd.img /boot/efi/EFI/debian/'
+} >> '/etc/initramfs/post-update.d/zz-update-efistub'
+chmod +x /etc/initramfs/post-update.d/zz-update-efistub
+/etc/initramfs/post-update.d/zz-update-efistub
+efibootmgr --disk ${partition1} -c -g -L "Debian (EFI stub)" -l '\EFI\debian\vmlinuz' -u "root=UUID=${uuid} ro quiet rootfstype=ext4 add_efi_memmap initrd=\\EFI\\debian\\initrd.img"
 
 # Add a user
 useradd -m "${user_name}"
