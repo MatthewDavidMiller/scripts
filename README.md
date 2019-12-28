@@ -3,13 +3,17 @@ This repository contains scripts I have created.
 
 Copyright (c) 2019 Matthew David Miller. All rights reserved.
 
-[Licensed under the MIT License.](https://github.com/MatthewDavidMiller/scripts/blob/stable/LICENSE)
+[Licensed under the MIT License.](LICENSE)
 
-# Windows Scripts:
+## Windows Scripts:
 
-[batch_process_hard_links.bat](https://github.com/MatthewDavidMiller/scripts/blob/stable/windows_scripts/batch_process_hard_links.bat) - Simple script to make hard links of all files from where the script is run from.
+### Large Scripts:
 
 [configure_windows_10.ps1](https://github.com/MatthewDavidMiller/scripts/blob/stable/windows_scripts/configure_windows_10.ps1) - Powershell script to configure Windows 10 settings I use such as disabling telemetry, disabling cortana, and configuring the firewall.
+
+### Small Scripts:
+
+[batch_process_hard_links.bat](https://github.com/MatthewDavidMiller/scripts/blob/stable/windows_scripts/batch_process_hard_links.bat) - Simple script to make hard links of all files from where the script is run from.
 
 [get_file_hash.ps1](https://github.com/MatthewDavidMiller/scripts/blob/stable/windows_scripts/get_file_hash.ps1) - Powershell script to get the file hashes of all files from where the script is run from.
 
@@ -25,9 +29,9 @@ Copyright (c) 2019 Matthew David Miller. All rights reserved.
 
 [wsl_restart.bat](https://github.com/MatthewDavidMiller/scripts/blob/stable/windows_scripts/wsl_restart.bat) - Simple script to restart Windows Subsystem for Linux.
 
-# Linux Scripts:
+## Linux Scripts:
 
-# Large Scripts:
+### Large Scripts:
 
 [arch_linux_install.sh](https://github.com/MatthewDavidMiller/scripts/blob/stable/linux_scripts/arch_linux_install.sh) - Bash script to automate my install of Arch Linux.
 
@@ -35,7 +39,7 @@ Copyright (c) 2019 Matthew David Miller. All rights reserved.
 
 [vpn_server_configure.sh](https://github.com/MatthewDavidMiller/scripts/blob/stable/linux_scripts/vpn_server_configure.sh) - Bash script to automate the configuration of my vpn server.
 
-# Small Scripts:
+### Small Scripts:
 
 [apt_package_updates.sh](https://github.com/MatthewDavidMiller/scripts/blob/stable/linux_scripts/apt_package_updates.sh) - A bash script to update the packages on Debian based distros.
 
