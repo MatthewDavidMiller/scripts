@@ -31,7 +31,7 @@ wsl_restart.bat - Simple script to restart Windows Subsystem for Linux.
 
 arch_linux_install.sh - Bash script to automate my install of Arch Linux.
 
-debian_server_install.sh - Bash script to automate the install of my vpn server.
+debian_server_install.sh - Bash script to automate the install of debian servers.
 
 vpn_server_configure.sh - Bash script to automate the configuration of my vpn server.
 
