@@ -167,6 +167,14 @@ apt-get clean
 echo 'Set root password'
 passwd root
 
+# Enable network connectivity
+{
+    printf '%s\n' 'auto lo'
+    printf '%s\n' 'iface lo inet loopback'
+    printf '%s\n' 'auto eth0'
+    printf '%s\n' 'iface eth0 inet dhcp'
+} >> '/etc/network/interfaces'
+
 # Setup grub
 rm -f '/etc/default/grub'
 {

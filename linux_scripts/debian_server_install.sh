@@ -77,6 +77,9 @@ uuid="$(blkid -o value -s UUID "${partition1}")"
 uuid2="$(blkid -o value -s UUID "${partition2}")"
 uuid3="$(blkid -o value -s UUID "${partition3}")"
 
+# Get the interface name
+interface="(ip route get 8.8.8.8 | sed -nr 's/.*dev ([^\ ]+).*/\1/p')"
+
 # Setup part 2 script
 touch '/mnt/vpn_server_install_part_2.sh'
 chmod +x '/mnt/vpn_server_install_part_2.sh'
@@ -166,6 +169,14 @@ apt-get clean
 # Set password
 echo 'Set root password'
 passwd root
+
+# Enable network connectivity
+{
+    printf '%s\n' 'auto lo'
+    printf '%s\n' 'iface lo inet loopback'
+    printf '%s\n' 'auto eth0'
+    printf '%s\n' 'iface eth0 inet dhcp'
+} >> '/etc/network/interfaces'
 
 # Setup grub
 rm -f '/etc/default/grub'
