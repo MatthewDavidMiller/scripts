@@ -37,6 +37,8 @@ Copyright (c) 2019 Matthew David Miller. All rights reserved.
 
 [debian_server_install.sh](linux_scripts/debian_server_install.sh) - Bash script to automate the install of debian servers.
 
+[debian_oldstable_server_install.sh](linux_scripts/debian_oldstable_server_install.sh) - Bash script to automate the install of debian servers using oldstable version.
+
 [vpn_server_configure.sh](linux_scripts/vpn_server_configure.sh) - Bash script to automate the configuration of my vpn server.
 
 ### Small Scripts:
