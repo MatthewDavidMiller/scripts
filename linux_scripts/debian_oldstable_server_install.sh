@@ -141,6 +141,10 @@ rm '/etc/hosts'
 
 # Setup mirrors and sources
 {
+    printf '%s\n' 'deb http://mirrors.advancedhosters.com/debian/ oldstable main'
+    printf '%s\n' 'deb-src http://mirrors.advancedhosters.com/debian/ oldstable main'
+    printf '%s\n' 'deb http://mirrors.advancedhosters.com/debian/ oldstable-updates main'
+    printf '%s\n' 'deb-src http://mirrors.advancedhosters.com/debian/ oldstable-updates main'
     printf '%s\n' 'deb-src http://ftp.us.debian.org/debian oldstable main'
     printf '%s\n' 'deb http://security.debian.org/ oldstable/updates main'
     printf '%s\n' 'deb-src http://security.debian.org/ oldstable/updates main'
