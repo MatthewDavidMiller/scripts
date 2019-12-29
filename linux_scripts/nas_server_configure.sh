@@ -41,9 +41,6 @@ EOF
 apt-get update
 apt-get install -y wget vim git ufw ntp ssh apt-transport-https openssh-server
 
-# Setup ntp client
-systemctl enable ntpd.service
-
 # Configure ufw
 
 # Limit max connections to ssh server and allow it only on private networks
