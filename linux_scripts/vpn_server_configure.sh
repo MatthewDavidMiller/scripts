@@ -54,7 +54,7 @@ chmod +x '/usr/local/bin/backup_configs.sh'
     printf '%s\n' '* 0 * * 0 reboot'
 } >> jobs.cron
 crontab jobs.cron
-rm jobs.cron
+rm -f jobs.cron
 
 # Setup vpn with PiVPN
 wget 'https://raw.githubusercontent.com/pivpn/pivpn/master/auto_install/install.sh'
@@ -114,7 +114,7 @@ sed -i 's,PubkeyAuthentication\s*no,PubkeyAuthentication yes,' /etc/ssh/sshd_con
 
 # Configure automatic updates
 
-rm '/etc/apt/apt.conf.d/50unattended-upgrades'
+rm -f '/etc/apt/apt.conf.d/50unattended-upgrades'
 
 cat <<\EOF > '/etc/apt/apt.conf.d/50unattended-upgrades'
 Unattended-Upgrade::Origins-Pattern {

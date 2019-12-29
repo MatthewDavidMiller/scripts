@@ -90,7 +90,7 @@ vgcreate Archlvm '/dev/mapper/cryptlvm'
 lvcreate -L 2G Archlvm -n swap
 lvcreate -L 32G Archlvm -n root
 lvcreate -l 100%FREE Archlvm -n home
-rm '/tmp/disk_password'
+rm -f '/tmp/disk_password'
 
 # Configure Windows duel boot
 if [[ "${windows_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
@@ -161,7 +161,7 @@ sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
 locale-gen
 
 # Set language to English
-rm '/etc/locale.conf'
+rm -f '/etc/locale.conf'
 {
 printf '%s\n' '# language config'
 printf '%s\n' '# file location is /etc/locale.conf'
@@ -171,7 +171,7 @@ printf '%s\n' ''
 } >> '/etc/locale.conf'
 
 # Set hostname
-rm '/etc/hostname'
+rm -f '/etc/hostname'
 {
 printf '%s\n' '# hostname file'
 printf '%s\n' '# File location is /etc/hostname'
@@ -180,7 +180,7 @@ printf '%s\n' ''
 } >> '/etc/hostname'
 
 # Setup hosts file
-rm '/etc/hosts'
+rm -f '/etc/hosts'
 {
 printf '%s\n' '# host file'
 printf '%s\n' '# file location is /etc/hosts'
@@ -196,7 +196,7 @@ echo 'Set root password'
 passwd root
 
 # Configure kernel for encryption and lvm
-rm '/etc/mkinitcpio.conf'
+rm -f '/etc/mkinitcpio.conf'
 {
 printf '%s\n' '# config for kernel'
 printf '%s\n' '# file location is /etc/mkinitcpio.conf'
@@ -253,7 +253,7 @@ printf '%s\n' ''
 bootctl --path=/boot install
 
 # Setup touchpad
-rm '/etc/X11/xorg.conf.d/20-touchpad.conf'
+rm -f '/etc/X11/xorg.conf.d/20-touchpad.conf'
 {
 printf '%s\n' 'Section "InputClass"'
 printf '%s\n' ' Identifier "libinput touchpad catchall"'
