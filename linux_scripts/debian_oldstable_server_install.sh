@@ -155,7 +155,7 @@ rm -f '/etc/hosts'
 
 # Install standard packages
 tasksel install standard
-apt-get install -y systemd linux-image-amd64 ${ucode} efibootmgr grub-efi initramfs-tools
+apt-get install -y systemd linux-image-amd64 ${ucode} efibootmgr grub-efi initramfs-tools sudo
 
 # Update kernel
 update-initramfs -u
