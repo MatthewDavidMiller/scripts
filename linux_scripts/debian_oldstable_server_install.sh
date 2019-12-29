@@ -171,8 +171,8 @@ passwd root
 {
     printf '%s\n' 'auto lo'
     printf '%s\n' 'iface lo inet loopback'
-    printf '%s\n' 'auto eth0'
-    printf '%s\n' 'iface eth0 inet dhcp'
+    printf '%s\n' 'auto ${interface}'
+    printf '%s\n' 'iface ${interface} inet dhcp'
 } >> '/etc/network/interfaces'
 
 # Setup grub
