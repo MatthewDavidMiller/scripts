@@ -1,93 +1,67 @@
 # Copyright (c) 2019 Matthew David Miller. All rights reserved.
-
 # Licensed under the MIT License.
-
 # Run the script as admin.
 
+# Remove applications
+
+# Applications base name
+$AppBase = "Microsoft."
 # Applications to remove
-
-# Use this variable with the other variables
-$app_to_remove_1="Microsoft."
-
-# Names of applications
-$app_to_remove_2="Windows.Photos"
-$app_to_remove_3="BingWeather"
-$app_to_remove_4="MicrosoftStickyNotes"
-$app_to_remove_5="ZuneVideo"
-$app_to_remove_6="ZuneMusic"
-$app_to_remove_7="XboxSpeechToTextOverlay"
-$app_to_remove_8="XboxIdentityProvider"
-$app_to_remove_9="XboxGamingOverlay"
-$app_to_remove_10="XboxGameOverlay"
-$app_to_remove_11="XboxApp"
-$app_to_remove_12="Xbox.TCUI"
-$app_to_remove_13="WindowsSoundRecorder"
-$app_to_remove_14="WindowsMaps"
-$app_to_remove_15="WindowsFeedbackHub"
-$app_to_remove_16="windowscommunicationsapps"
-$app_to_remove_17="WindowsCamera"
-$app_to_remove_18="WindowsAlarms"
-$app_to_remove_19="SkypeApp"
-$app_to_remove_20="Print3D"
-$app_to_remove_21="People"
-$app_to_remove_22="OneConnect"
-$app_to_remove_23="Office.Sway"
-$app_to_remove_24="NetworkSpeedTest"
-$app_to_remove_25="MicrosoftSolitaireCollection"
-$app_to_remove_26="MicrosoftOfficeHub"
-$app_to_remove_27="Microsoft3DViewer"
-$app_to_remove_28="Messaging"
-$app_to_remove_29="Getstarted"
-$app_to_remove_30="GetHelp"
-$app_to_remove_31="XboxOneSmartGlass"
-$app_to_remove_32="BingNews"
-$app_to_remove_33="Windows.Photos"
-$app_to_remove_34="WindowsCalculator"
-$app_to_remove_35="MSPaint"
-$app_to_remove_36="YourPhone"
-$app_to_remove_37="MixedReality.Portal"
-$app_to_remove_38="ScreenSketch"
-$app_to_remove_39="Office.OneNote"
-$app_to_remove_40="Wallet"
-
+$AppBingWeather = "BingWeather"
+$AppStickyNotes = "MicrosoftStickyNotes"
+$AppZuneVideo = "ZuneVideo"
+$AppZuneMusic = "ZuneMusic"
+$AppMaps = "WindowsMaps"
+$AppFeedbackHub = "WindowsFeedbackHub"
+$AppCommunications = "windowscommunicationsapps"
+$AppCamera = "WindowsCamera"
+$AppAlarms = "WindowsAlarms"
+$AppSkype = "SkypeApp"
+$AppPrint3D = "Print3D"
+$AppPeople = "People"
+$AppOneConnect = "OneConnect"
+$AppOfficeSway = "Office.Sway"
+$AppNetworkSpeedTest = "NetworkSpeedTest"
+$AppSolitaire = "MicrosoftSolitaireCollection"
+$AppOfficeHub = "MicrosoftOfficeHub"
+$App3DViewer = "Microsoft3DViewer"
+$AppMessaging = "Messaging"
+$AppGetStarted = "Getstarted"
+$AppGetHelp = "GetHelp"
+$AppXboxOneSmartGlass = "XboxOneSmartGlass"
+$AppNews = "BingNews"
+$AppYourPhone = "YourPhone"
+$AppMixedReality = "MixedReality.Portal"
+$AppScreenSketch = "ScreenSketch"
+$AppOfficeOnenote = "Office.OneNote"
+$AppWallet = "Wallet"
 
 # Removes the applications
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_2)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_3)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_4)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_5)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_6)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_7)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_8)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_9)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_10)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_11)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_12)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_13)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_14)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_15)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_16)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_17)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_18)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_19)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_20)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_21)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_22)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_23)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_24)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_25)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_26)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_27)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_28)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_29)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_30)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_31)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_32)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_33)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_34)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_35)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_36)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_37)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_38)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_39)" | Remove-AppxPackage
-Get-AppxPackage -name "$($app_to_remove_1)$($app_to_remove_40)" | Remove-AppxPackage
+Get-AppxPackage -name "$($AppBase)$($AppBingWeather)" | Remove-AppxPackage
+Get-AppxPackage -name "$($AppBase)$($AppStickyNotes)" | Remove-AppxPackage
+Get-AppxPackage -name "$($AppBase)$($AppZuneVideo)" | Remove-AppxPackage
+Get-AppxPackage -name "$($AppBase)$($AppZuneMusic)" | Remove-AppxPackage
+Get-AppxPackage -name "$($AppBase)$($AppMaps)" | Remove-AppxPackage
+Get-AppxPackage -name "$($AppBase)$($AppFeedbackHub)" | Remove-AppxPackage
+Get-AppxPackage -name "$($AppBase)$($AppCommunications)" | Remove-AppxPackage
+Get-AppxPackage -name "$($AppBase)$($AppCamera)" | Remove-AppxPackage
+Get-AppxPackage -name "$($AppBase)$($AppAlarms)" | Remove-AppxPackage
+Get-AppxPackage -name "$($AppBase)$($AppSkype)" | Remove-AppxPackage
+Get-AppxPackage -name "$($AppBase)$($AppPrint3D)" | Remove-AppxPackage
+Get-AppxPackage -name "$($AppBase)$($AppPeople)" | Remove-AppxPackage
+Get-AppxPackage -name "$($AppBase)$($AppOneConnect)" | Remove-AppxPackage
+Get-AppxPackage -name "$($AppBase)$($AppOfficeSway)" | Remove-AppxPackage
+Get-AppxPackage -name "$($AppBase)$($AppNetworkSpeedTest)" | Remove-AppxPackage
+Get-AppxPackage -name "$($AppBase)$($AppSolitaire)" | Remove-AppxPackage
+Get-AppxPackage -name "$($AppBase)$($AppOfficeHub)" | Remove-AppxPackage
+Get-AppxPackage -name "$($AppBase)$($App3DViewer)" | Remove-AppxPackage
+Get-AppxPackage -name "$($AppBase)$($AppMessaging)" | Remove-AppxPackage
+Get-AppxPackage -name "$($AppBase)$($AppGetStarted)" | Remove-AppxPackage
+Get-AppxPackage -name "$($AppBase)$($AppGetHelp)" | Remove-AppxPackage
+Get-AppxPackage -name "$($AppBase)$($AppXboxOneSmartGlass)" | Remove-AppxPackage
+Get-AppxPackage -name "$($AppBase)$($AppNews)" | Remove-AppxPackage
+Get-AppxPackage -name "$($AppBase)$($AppYourPhone)" | Remove-AppxPackage
+Get-AppxPackage -name "$($AppBase)$($AppMixedReality)" | Remove-AppxPackage
+Get-AppxPackage -name "$($AppBase)$($AppScreenSketch)" | Remove-AppxPackage
+Get-AppxPackage -name "$($AppBase)$($AppOfficeOnenote)" | Remove-AppxPackage
+Get-AppxPackage -name "$($AppBase)$($AppWallet)" | Remove-AppxPackage
