@@ -154,7 +154,7 @@ apt-get install -y systemd linux-image-amd64 ${ucode} efibootmgr grub-efi initra
 update-initramfs -u
 
 # Clean download cache
-aptitude clean
+apt-get clean
 
 # Set password
 echo 'Set root password'
