@@ -7,13 +7,41 @@
 
 # Enter code for dynamic dns
 read -r -p "Enter code for dynamic dns: " dynamic_dns
+# Set server ip
+read -r -p "Enter server ip address. Example '10.1.10.6': " ip_address
+# Set network
+read -r -p "Enter network ip address. Example '10.1.10.0': " network_address
+# Set subnet mask
+read -r -p "Enter netmask. Example '255.255.255.0': " subnet_mask
+# Set gateway
+read -r -p "Enter gateway ip. Example '10.1.10.1': " gateway_address
+# Set dns server
+read -r -p "Enter dns server ip. Example '10.1.10.5': " dns_address
+
+# Get the interface name
+interface="(ip route get 8.8.8.8 | sed -nr 's/.*dev ([^\ ]+).*/\1/p')"
 
 # Get username
 user_name=$(logname)
 
+# Configure network
+rm -f '/etc/network/interfaces'
+cat <<EOF > '/etc/network/interfaces'
+auto lo
+iface lo inet loopback
+auto ${interface}
+iface ${interface} inet static
+    address ${ip_address}
+    network ${network_address}
+    netmask ${subnet_mask}
+    gateway ${gateway_address}
+    dns-nameservers ${dns_address}
+
+EOF
+
 # Install recommended packages
 apt-get update
-apt-get install -y wget vim git ufw ntp ssh apt-transport-https
+apt-get install -y wget vim git ufw ntp ssh apt-transport-https openssh-server
 
 # Setup ntp client
 systemctl enable ntpd.service
