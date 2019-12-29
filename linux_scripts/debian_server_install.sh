@@ -108,11 +108,14 @@ mount -a
 # Set the timezone
 ln -sf '/usr/share/zoneinfo/America/New_York' '/etc/localtime'
 
+# Install locale package
+apt-get install -y locales
+
 # Setup locales
 dpkg-reconfigure locales
 
 # Set language to English
-rm '/etc/locale.conf'
+rm -f '/etc/locale.conf'
 {
     printf '%s\n' '# language config'
     printf '%s\n' '# file location is /etc/locale.conf'
@@ -121,7 +124,7 @@ rm '/etc/locale.conf'
 } >> '/etc/locale.conf'
 
 # Set hostname
-rm '/etc/hostname'
+rm -f '/etc/hostname'
 {
     printf '%s\n' '# hostname file'
     printf '%s\n' '# File location is /etc/hostname'
@@ -129,7 +132,7 @@ rm '/etc/hostname'
 } >> '/etc/hostname'
 
 # Setup hosts file
-rm '/etc/hosts'
+rm -f '/etc/hosts'
 {
     printf '%s\n' '# host file'
     printf '%s\n' '# file location is /etc/hosts'
@@ -165,7 +168,7 @@ echo 'Set root password'
 passwd root
 
 # Setup grub
-rm '/etc/default/grub'
+rm -f '/etc/default/grub'
 {
     printf '%s\n' 'GRUB_DEFAULT=0'
     printf '%s\n' 'GRUB_TIMEOUT=0'
