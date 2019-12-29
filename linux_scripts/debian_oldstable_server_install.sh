@@ -108,14 +108,8 @@ mount -a
 # Set the timezone
 ln -sf '/usr/share/zoneinfo/America/New_York' '/etc/localtime'
 
-# Set the clock
-hwclock --systohc
-
-# Setup locale config
-sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
-
-# Generate locale
-locale-gen
+# Setup locales
+dpkg-reconfigure locales
 
 # Set language to English
 rm '/etc/locale.conf'
@@ -154,7 +148,7 @@ rm '/etc/hosts'
 
 # Install standard packages
 tasksel install standard
-apt-get install -y systemd linux-image-4.19.0-6-amd64 ${ucode} efibootmgr grub-efi initramfs-tools
+apt-get install -y systemd linux-image-amd64 ${ucode} efibootmgr grub-efi initramfs-tools
 
 # Update kernel
 update-initramfs -u
