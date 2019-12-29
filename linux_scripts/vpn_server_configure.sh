@@ -12,7 +12,8 @@ read -r -p "Enter code for dynamic dns: " dynamic_dns
 user_name=$(logname)
 
 # Install recommended packages
-apt-get install -y wget vim git ufw ntp ssh
+apt-get update
+apt-get install -y wget vim git ufw ntp ssh apt-transport-https
 
 # Setup ntp client
 systemctl enable ntpd.service
@@ -69,14 +70,14 @@ pivpn add
 # Setup ssh
 
 # Generate an ecdsa 521 bit key
-ssh-keygen -f "/home/${user_name}/ssh_key" -t ecdsa -b 521
+ssh-keygen -f "/home/${user_name}/vpn_key" -t ecdsa -b 521
 
 # Authorize the key for use with ssh
 mkdir "/home/${user_name}/.ssh"
 chmod 700 "/home/${user_name}/.ssh"
 touch "/home/${user_name}/.ssh/authorized_keys"
 chmod 600 "/home/${user_name}/.ssh/authorized_keys"
-cat "/home/${user_name}/ssh_key.pub" >> "/home/${user_name}/.ssh/authorized_keys"
+cat "/home/${user_name}/vpn_key.pub" >> "/home/${user_name}/.ssh/authorized_keys"
 printf '%s\n' '' >> "/home/${user_name}/.ssh/authorized_keys"
 chown -R "${user_name}" "/home/${user_name}"
 read -r -p "Remember to copy the ssh private key to the client before restarting the device after install: " >> '/dev/null'
@@ -110,3 +111,28 @@ sed -i 's,#AuthorizedKeysFile\s*.ssh/authorized_keys\s*.ssh/authorized_keys2,Aut
 sed -i 's,#PubkeyAuthentication\s*no,PubkeyAuthentication yes,' /etc/ssh/sshd_config
 sed -i 's,#PubkeyAuthentication\s*yes,PubkeyAuthentication yes,' /etc/ssh/sshd_config
 sed -i 's,PubkeyAuthentication\s*no,PubkeyAuthentication yes,' /etc/ssh/sshd_config
+
+# Configure automatic updates
+
+rm '/etc/apt/apt.conf.d/50unattended-upgrades'
+
+cat <<\EOF > '/etc/apt/apt.conf.d/50unattended-upgrades'
+Unattended-Upgrade::Origins-Pattern {
+        "origin=Debian,a=stable";
+        "origin=Debian,a=stable-updates";
+};
+
+Unattended-Upgrade::Package-Blacklist {
+
+};
+
+// Automatically reboot *WITHOUT CONFIRMATION* if
+//  the file /var/run/reboot-required is found after the upgrade
+Unattended-Upgrade::Automatic-Reboot "true";
+
+// If automatic reboot is enabled and needed, reboot at the specific
+// time instead of immediately
+//  Default: "now"
+Unattended-Upgrade::Automatic-Reboot-Time "04:00";
+
+EOF
