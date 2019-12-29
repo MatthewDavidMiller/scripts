@@ -39,7 +39,7 @@ EOF
 
 # Install recommended packages
 apt-get update
-apt-get install -y wget vim git ufw ntp ssh apt-transport-https
+apt-get install -y wget vim git ufw ntp ssh apt-transport-https openssh-server
 
 # Setup ntp client
 systemctl enable ntpd.service
@@ -80,7 +80,7 @@ chmod +x '/usr/local/bin/backup_configs.sh'
     printf '%s\n' '* 0 * * 1 bash /usr/local/bin/backup_configs.sh &'
 } >> jobs.cron
 crontab jobs.cron
-rm jobs.cron
+rm -f jobs.cron
 
 # Setup ssh
 
@@ -129,7 +129,7 @@ sed -i 's,PubkeyAuthentication\s*no,PubkeyAuthentication yes,' /etc/ssh/sshd_con
 
 # Configure automatic updates
 
-rm '/etc/apt/apt.conf.d/50unattended-upgrades'
+rm -f '/etc/apt/apt.conf.d/50unattended-upgrades'
 
 cat <<\EOF > '/etc/apt/apt.conf.d/50unattended-upgrades'
 Unattended-Upgrade::Origins-Pattern {
@@ -167,7 +167,7 @@ deb https://packages.openmediavault.org/public arrakis main
 
 EOF
 
-cat <<EOF >> 'openmediavault_install.sh'
+cat <<\EOF >> 'openmediavault_install.sh'
 
 export LANG=C
 export DEBIAN_FRONTEND=noninteractive
