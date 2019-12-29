@@ -198,6 +198,10 @@ passwd "${user_name}"
 # Setup sudo
 printf '%s\n' "${user_name} ALL=(ALL) ALL" >> '/etc/sudoers'
 
+# Set shell
+chsh  -s /bin/bash
+chsh  -s /bin/bash "${user_name}"
+
 # Exit chroot
 exit
 
