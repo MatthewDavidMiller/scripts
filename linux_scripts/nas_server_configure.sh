@@ -39,9 +39,16 @@ EOF
 
 # Install recommended packages
 apt-get update
+apt-get upgrade
 apt-get install -y wget vim git ufw ntp ssh apt-transport-https openssh-server
 
 # Configure ufw
+
+# Set default inbound to deny
+ufw default deny incoming
+
+# Set default outbound to allow
+ufw default allow outgoing
 
 # Limit max connections to ssh server and allow it only on private networks
 ufw limit proto tcp from 10.0.0.0/8 to any port 22
