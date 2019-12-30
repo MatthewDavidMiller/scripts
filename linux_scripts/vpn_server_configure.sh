@@ -41,9 +41,16 @@ EOF
 
 # Install recommended packages
 apt-get update
+apt-get upgrade
 apt-get install -y wget vim git ufw ntp ssh apt-transport-https openssh-server
 
 # Configure ufw
+
+# Set default inbound to deny
+ufw default deny incoming
+
+# Set default outbound to allow
+ufw default allow outgoing
 
 # Limit max connections to vpn server
 ufw limit proto udp from any to any port 64640
