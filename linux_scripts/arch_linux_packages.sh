@@ -24,6 +24,7 @@ read -r -p "Install clamav? [y/N] " response17
 read -r -p "Install vim? [y/N] " response18
 read -r -p "Install shellcheck? [y/N] " response19
 read -r -p "Install tftpd? [y/N] " response20
+read -r -p "Install cmake? [y/N] " response21
 
 # Install gnome desktop environment
 if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]
@@ -143,4 +144,10 @@ fi
 if [[ "${response20}" =~ ^([yY][eE][sS]|[yY])+$ ]]
 then
     sudo pacman -S --noconfirm --needed tftp-hpa
+fi
+
+# Install cmake
+if [[ "${response21}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+then
+    sudo pacman -S --noconfirm --needed cmake
 fi
