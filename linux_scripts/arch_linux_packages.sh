@@ -25,6 +25,7 @@ read -r -p "Install vim? [y/N] " response18
 read -r -p "Install shellcheck? [y/N] " response19
 read -r -p "Install tftpd? [y/N] " response20
 read -r -p "Install cmake? [y/N] " response21
+read -r -p "Install pylint? [y/N] " response22
 
 # Install gnome desktop environment
 if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]
@@ -150,4 +151,10 @@ fi
 if [[ "${response21}" =~ ^([yY][eE][sS]|[yY])+$ ]]
 then
     sudo pacman -S --noconfirm --needed cmake
+fi
+
+# Install pylint
+if [[ "${response22}" =~ ^([yY][eE][sS]|[yY])+$ ]]
+then
+    sudo pacman -S --noconfirm --needed python-pylint
 fi
