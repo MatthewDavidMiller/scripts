@@ -35,6 +35,8 @@ Copyright (c) 2019 Matthew David Miller. All rights reserved.
 
 [arch_linux_install.sh](linux_scripts/arch_linux_install.sh) - Bash script to automate my install of Arch Linux.
 
+[arch_linux_configure.sh](linux_scripts/arch_linux_configure.sh) - Bash script to automate my configuration of Arch Linux.
+
 [debian_server_install.sh](linux_scripts/debian_server_install.sh) - Bash script to automate the install of debian servers.
 
 [debian_oldstable_server_install.sh](linux_scripts/debian_oldstable_server_install.sh) - Bash script to automate the install of debian servers using oldstable version.
