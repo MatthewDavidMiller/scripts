@@ -8,5 +8,5 @@ then
     sudo opkg update
     
     # Upgrades all installed packages
-    sudo opkg list-upgradable | cut -f 1 -d ' ' | xargs opkg upgrade
+    sudo opkg list-upgradable | cut -f 1 -d ' ' | sudo xargs opkg upgrade
 fi
