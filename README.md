@@ -43,6 +43,8 @@ Copyright (c) 2019 Matthew David Miller. All rights reserved.
 
 [nas_server_configure.sh](linux_scripts/nas_server_configure.sh) - Bash script to automate the configuration of my nas.
 
+[pihole_server_configure.sh](linux_scripts/pihole_server_configure.sh) - Bash script to automate the configuration of my pihole server.
+
 [vpn_server_configure.sh](linux_scripts/vpn_server_configure.sh) - Bash script to automate the configuration of my vpn server.
 
 ### Small Scripts:
