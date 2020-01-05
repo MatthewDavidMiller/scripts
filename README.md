@@ -61,6 +61,10 @@ Copyright (c) 2019 Matthew David Miller. All rights reserved.
 
 [configure_kvm.sh](linux_scripts/configure_kvm.sh) - A bash script to configure kvm.
 
+[configure_omada_controller.sh](linux_scripts/configure_omada_controller.sh) - A bash script to configure TP Link Omada Controller.
+
+[configure_sway.sh](linux_scripts/configure_sway.sh) - A bash script to configure the sway window manager.
+
 [configure_termite.sh](linux_scripts/configure_termite.sh) - A bash script to configure the termite terminal emulator.
 
 [connect_smb.sh](linux_scripts/connect_smb.sh) - A bash script to connect a samba share and automount it.
