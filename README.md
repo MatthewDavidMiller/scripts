@@ -1,7 +1,7 @@
 # Scripts
 This repository contains scripts I have created.
 
-Copyright (c) 2019 Matthew David Miller. All rights reserved.
+Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 
 [Licensed under the MIT License.](LICENSE)
 

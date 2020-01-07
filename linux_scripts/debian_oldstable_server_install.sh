@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) 2019 Matthew David Miller. All rights reserved.
+# Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 # Licensed under the MIT License.
 # Needs to be run as root.
 # Install script for a debian server. Use with Debian standard live installer. Run the script when in the live installer.

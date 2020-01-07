@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) 2019 Matthew David Miller. All rights reserved.
+# Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 # Licensed under the MIT License.
 # Needs to be run as root. Make sure you are logged in as a user instead of root.
 # Configuration script for the nas server. Run after installing with the oldstable install script.
