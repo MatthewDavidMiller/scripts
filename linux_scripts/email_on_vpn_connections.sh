@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) 2019 Matthew David Miller. All rights reserved.
+# Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 # Licensed under the MIT License.
 
 # This script is used to email the admin when a VPN connection is established on the VPN server.

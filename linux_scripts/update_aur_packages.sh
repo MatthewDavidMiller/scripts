@@ -19,6 +19,8 @@ sudo pacman -S --noconfirm --needed base-devel
 if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]
 then
     cd "/home/${user_name}/aur/freefilesync" || exit
+    git clean -df
+    git checkout -- .
     sudo git pull
     read -r -p "Check the contents of the files before installing. Press enter to continue: "
     less PKGBUILD
@@ -35,6 +37,8 @@ then
     read -r -p "Choose the latest key. Press enter to continue: "
     gpg --keyserver 'hkp://keyserver.ubuntu.com' --search-key 'Spotify Public Repository Signing Key'
     cd "/home/${user_name}/aur/spotify" || exit
+    git clean -df
+    git checkout -- .
     sudo git pull
     read -r -p "Check the contents of the files before installing. Press enter to continue: "
     less PKGBUILD
@@ -49,6 +53,8 @@ fi
 if [[ "${response5}" =~ ^([yY][eE][sS]|[yY])+$ ]]
 then
     cd "/home/${user_name}/aur/vscode" || exit
+    git clean -df
+    git checkout -- .
     sudo git pull
     read -r -p "Check the contents of the files before installing. Press enter to continue: "
     less PKGBUILD
