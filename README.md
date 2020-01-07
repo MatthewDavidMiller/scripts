@@ -1,7 +1,7 @@
 # Scripts
 This repository contains scripts I have created.
 
-Copyright (c) 2019 Matthew David Miller. All rights reserved.
+Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 
 [Licensed under the MIT License.](LICENSE)
 
@@ -60,6 +60,10 @@ Copyright (c) 2019 Matthew David Miller. All rights reserved.
 [configure_i3.sh](linux_scripts/configure_i3.sh) - A bash script to configure the i3 window manager.
 
 [configure_kvm.sh](linux_scripts/configure_kvm.sh) - A bash script to configure kvm.
+
+[configure_omada_controller.sh](linux_scripts/configure_omada_controller.sh) - A bash script to configure TP Link Omada Controller.
+
+[configure_sway.sh](linux_scripts/configure_sway.sh) - A bash script to configure the sway window manager.
 
 [configure_termite.sh](linux_scripts/configure_termite.sh) - A bash script to configure the termite terminal emulator.
 

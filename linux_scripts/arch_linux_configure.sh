@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) 2019 Matthew David Miller. All rights reserved.
+# Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 # Licensed under the MIT License.
 
 # Configuration script for Arch Linux.  Run after installing. Do not run as root.

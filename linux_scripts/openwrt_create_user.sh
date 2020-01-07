@@ -13,3 +13,7 @@ sudo chown "${user_name}" "/home/${user_name}"
 
 # Setup sudo
 sudo bash -c "printf '%s\n' \"${user_name} ALL=(ALL) ALL\" >> '/etc/sudoers'"
+
+# Set shell
+chsh -s /bin/bash
+chsh -s /bin/bash "${user_name}"
