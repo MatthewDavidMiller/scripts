@@ -62,7 +62,7 @@ mkswap "${partition2}"
 mkfs.fat -F32 "${partition1}"
 
 # Install base packages
-debootstrap --arch amd64 --components=main,contrib,non-free stable /mnt 'http://ftp.us.debian.org/debian'
+debootstrap --arch amd64 --components=main,contrib,non-free oldstable /mnt 'http://ftp.us.debian.org/debian'
 
 # Mount proc and sysfs
 {
@@ -76,9 +76,6 @@ mount sysfs /mnt/sys -t sysfs
 uuid="$(blkid -o value -s UUID "${partition1}")"
 uuid2="$(blkid -o value -s UUID "${partition2}")"
 uuid3="$(blkid -o value -s UUID "${partition3}")"
-
-# Get the interface name
-interface="(ip route get 8.8.8.8 | sed -nr 's/.*dev ([^\ ]+).*/\1/p')"
 
 # Setup part 2 script
 touch '/mnt/vpn_server_install_part_2.sh'
@@ -147,13 +144,13 @@ rm -f '/etc/hosts'
 
 # Setup mirrors and sources
 {
-    printf '%s\n' 'deb http://mirrors.advancedhosters.com/debian/ stable main'
-    printf '%s\n' 'deb-src http://mirrors.advancedhosters.com/debian/ stable main'
-    printf '%s\n' 'deb http://mirrors.advancedhosters.com/debian/ stable-updates main'
-    printf '%s\n' 'deb-src http://mirrors.advancedhosters.com/debian/ stable-updates main'
-    printf '%s\n' 'deb-src http://ftp.us.debian.org/debian stable main'
-    printf '%s\n' 'deb http://security.debian.org/ stable/updates main'
-    printf '%s\n' 'deb-src http://security.debian.org/ stable/updates main'
+    printf '%s\n' 'deb http://mirrors.advancedhosters.com/debian/ oldstable main'
+    printf '%s\n' 'deb-src http://mirrors.advancedhosters.com/debian/ oldstable main'
+    printf '%s\n' 'deb http://mirrors.advancedhosters.com/debian/ oldstable-updates main'
+    printf '%s\n' 'deb-src http://mirrors.advancedhosters.com/debian/ oldstable-updates main'
+    printf '%s\n' 'deb-src http://ftp.us.debian.org/debian oldstable main'
+    printf '%s\n' 'deb http://security.debian.org/ oldstable/updates main'
+    printf '%s\n' 'deb-src http://security.debian.org/ oldstable/updates main'
 } >> '/etc/apt/sources.list'
 
 # Install standard packages

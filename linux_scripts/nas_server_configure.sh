@@ -3,12 +3,10 @@
 # Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 # Licensed under the MIT License.
 # Needs to be run as root. Make sure you are logged in as a user instead of root.
-# Configuration script for the vpn server. Run after installing with the install script.
+# Configuration script for the nas server. Run after installing with the oldstable install script.
 
-# Enter code for dynamic dns
-read -r -p "Enter code for dynamic dns: " dynamic_dns
 # Set server ip
-read -r -p "Enter server ip address. Example '10.1.10.6': " ip_address
+read -r -p "Enter server ip address. Example '10.1.10.4': " ip_address
 # Set network
 read -r -p "Enter network ip address. Example '10.1.10.0': " network_address
 # Set subnet mask
@@ -18,11 +16,11 @@ read -r -p "Enter gateway ip. Example '10.1.10.1': " gateway_address
 # Set dns server
 read -r -p "Enter dns server ip. Example '10.1.10.5': " dns_address
 
-# Get the interface name
-interface="(ip route get 8.8.8.8 | sed -nr 's/.*dev ([^\ ]+).*/\1/p')"
-
 # Get username
 user_name=$(logname)
+
+# Get the interface name
+interface="(ip route get 8.8.8.8 | sed -nr 's/.*dev ([^\ ]+).*/\1/p')"
 
 # Configure network
 rm -f '/etc/network/interfaces'
@@ -52,26 +50,35 @@ ufw default deny incoming
 # Set default outbound to allow
 ufw default allow outgoing
 
-# Limit max connections to vpn server
-ufw limit proto udp from any to any port 64640
-
 # Limit max connections to ssh server and allow it only on private networks
 ufw limit proto tcp from 10.0.0.0/8 to any port 22
 ufw limit proto tcp from fe80::/10 to any port 22
+
+# Allow https on private networks
+ufw allow proto tcp from 10.0.0.0/8 to any port 443
+ufw allow proto tcp from fe80::/10 to any port 443
+
+# Allow smb on private networks
+ufw allow proto tcp from 10.0.0.0/8 to any port 445
+ufw allow proto tcp from fe80::/10 to any port 445
+
+# Allow netbios on private networks
+ufw allow proto tcp from 10.0.0.0/8 to any port 137
+ufw allow proto tcp from fe80::/10 to any port 137
+
+# Allow netbios on private networks
+ufw allow proto tcp from 10.0.0.0/8 to any port 138
+ufw allow proto tcp from fe80::/10 to any port 138
+
+# Allow netbios on private networks
+ufw allow proto tcp from 10.0.0.0/8 to any port 139
+ufw allow proto tcp from fe80::/10 to any port 139
 
 # Enable ufw
 systemctl enable ufw.service
 ufw enable
 
 # Get scripts
-
-# Script to get emails on vpn connections
-wget 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/email_on_vpn_connections.sh'
-mv 'email_on_vpn_connections.sh' '/usr/local/bin/email_on_vpn_connections.sh'
-chmod +x '/usr/local/bin/email_on_vpn_connections.sh'
-wget 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/email_on_vpn_connections.py'
-mv 'email_on_vpn_connections.py' '/usr/local/bin/email_on_vpn_connections.py'
-chmod +x '/usr/local/bin/email_on_vpn_connections.py'
 
 # Script to archive config files for backup
 wget 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/backup_configs.sh'
@@ -80,38 +87,23 @@ chmod +x '/usr/local/bin/backup_configs.sh'
 
 # Configure cron jobs
 cat <<EOF > jobs.cron
-@reboot apt-get update && apt-get install -y openvpn &
 * 0 * * 1 bash /usr/local/bin/backup_configs.sh &
-@reboot nohup bash /usr/local/bin/email_on_vpn_connections.sh &
-3,8,13,18,23,28,33,38,43,48,53,58 * * * * sleep 29 ; wget --no-check-certificate -O - https://freedns.afraid.org/dynamic/update.php?${dynamic_dns} >> /tmp/freedns_mattm_mooo_com.log 2>&1 &
-* 0 * * 0 reboot
 
 EOF
 crontab jobs.cron
 rm -f jobs.cron
 
-# Setup vpn with PiVPN
-wget 'https://raw.githubusercontent.com/pivpn/pivpn/master/auto_install/install.sh'
-mv 'install.sh' '/usr/local/bin/pivn_installer.sh'
-chmod +x '/usr/local/bin/pivn_installer.sh'
-bash '/usr/local/bin/pivn_installer.sh'
-
-# Add three openvpn users
-pivpn add
-pivpn add
-pivpn add
-
 # Setup ssh
 
 # Generate an ecdsa 521 bit key
-ssh-keygen -f "/home/${user_name}/vpn_key" -t ecdsa -b 521
+ssh-keygen -f "/home/${user_name}/nas_key" -t ecdsa -b 521
 
 # Authorize the key for use with ssh
 mkdir "/home/${user_name}/.ssh"
 chmod 700 "/home/${user_name}/.ssh"
 touch "/home/${user_name}/.ssh/authorized_keys"
 chmod 600 "/home/${user_name}/.ssh/authorized_keys"
-cat "/home/${user_name}/vpn_key.pub" >> "/home/${user_name}/.ssh/authorized_keys"
+cat "/home/${user_name}/nas_key.pub" >> "/home/${user_name}/.ssh/authorized_keys"
 printf '%s\n' '' >> "/home/${user_name}/.ssh/authorized_keys"
 chown -R "${user_name}" "/home/${user_name}"
 read -r -p "Remember to copy the ssh private key to the client before restarting the device after install: " >> '/dev/null'
@@ -152,8 +144,8 @@ rm -f '/etc/apt/apt.conf.d/50unattended-upgrades'
 
 cat <<\EOF > '/etc/apt/apt.conf.d/50unattended-upgrades'
 Unattended-Upgrade::Origins-Pattern {
-        "origin=Debian,a=stable";
-        "origin=Debian,a=stable-updates";
+        "origin=Debian,a=oldstable";
+        "origin=Debian,a=oldstable-updates";
 };
 
 Unattended-Upgrade::Package-Blacklist {
@@ -170,3 +162,38 @@ Unattended-Upgrade::Automatic-Reboot "true";
 Unattended-Upgrade::Automatic-Reboot-Time "04:00";
 
 EOF
+
+# Setup openmediavault
+
+cat <<EOF >> '/etc/apt/sources.list.d/openmediavault.list'
+deb https://packages.openmediavault.org/public arrakis main
+# deb https://downloads.sourceforge.net/project/openmediavault/packages arrakis main
+## Uncomment the following line to add software from the proposed repository.
+# deb https://packages.openmediavault.org/public arrakis-proposed main
+# deb https://downloads.sourceforge.net/project/openmediavault/packages arrakis-proposed main
+## This software is not part of OpenMediaVault, but is offered by third-party
+## developers as a service to OpenMediaVault users.
+# deb https://packages.openmediavault.org/public arrakis partner
+# deb https://downloads.sourceforge.net/project/openmediavault/packages arrakis partner
+
+EOF
+
+cat <<\EOF >> 'openmediavault_install.sh'
+
+export LANG=C
+export DEBIAN_FRONTEND=noninteractive
+export APT_LISTCHANGES_FRONTEND=none
+apt-get update
+apt-get --allow-unauthenticated install openmediavault-keyring
+apt-get update
+apt-get --yes --auto-remove --show-upgraded \
+    --allow-downgrades --allow-change-held-packages \
+    --no-install-recommends \
+    --option Dpkg::Options::="--force-confdef" \
+    --option DPkg::Options::="--force-confold" \
+    install postfix openmediavault
+# Initialize the system and database.
+omv-initsystem
+
+EOF
+bash 'openmediavault_install.sh'
