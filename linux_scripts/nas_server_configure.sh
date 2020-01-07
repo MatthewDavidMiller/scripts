@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) 2019 Matthew David Miller. All rights reserved.
+# Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 # Licensed under the MIT License.
 # Needs to be run as root. Make sure you are logged in as a user instead of root.
 # Configuration script for the nas server. Run after installing with the oldstable install script.
@@ -52,21 +52,27 @@ ufw default allow outgoing
 
 # Limit max connections to ssh server and allow it only on private networks
 ufw limit proto tcp from 10.0.0.0/8 to any port 22
+ufw limit proto tcp from fe80::/10 to any port 22
 
 # Allow https on private networks
 ufw allow proto tcp from 10.0.0.0/8 to any port 443
+ufw allow proto tcp from fe80::/10 to any port 443
 
 # Allow smb on private networks
 ufw allow proto tcp from 10.0.0.0/8 to any port 445
+ufw allow proto tcp from fe80::/10 to any port 445
 
 # Allow netbios on private networks
 ufw allow proto tcp from 10.0.0.0/8 to any port 137
+ufw allow proto tcp from fe80::/10 to any port 137
 
 # Allow netbios on private networks
 ufw allow proto tcp from 10.0.0.0/8 to any port 138
+ufw allow proto tcp from fe80::/10 to any port 138
 
 # Allow netbios on private networks
 ufw allow proto tcp from 10.0.0.0/8 to any port 139
+ufw allow proto tcp from fe80::/10 to any port 139
 
 # Enable ufw
 systemctl enable ufw.service
@@ -80,9 +86,10 @@ mv 'backup_configs.sh' '/usr/local/bin/backup_configs.sh'
 chmod +x '/usr/local/bin/backup_configs.sh'
 
 # Configure cron jobs
-{
-    printf '%s\n' '* 0 * * 1 bash /usr/local/bin/backup_configs.sh &'
-} >> jobs.cron
+cat <<EOF > jobs.cron
+* 0 * * 1 bash /usr/local/bin/backup_configs.sh &
+
+EOF
 crontab jobs.cron
 rm -f jobs.cron
 

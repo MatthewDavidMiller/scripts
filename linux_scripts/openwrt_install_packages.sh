@@ -10,5 +10,5 @@ then
     sudo opkg update
     
     # Installs packages
-    sudo opkg install luci-app-upnp ipset luci-ssl iptables-mod-geoip sudo bash coreutils openssh-keygen shadow-useradd
+    sudo opkg install luci-app-upnp ipset luci-ssl iptables-mod-geoip sudo bash coreutils openssh-keygen shadow-useradd shadow-chsh
 fi

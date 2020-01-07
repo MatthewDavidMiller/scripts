@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) 2019 Matthew David Miller. All rights reserved.
+# Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 # Licensed under the MIT License.
 # Needs to be run as root. Make sure you are logged in as a user instead of root.
 # Configuration script for the vpn server. Run after installing with the install script.
@@ -57,6 +57,7 @@ ufw limit proto udp from any to any port 64640
 
 # Limit max connections to ssh server and allow it only on private networks
 ufw limit proto tcp from 10.0.0.0/8 to any port 22
+ufw limit proto tcp from fe80::/10 to any port 22
 
 # Enable ufw
 systemctl enable ufw.service
@@ -78,13 +79,14 @@ mv 'backup_configs.sh' '/usr/local/bin/backup_configs.sh'
 chmod +x '/usr/local/bin/backup_configs.sh'
 
 # Configure cron jobs
-{
-    printf '%s\n' '@reboot apt-get update && apt-get install -y openvpn &'
-    printf '%s\n' '@reboot nohup bash /usr/local/bin/email_on_vpn_connections.sh &'
-    printf '%s\n' "3,8,13,18,23,28,33,38,43,48,53,58 * * * * sleep 29 ; wget --no-check-certificate -O - https://freedns.afraid.org/dynamic/update.php?${dynamic_dns} >> /tmp/freedns_mattm_mooo_com.log 2>&1 &"
-    printf '%s\n' '* 0 * * 1 bash /usr/local/bin/backup_configs.sh &'
-    printf '%s\n' '* 0 * * 0 reboot'
-} >> jobs.cron
+cat <<EOF > jobs.cron
+@reboot apt-get update && apt-get install -y openvpn &
+* 0 * * 1 bash /usr/local/bin/backup_configs.sh &
+@reboot nohup bash /usr/local/bin/email_on_vpn_connections.sh &
+3,8,13,18,23,28,33,38,43,48,53,58 * * * * sleep 29 ; wget --no-check-certificate -O - https://freedns.afraid.org/dynamic/update.php?${dynamic_dns} >> /tmp/freedns_mattm_mooo_com.log 2>&1 &
+* 0 * * 0 reboot
+
+EOF
 crontab jobs.cron
 rm -f jobs.cron
 
