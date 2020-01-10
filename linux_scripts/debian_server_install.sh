@@ -166,8 +166,8 @@ rm -f '/etc/hosts'
     printf '%s\n' 'deb-src https://mirrors.wikimedia.org/debian/ ${version} main contrib non-free'
     printf '%s\n' 'deb https://mirrors.wikimedia.org/debian/ ${version}-updates main contrib non-free'
     printf '%s\n' 'deb-src https://mirrors.wikimedia.org/debian/ ${version}-updates main contrib non-free'
-    printf '%s\n' 'deb http://security.debian.org/ ${version}/updates main contrib non-free'
-    printf '%s\n' 'deb-src http://security.debian.org/ ${version}/updates main contrib non-free'
+    printf '%s\n' 'deb http://security.debian.org/debian-security/ ${version}/updates main contrib non-free'
+    printf '%s\n' 'deb-src http://security.debian.org/debian-security/ ${version}/updates main contrib non-free'
 } >> '/etc/apt/sources.list'
 
 # Install standard packages
