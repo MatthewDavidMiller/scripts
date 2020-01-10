@@ -18,6 +18,7 @@ read -r -p "Enter dns server ip. Example '1.1.1.1': " dns_address
 
 # Get the interface name
 interface="$(ip route get 8.8.8.8 | sed -nr 's/.*dev ([^\ ]+).*/\1/p')"
+echo "Interface name is ${interface}"
 
 # Get username
 user_name=$(logname)
@@ -40,7 +41,7 @@ EOF
 # Install recommended packages
 apt-get update
 apt-get upgrade
-apt-get install -y wget vim git ufw ntp ssh apt-transport-https openssh-server
+apt-get install -y wget vim git ufw ntp ssh openssh-server
 
 # Configure ufw
 
