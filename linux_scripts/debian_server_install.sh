@@ -92,7 +92,8 @@ uuid2="$(blkid -o value -s UUID "${partition2}")"
 uuid3="$(blkid -o value -s UUID "${partition3}")"
 
 # Get the interface name
-interface="(ip route get 8.8.8.8 | sed -nr 's/.*dev ([^\ ]+).*/\1/p')"
+interface="$(ip route get 8.8.8.8 | sed -nr 's/.*dev ([^\ ]+).*/\1/p')"
+echo "${interface}"
 
 # Setup part 2 script
 touch '/mnt/debian_server_install.sh'
