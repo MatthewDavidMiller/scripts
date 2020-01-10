@@ -95,10 +95,10 @@ uuid3="$(blkid -o value -s UUID "${partition3}")"
 interface="(ip route get 8.8.8.8 | sed -nr 's/.*dev ([^\ ]+).*/\1/p')"
 
 # Setup part 2 script
-touch '/mnt/vpn_server_install_part_2.sh'
-chmod +x '/mnt/vpn_server_install_part_2.sh'
+touch '/mnt/debian_server_install.sh'
+chmod +x '/mnt/debian_server_install.sh'
 
-cat <<EOF > /mnt/vpn_server_install_part_2.sh
+cat <<EOF > /mnt/debian_server_install.sh
 #!/bin/bash
 
 # Create device files
@@ -187,8 +187,8 @@ passwd root
 {
     printf '%s\n' 'auto lo'
     printf '%s\n' 'iface lo inet loopback'
-    printf '%s\n' 'auto ${interface}'
-    printf '%s\n' 'iface ${interface} inet dhcp'
+    printf '%s\n' "auto ${interface}"
+    printf '%s\n' "iface ${interface} inet dhcp"
 } >> '/etc/network/interfaces'
 
 # Setup grub
@@ -221,4 +221,4 @@ exit
 EOF
 
 # Move to installation
-LANG=C.UTF-8 chroot /mnt "./vpn_server_install_part_2.sh"
+LANG=C.UTF-8 chroot /mnt "./debian_server_install.sh"
