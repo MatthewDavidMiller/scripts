@@ -38,6 +38,9 @@ iface ${interface} inet static
 
 EOF
 
+# Fix all packages
+dpkg --configure -a
+
 # Install recommended packages
 apt-get update
 apt-get upgrade
