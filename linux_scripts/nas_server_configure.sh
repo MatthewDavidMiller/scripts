@@ -21,6 +21,7 @@ user_name=$(logname)
 
 # Get the interface name
 interface="$(ip route get 8.8.8.8 | sed -nr 's/.*dev ([^\ ]+).*/\1/p')"
+echo "Interface name is ${interface}"
 
 # Configure network
 rm -f '/etc/network/interfaces'
