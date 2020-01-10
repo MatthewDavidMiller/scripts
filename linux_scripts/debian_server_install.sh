@@ -25,6 +25,20 @@ read -r -p "Is the cpu intel? [y/N] " ucode_response
 read -r -p "Set the device hostname: " device_hostname
 # Specify user name
 read -r -p "Specify a username for a new user: " user_name
+# Specify version
+read -r -p "Use oldstable [1] or stable [2]? [1/2]: " specify_version
+
+# Specify version
+if [[ "${specify_version}" =~ ^([1])+$ ]]
+then
+    version='oldstable'
+fi
+
+# Specify version
+if [[ "${specify_version}" =~ ^([2])+$ ]]
+then
+    version='stable'
+fi
 
 # Install needed packages
 apt-get update
@@ -62,7 +76,7 @@ mkswap "${partition2}"
 mkfs.fat -F32 "${partition1}"
 
 # Install base packages
-debootstrap --arch amd64 --components=main,contrib,non-free stable /mnt 'http://ftp.us.debian.org/debian'
+debootstrap --arch amd64 --components=main,contrib,non-free ${version} /mnt 'http://ftp.us.debian.org/debian'
 
 # Mount proc and sysfs
 {
@@ -147,17 +161,17 @@ rm -f '/etc/hosts'
 
 # Setup mirrors and sources
 {
-    printf '%s\n' 'deb http://mirrors.advancedhosters.com/debian/ stable main'
-    printf '%s\n' 'deb-src http://mirrors.advancedhosters.com/debian/ stable main'
-    printf '%s\n' 'deb http://mirrors.advancedhosters.com/debian/ stable-updates main'
-    printf '%s\n' 'deb-src http://mirrors.advancedhosters.com/debian/ stable-updates main'
-    printf '%s\n' 'deb http://security.debian.org/ stable/updates main'
-    printf '%s\n' 'deb-src http://security.debian.org/ stable/updates main'
+    printf '%s\n' 'deb https://mirrors.wikimedia.org/debian/ ${version} main'
+    printf '%s\n' 'deb-src https://mirrors.wikimedia.org/debian/ ${version} main'
+    printf '%s\n' 'deb https://mirrors.wikimedia.org/debian/ ${version}-updates main'
+    printf '%s\n' 'deb-src https://mirrors.wikimedia.org/debian/ ${version}-updates main'
+    printf '%s\n' 'deb http://security.debian.org/ ${version}/updates main'
+    printf '%s\n' 'deb-src http://security.debian.org/ ${version}/updates main'
 } >> '/etc/apt/sources.list'
 
 # Install standard packages
 tasksel install standard
-apt-get install -y systemd linux-image-amd64 ${ucode} efibootmgr grub-efi initramfs-tools sudo
+apt-get install -y systemd linux-image-amd64 ${ucode} efibootmgr grub-efi initramfs-tools sudo apt-transport-https
 
 # Update kernel
 update-initramfs -u
