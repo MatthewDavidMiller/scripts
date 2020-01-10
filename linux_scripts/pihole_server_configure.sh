@@ -41,6 +41,7 @@ EOF
 # Restart network interface
 ip link set "${interface}" down
 ip link set "${interface}" up
+sleep 10
 
 # Fix all packages
 dpkg --configure -a
@@ -175,12 +176,6 @@ Unattended-Upgrade::Automatic-Reboot-Time "04:00";
 
 EOF
 
-# Install pihole
-git clone --depth 1 https://github.com/pi-hole/pi-hole.git Pi-hole
-cd 'Pi-hole/automated install/' || exit
-bash basic-install.sh
-cd || exit
-
 # Setup unbound
 wget -O root.hints https://www.internic.net/domain/named.root
 mv root.hints /var/lib/unbound/
@@ -237,6 +232,12 @@ server:
     private-address: fe80::/10
 
 EOF
+
+# Install pihole
+git clone --depth 1 https://github.com/pi-hole/pi-hole.git Pi-hole
+cd 'Pi-hole/automated install/' || exit
+bash basic-install.sh
+cd || exit
 
 # Setup whitelisted sites
 rm -f '/etc/pihole/whitelist.txt'
