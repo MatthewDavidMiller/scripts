@@ -93,7 +93,7 @@ uuid3="$(blkid -o value -s UUID "${partition3}")"
 
 # Get the interface name
 interface="$(ip route get 8.8.8.8 | sed -nr 's/.*dev ([^\ ]+).*/\1/p')"
-echo "${interface}"
+echo "Interface name is ${interface}"
 
 # Setup part 2 script
 touch '/mnt/debian_server_install.sh'
@@ -162,12 +162,12 @@ rm -f '/etc/hosts'
 
 # Setup mirrors and sources
 {
-    printf '%s\n' 'deb https://mirrors.wikimedia.org/debian/ ${version} main'
-    printf '%s\n' 'deb-src https://mirrors.wikimedia.org/debian/ ${version} main'
-    printf '%s\n' 'deb https://mirrors.wikimedia.org/debian/ ${version}-updates main'
-    printf '%s\n' 'deb-src https://mirrors.wikimedia.org/debian/ ${version}-updates main'
-    printf '%s\n' 'deb http://security.debian.org/ ${version}/updates main'
-    printf '%s\n' 'deb-src http://security.debian.org/ ${version}/updates main'
+    printf '%s\n' 'deb https://mirrors.wikimedia.org/debian/ ${version} main contrib non-free'
+    printf '%s\n' 'deb-src https://mirrors.wikimedia.org/debian/ ${version} main contrib non-free'
+    printf '%s\n' 'deb https://mirrors.wikimedia.org/debian/ ${version}-updates main contrib non-free'
+    printf '%s\n' 'deb-src https://mirrors.wikimedia.org/debian/ ${version}-updates main contrib non-free'
+    printf '%s\n' 'deb http://security.debian.org/ ${version}/updates main contrib non-free'
+    printf '%s\n' 'deb-src http://security.debian.org/ ${version}/updates main contrib non-free'
 } >> '/etc/apt/sources.list'
 
 # Install standard packages

@@ -20,6 +20,7 @@ read -r -p "Enter dns server ip. Example '10.1.10.5': " dns_address
 
 # Get the interface name
 interface="$(ip route get 8.8.8.8 | sed -nr 's/.*dev ([^\ ]+).*/\1/p')"
+echo "Interface name is ${interface}"
 
 # Get username
 user_name=$(logname)
@@ -38,6 +39,9 @@ iface ${interface} inet static
     dns-nameservers ${dns_address}
 
 EOF
+
+# Fix all packages
+dpkg --configure -a
 
 # Install recommended packages
 apt-get update
