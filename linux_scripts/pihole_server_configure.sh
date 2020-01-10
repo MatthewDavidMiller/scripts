@@ -43,7 +43,7 @@ dpkg --configure -a
 
 # Install recommended packages
 apt-get update
-apt-get upgrade
+apt-get upgrade -y
 apt-get install -y wget vim git ufw ntp ssh openssh-server
 
 # Configure ufw
