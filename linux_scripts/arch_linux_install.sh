@@ -111,9 +111,18 @@ else
     mount "${partition1}" '/mnt/boot'
 fi
 
-# Change mirrors to US based ones
-cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
-awk '/^## US$/{f=1}f==0{next}/^$/{exit}{print substr($0, 2)}' /etc/pacman.d/mirrorlist
+# Configure mirrors
+rm -f '/etc/pacman.d/mirrorlist'
+cat <<\EOF > '/etc/pacman.d/mirrorlist'
+## United States
+Server = https://mirrors.kernel.org/archlinux/$repo/os/$arch
+Server = https://repo.ialab.dsu.edu/archlinux/$repo/os/$arch
+Server = https://mirror.arizona.edu/archlinux/$repo/os/$arch
+Server = https://mirrors.lug.mtu.edu/archlinux/$repo/os/$arch
+Server = https://mirrors.rit.edu/archlinux/$repo/os/$arch
+Server = https://mirrors.rutgers.edu/archlinux/$repo/os/$arch
+
+EOF
 
 # Install base packages
 pacstrap /mnt --noconfirm base base-devel linux linux-lts linux-firmware systemd e2fsprogs ntfs-3g exfat-utils vi man-db man-pages texinfo lvm2 xf86-video-intel xf86-video-amdgpu xf86-video-nouveau bash bash-completion ntp util-linux
