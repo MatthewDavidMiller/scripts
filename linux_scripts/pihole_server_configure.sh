@@ -502,9 +502,9 @@ cat <<\EOF > '/etc/pihole/regex.list'
 EOF
 
 # Configure pihole settings
-sed -i "s/DNSSEC=.*/DNSSEC=true/g" '/etc/pihole/setupVars.conf'
-sed -i "s/PIHOLE_DNS_1=.*/PIHOLE_DNS_1=127.0.0.1#5053/g" '/etc/pihole/setupVars.conf'
-sed -i "s/PIHOLE_DNS_2=.*/PIHOLE_DNS_2=::1#5053/g" '/etc/pihole/setupVars.conf'
-sed -i "s/DNSMASQ_LISTENING=.*/DNSMASQ_LISTENING=all/g" '/etc/pihole/setupVars.conf'
+grep -q 'DNSSEC=' '/etc/pihole/setupVars.conf' && sed -i "s/DNSSEC=.*/DNSSEC=true/g" '/etc/pihole/setupVars.conf' || printf '%s\n' 'DNSSEC=true' >> '/etc/pihole/setupVars.conf'
+grep -q 'PIHOLE_DNS_1=' '/etc/pihole/setupVars.conf' && sed -i "s/PIHOLE_DNS_1=.*/PIHOLE_DNS_1=127.0.0.1#5053/g" '/etc/pihole/setupVars.conf' || printf '%s\n' 'PIHOLE_DNS_1=127.0.0.1#5053' >> '/etc/pihole/setupVars.conf'
+grep -q 'PIHOLE_DNS_2=' '/etc/pihole/setupVars.conf' && sed -i "s/PIHOLE_DNS_2=.*/PIHOLE_DNS_2=::1#5053/g" '/etc/pihole/setupVars.conf' || printf '%s\n' 'PIHOLE_DNS_2=::1#5053' >> '/etc/pihole/setupVars.conf'
+grep -q 'DNSMASQ_LISTENING=' '/etc/pihole/setupVars.conf' && sed -i "s/DNSMASQ_LISTENING=.*/DNSMASQ_LISTENING=all/g" '/etc/pihole/setupVars.conf' || printf '%s\n' 'DNSMASQ_LISTENING=all' >> '/etc/pihole/setupVars.conf'
 echo 'Set pihole password'
 pihole -a -p
