@@ -39,9 +39,7 @@ iface ${interface} inet static
 EOF
 
 # Restart network interface
-ip link set "${interface}" down
-ip link set "${interface}" up
-sleep 10
+ifdown "${interface}" && ifup "${interface}"
 
 # Fix all packages
 dpkg --configure -a
