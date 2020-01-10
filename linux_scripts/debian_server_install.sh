@@ -135,26 +135,18 @@ dpkg-reconfigure locales
 # Set language to English
 rm -f '/etc/locale.conf'
 {
-    printf '%s\n' '# language config'
-    printf '%s\n' '# file location is /etc/locale.conf'
-    printf '%s\n' ''
     printf '%s\n' 'LANG=en_US.UTF-8'
 } >> '/etc/locale.conf'
 
 # Set hostname
 rm -f '/etc/hostname'
 {
-    printf '%s\n' '# hostname file'
-    printf '%s\n' '# File location is /etc/hostname'
     printf '%s\n' "${device_hostname}"
 } >> '/etc/hostname'
 
 # Setup hosts file
 rm -f '/etc/hosts'
 {
-    printf '%s\n' '# host file'
-    printf '%s\n' '# file location is /etc/hosts'
-    printf '%s\n' ''
     printf '%s\n' '127.0.0.1 localhost'
     printf '%s\n' '::1 localhost'
     printf '%s\n' "127.0.1.1 ${device_hostname}.localdomain ${device_hostname}"
