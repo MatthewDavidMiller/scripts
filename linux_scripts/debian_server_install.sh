@@ -25,6 +25,20 @@ read -r -p "Is the cpu intel? [y/N] " ucode_response
 read -r -p "Set the device hostname: " device_hostname
 # Specify user name
 read -r -p "Specify a username for a new user: " user_name
+# Specify version
+read -r -p "Use oldstable [1] or stable [2]? [1/2]: " specify_version
+
+# Specify version
+if [[ "${specify_version}" =~ ^([1])+$ ]]
+then
+    version='oldstable'
+fi
+
+# Specify version
+if [[ "${specify_version}" =~ ^([2])+$ ]]
+then
+    version='stable'
+fi
 
 # Install needed packages
 apt-get update
@@ -62,7 +76,7 @@ mkswap "${partition2}"
 mkfs.fat -F32 "${partition1}"
 
 # Install base packages
-debootstrap --arch amd64 --components=main,contrib,non-free stable /mnt 'http://ftp.us.debian.org/debian'
+debootstrap --arch amd64 --components=main,contrib,non-free ${version} /mnt 'http://ftp.us.debian.org/debian'
 
 # Mount proc and sysfs
 {
@@ -78,13 +92,14 @@ uuid2="$(blkid -o value -s UUID "${partition2}")"
 uuid3="$(blkid -o value -s UUID "${partition3}")"
 
 # Get the interface name
-interface="(ip route get 8.8.8.8 | sed -nr 's/.*dev ([^\ ]+).*/\1/p')"
+interface="$(ip route get 8.8.8.8 | sed -nr 's/.*dev ([^\ ]+).*/\1/p')"
+echo "${interface}"
 
 # Setup part 2 script
-touch '/mnt/vpn_server_install_part_2.sh'
-chmod +x '/mnt/vpn_server_install_part_2.sh'
+touch '/mnt/debian_server_install.sh'
+chmod +x '/mnt/debian_server_install.sh'
 
-cat <<EOF > /mnt/vpn_server_install_part_2.sh
+cat <<EOF > /mnt/debian_server_install.sh
 #!/bin/bash
 
 # Create device files
@@ -147,18 +162,17 @@ rm -f '/etc/hosts'
 
 # Setup mirrors and sources
 {
-    printf '%s\n' 'deb http://mirrors.advancedhosters.com/debian/ stable main'
-    printf '%s\n' 'deb-src http://mirrors.advancedhosters.com/debian/ stable main'
-    printf '%s\n' 'deb http://mirrors.advancedhosters.com/debian/ stable-updates main'
-    printf '%s\n' 'deb-src http://mirrors.advancedhosters.com/debian/ stable-updates main'
-    printf '%s\n' 'deb-src http://ftp.us.debian.org/debian stable main'
-    printf '%s\n' 'deb http://security.debian.org/ stable/updates main'
-    printf '%s\n' 'deb-src http://security.debian.org/ stable/updates main'
+    printf '%s\n' 'deb https://mirrors.wikimedia.org/debian/ ${version} main'
+    printf '%s\n' 'deb-src https://mirrors.wikimedia.org/debian/ ${version} main'
+    printf '%s\n' 'deb https://mirrors.wikimedia.org/debian/ ${version}-updates main'
+    printf '%s\n' 'deb-src https://mirrors.wikimedia.org/debian/ ${version}-updates main'
+    printf '%s\n' 'deb http://security.debian.org/ ${version}/updates main'
+    printf '%s\n' 'deb-src http://security.debian.org/ ${version}/updates main'
 } >> '/etc/apt/sources.list'
 
 # Install standard packages
 tasksel install standard
-apt-get install -y systemd linux-image-amd64 ${ucode} efibootmgr grub-efi initramfs-tools sudo
+apt-get install -y systemd linux-image-amd64 ${ucode} efibootmgr grub-efi initramfs-tools sudo apt-transport-https
 
 # Update kernel
 update-initramfs -u
@@ -174,8 +188,8 @@ passwd root
 {
     printf '%s\n' 'auto lo'
     printf '%s\n' 'iface lo inet loopback'
-    printf '%s\n' 'auto ${interface}'
-    printf '%s\n' 'iface ${interface} inet dhcp'
+    printf '%s\n' "auto ${interface}"
+    printf '%s\n' "iface ${interface} inet dhcp"
 } >> '/etc/network/interfaces'
 
 # Setup grub
@@ -208,4 +222,4 @@ exit
 EOF
 
 # Move to installation
-LANG=C.UTF-8 chroot /mnt "./vpn_server_install_part_2.sh"
+LANG=C.UTF-8 chroot /mnt "./debian_server_install.sh"

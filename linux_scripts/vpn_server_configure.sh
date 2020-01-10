@@ -19,7 +19,7 @@ read -r -p "Enter gateway ip. Example '10.1.10.1': " gateway_address
 read -r -p "Enter dns server ip. Example '10.1.10.5': " dns_address
 
 # Get the interface name
-interface="(ip route get 8.8.8.8 | sed -nr 's/.*dev ([^\ ]+).*/\1/p')"
+interface="$(ip route get 8.8.8.8 | sed -nr 's/.*dev ([^\ ]+).*/\1/p')"
 
 # Get username
 user_name=$(logname)
