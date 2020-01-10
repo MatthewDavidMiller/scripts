@@ -501,3 +501,11 @@ cat <<\EOF > '/etc/pihole/regex.list'
 ^.+\.(ru|cn|ro|ml|ga|gq|cf|tk|pw|ua|ug|ve|)$
 
 EOF
+
+# Configure pihole settings
+sed -i "s/DNSSEC=.*/DNSSEC=true/g" '/etc/pihole/setupVars.conf'
+sed -i "s/PIHOLE_DNS_1=.*/PIHOLE_DNS_1=127.0.0.1#5053/g" '/etc/pihole/setupVars.conf'
+sed -i "s/PIHOLE_DNS_2=.*/PIHOLE_DNS_2=::1#5053/g" '/etc/pihole/setupVars.conf'
+sed -i "s/DNSMASQ_LISTENING=.*/DNSMASQ_LISTENING=all/g" '/etc/pihole/setupVars.conf'
+echo 'Set pihole password'
+pihole -a -p
