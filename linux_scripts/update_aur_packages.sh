@@ -21,12 +21,13 @@ then
     cd "/home/${user_name}/aur/freefilesync" || exit
     git clean -df
     git checkout -- .
-    sudo git pull
+    sudo git fetch
     read -r -p "Check the contents of the files before installing. Press enter to continue: "
-    less PKGBUILD
+    sudo git diff master...origin/master
     read -r -p "Ready to update? [y/N] " response2
     if [[ "${response2}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
+        sudo git pull
         makepkg -sirc
     fi
 fi
@@ -39,12 +40,13 @@ then
     cd "/home/${user_name}/aur/spotify" || exit
     git clean -df
     git checkout -- .
-    sudo git pull
+    sudo git fetch
     read -r -p "Check the contents of the files before installing. Press enter to continue: "
-    less PKGBUILD
+    sudo git diff master...origin/master
     read -r -p "Ready to update? [y/N] " response4
     if [[ "${response4}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
+        sudo git pull
         makepkg -sirc
     fi
 fi
@@ -55,12 +57,13 @@ then
     cd "/home/${user_name}/aur/vscode" || exit
     git clean -df
     git checkout -- .
-    sudo git pull
+    sudo git fetch
     read -r -p "Check the contents of the files before installing. Press enter to continue: "
-    less PKGBUILD
+    sudo git diff master...origin/master
     read -r -p "Ready to update? [y/N] " response6
     if [[ "${response6}" =~ ^([yY][eE][sS]|[yY])+$ ]]
     then
+        sudo git pull
         makepkg -sirc
     fi
 fi
