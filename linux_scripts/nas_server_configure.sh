@@ -47,7 +47,7 @@ dpkg --configure -a
 # Install recommended packages
 apt-get update
 apt-get upgrade
-apt-get install -y wget vim git ufw ntp ssh apt-transport-https openssh-server
+apt-get install -y wget vim git ufw ntp ssh apt-transport-https openssh-server unattended-upgrades
 
 # Configure ufw
 
