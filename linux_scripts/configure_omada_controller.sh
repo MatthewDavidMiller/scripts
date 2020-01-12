@@ -5,6 +5,7 @@
 # Install script for TP Link Omada Controller
 # Use with Debian
 # Run as user using sudo
+# Run after installing Debian stable with the install script
 
 # Set server ip
 read -r -p "Enter server ip address. Example '10.1.10.5': " ip_address
