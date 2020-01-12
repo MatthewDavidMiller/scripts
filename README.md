@@ -37,6 +37,8 @@ Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 
 [arch_linux_configure.sh](linux_scripts/arch_linux_configure.sh) - Bash script to automate my configuration of Arch Linux.
 
+[configure_omada_controller.sh](linux_scripts/configure_omada_controller.sh) - A bash script to configure TP Link Omada Controller.
+
 [debian_server_install.sh](linux_scripts/debian_server_install.sh) - Bash script to automate the install of debian servers.
 
 [nas_server_configure.sh](linux_scripts/nas_server_configure.sh) - Bash script to automate the configuration of my nas.
@@ -60,8 +62,6 @@ Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 [configure_i3.sh](linux_scripts/configure_i3.sh) - A bash script to configure the i3 window manager.
 
 [configure_kvm.sh](linux_scripts/configure_kvm.sh) - A bash script to configure kvm.
-
-[configure_omada_controller.sh](linux_scripts/configure_omada_controller.sh) - A bash script to configure TP Link Omada Controller.
 
 [configure_sway.sh](linux_scripts/configure_sway.sh) - A bash script to configure the sway window manager.
 
