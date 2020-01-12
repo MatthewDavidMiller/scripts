@@ -8,7 +8,7 @@
 # Run after installing Debian stable with the install script
 
 # Set server ip
-read -r -p "Enter server ip address. Example '10.1.10.5': " ip_address
+read -r -p "Enter server ip address. Example '10.1.10.7': " ip_address
 # Set network
 read -r -p "Enter network ip address. Example '10.1.10.0': " network_address
 # Set subnet mask
@@ -60,11 +60,11 @@ ufw default deny incoming
 ufw default allow outgoing
 
 # Limit max connections to ssh server and allow it only on private networks
-ufw limit proto tcp from 192.168.0.0/16 to any port 22
+ufw limit proto tcp from 10.0.0.0/8 to any port 22
 ufw limit proto tcp from fe80::/10 to any port 22
 
 # Allow omada controller
-ufw allow proto tcp from 192.168.0.0/16 to any port 8043
+ufw allow proto tcp from 10.0.0.0/8 to any port 8043
 ufw allow proto tcp from fe80::/10 to any port 8043
 
 # Setup ssh
