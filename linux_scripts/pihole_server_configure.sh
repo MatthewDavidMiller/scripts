@@ -117,7 +117,10 @@ chmod 600 "/home/${user_name}/.ssh/authorized_keys"
 cat "/home/${user_name}/pihole_key.pub" >> "/home/${user_name}/.ssh/authorized_keys"
 printf '%s\n' '' >> "/home/${user_name}/.ssh/authorized_keys"
 chown -R "${user_name}" "/home/${user_name}"
-read -r -p "Remember to copy the ssh private key to the client before restarting the device after install: " >> '/dev/null'
+python -m SimpleHTTPServer 40080 &
+server_pid=$!
+read -r -p "Copy the key from the webserver on port 40080 before continuing: " >> '/dev/null'
+kill "${server_pid}"
 
 # Secure ssh access
 

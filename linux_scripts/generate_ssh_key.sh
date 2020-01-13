@@ -32,6 +32,10 @@ sudo chmod 600 "/home/$user_name/.ssh/authorized_keys"
 sudo bash -c "cat \"/home/$user_name/ssh_key.pub\" >> \"/home/$user_name/.ssh/authorized_keys\""
 sudo bash -c "printf '%s\n' '' >> \"/home/$user_name/.ssh/authorized_keys\""
 sudo chown -R "$user_name" "/home/$user_name"
+python -m SimpleHTTPServer 40080 &
+server_pid=$!
+read -r -p "Copy the key from the webserver on port 40080 before continuing: " >> '/dev/null'
+kill "${server_pid}"
 
 # Dropbear setup
 if [[ "${response3}" =~ ^([yY][eE][sS]|[yY])+$ ]]
