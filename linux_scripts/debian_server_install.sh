@@ -26,18 +26,18 @@ read -r -p "Set the device hostname: " device_hostname
 # Specify user name
 read -r -p "Specify a username for a new user: " user_name
 # Specify version
-read -r -p "Use oldstable [1] or stable [2]? [1/2]: " specify_version
+read -r -p "Use stretch [1] or buster [2]? [1/2]: " specify_version
 
 # Specify version
 if [[ "${specify_version}" =~ ^([1])+$ ]]
 then
-    version='oldstable'
+    version='stretch'
 fi
 
 # Specify version
 if [[ "${specify_version}" =~ ^([2])+$ ]]
 then
-    version='stable'
+    version='buster'
 fi
 
 # Install needed packages

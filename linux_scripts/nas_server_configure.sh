@@ -154,8 +154,9 @@ rm -f '/etc/apt/apt.conf.d/50unattended-upgrades'
 
 cat <<\EOF > '/etc/apt/apt.conf.d/50unattended-upgrades'
 Unattended-Upgrade::Origins-Pattern {
-        "origin=Debian,a=oldstable";
-        "origin=Debian,a=oldstable-updates";
+        "origin=Debian,n=stretch,l=Debian";
+        "origin=Debian,n=stretch,l=Debian-Security";
+        "origin=Debian,n=stretch-updates";
 };
 
 Unattended-Upgrade::Package-Blacklist {
