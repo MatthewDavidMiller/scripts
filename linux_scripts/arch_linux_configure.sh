@@ -36,6 +36,11 @@ EndSection
 
 EOF"
 
+# Rank mirrors
+cp '/etc/pacman.d/mirrorlist' '/etc/pacman.d/mirrorlist.backup'
+rm -f '/etc/pacman.d/mirrorlist'
+rankmirrors -n 40 '/etc/pacman.d/mirrorlist.backup' >> '/etc/pacman.d/mirrorlist'
+
 # Prompts
 read -r -p "Run arch_linux_packages script? [y/N] " arch_linux_packages
 read -r -p "Run configure_i3 script? [y/N] " configure_i3
