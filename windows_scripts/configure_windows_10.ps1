@@ -513,3 +513,64 @@ else {
     New-ItemProperty -Path $AppPrivacy -Name LetAppsSyncWithDevices_ForceDenyTheseApps -PropertyType MultiString -Force | Out-Null
     New-ItemProperty -Path $AppPrivacy -Name LetAppsSyncWithDevices_UserInControlOfTheseApps -PropertyType MultiString -Force | Out-Null
 }
+
+# Install chocolatey
+Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+
+# Install shellcheck
+choco install shellcheck
+
+# Install notepad++
+choco install notepadplusplus
+
+# Install 7zip
+choco install 7zip
+
+# Install nmap
+choco install nmap
+
+# Install qbittorrent
+choco install qbittorrent
+
+# Install rufus
+choco install rufus
+
+# Install etcher
+choco install etcher
+
+# Install gimp
+choco install gimp
+
+# Install git
+choco install git
+
+# Install vlc
+choco install vlc
+
+# Install blender
+choco install blender
+
+# Install bitwarden
+choco install bitwarden
+
+# Install winscp
+choco install winscp
+
+# Install python
+choco install python
+
+# Install libreoffice
+choco install libreoffice-fresh
+
+# Install firefox
+Invoke-WebRequest 'https://download.mozilla.org/?product=firefox-msi-latest-ssl&os=win64&lang=en-US' -OutFile "$HOME\Downloads\firefox.msi"
+."$HOME\Downloads\firefox.msi"
+
+# Update all installed choclatey packages
+choco upgrade all
+
+# Configure Python
+# Update pip
+python -m pip install -U pip
+# Install pylint
+pip install pylint
