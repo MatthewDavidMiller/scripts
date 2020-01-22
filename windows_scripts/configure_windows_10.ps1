@@ -556,6 +556,9 @@ choco install bitwarden
 # Install winscp
 choco install winscp
 
+# Install putty
+choco install putty
+
 # Install python
 choco install python
 
