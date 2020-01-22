@@ -469,6 +469,7 @@ https://gitlab.com/curben/urlhaus-filter/raw/master/urlhaus-filter-hosts.txt
 https://raw.githubusercontent.com/DandelionSprout/adfilt/master/Alternate%20versions%20Anti-Malware%20List/AntiMalwareHosts.txt
 https://raw.githubusercontent.com/HorusTeknoloji/TR-PhishingList/master/url-lists.txt
 https://v.firebog.net/hosts/Airelle-hrsk.txt
+https://github.com/chadmayfield/pihole-blocklists/raw/master/lists/pi_blocklist_porn_all.list
 
 EOF
 
