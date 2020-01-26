@@ -85,10 +85,6 @@ ufw allow proto tcp from fe80::/10 to any port 443
 ufw allow proto tcp from 10.0.0.0/8 to any port 4711
 ufw allow proto tcp from fe80::/10 to any port 4711
 
-# Enable ufw
-systemctl enable ufw.service
-ufw enable
-
 # Get scripts
 
 # Script to archive config files for backup
@@ -121,6 +117,10 @@ python -m SimpleHTTPServer 40080 &
 server_pid=$!
 read -r -p "Copy the key from the webserver on port 40080 before continuing: " >> '/dev/null'
 kill "${server_pid}"
+
+# Enable ufw
+systemctl enable ufw.service
+ufw enable
 
 # Secure ssh access
 

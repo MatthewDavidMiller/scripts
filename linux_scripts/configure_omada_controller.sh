@@ -85,6 +85,10 @@ server_pid=$!
 read -r -p "Copy the key from the webserver on port 40080 before continuing: " >> '/dev/null'
 kill "${server_pid}"
 
+# Enable ufw
+systemctl enable ufw.service
+ufw enable
+
 # Secure ssh access
 
 # Turn off password authentication
