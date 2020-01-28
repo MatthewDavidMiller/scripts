@@ -565,6 +565,18 @@ choco install python
 # Install libreoffice
 choco install libreoffice-fresh
 
+# Install java
+choco install jre8
+
+# Install sysinternals
+choco install sysinternals
+
+# Install vscode
+choco install vscode
+
+# Install wireshark
+choco install wireshark
+
 # Install firefox
 Invoke-WebRequest 'https://download.mozilla.org/?product=firefox-msi-latest-ssl&os=win64&lang=en-US' -OutFile "$HOME\Downloads\firefox.msi"
 ."$HOME\Downloads\firefox.msi"
