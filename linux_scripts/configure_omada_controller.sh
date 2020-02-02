@@ -67,6 +67,14 @@ ufw limit proto tcp from fe80::/10 to any port 22
 ufw allow proto tcp from 10.0.0.0/8 to any port 8043
 ufw allow proto tcp from fe80::/10 to any port 8043
 
+# Allow HTTP
+ufw allow proto tcp from 10.0.0.0/8 to any port 80
+ufw allow proto tcp from fe80::/10 to any port 80
+
+# Allow HTTPS
+ufw allow proto tcp from 10.0.0.0/8 to any port 443
+ufw allow proto tcp from fe80::/10 to any port 443
+
 # Setup ssh
 
 # Generate an ecdsa 521 bit key
