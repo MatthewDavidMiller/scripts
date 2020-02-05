@@ -291,7 +291,6 @@ rm -f '/etc/pihole/regex.list'
 cat <<\EOF > '/etc/pihole/regex.list'
 
 ^.+\.(ru|cn|ro|ml|ga|gq|cf|tk|pw|ua|ug|ve|)$
-(ads|logs|cloudservices).roku.com$
 porn
 sex
 
