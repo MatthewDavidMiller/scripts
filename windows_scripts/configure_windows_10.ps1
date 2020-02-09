@@ -577,6 +577,15 @@ choco install vscode
 # Install wireshark
 choco install wireshark
 
+# Install tinynvidiaupdater
+Invoke-WebRequest 'https://github.com/ElPumpo/TinyNvidiaUpdateChecker/releases/download/v1.13.0/TinyNvidiaUpdateChecker.v1.13.0.exe' -OutFile 'C:\Program Files\tinynvidiaupdatechecker\TinyNvidiaUpdateChecker.v1.13.0.exe'
+# Create shortcut
+$WScriptShell = New-Object -ComObject WScript.Shell
+$Shortcut = $WScriptShell.CreateShortcut('C:\ProgramData\Microsoft\Windows\Start Menu\Programs\TinyNvidiaUpdateChecker.lnk')
+$Shortcut.WorkingDirectory = 'C:\Program Files\tinynvidiaupdatechecker'
+$Shortcut.TargetPath = 'C:\Program Files\tinynvidiaupdatechecker\TinyNvidiaUpdateChecker.v1.13.0.exe'
+$Shortcut.Save()
+
 # Install firefox
 Invoke-WebRequest 'https://download.mozilla.org/?product=firefox-msi-latest-ssl&os=win64&lang=en-US' -OutFile "$HOME\Downloads\firefox.msi"
 ."$HOME\Downloads\firefox.msi"
