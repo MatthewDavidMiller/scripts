@@ -581,8 +581,12 @@ choco install wireshark
 Invoke-WebRequest 'https://download.mozilla.org/?product=firefox-msi-latest-ssl&os=win64&lang=en-US' -OutFile "$HOME\Downloads\firefox.msi"
 ."$HOME\Downloads\firefox.msi"
 
-# Update all installed choclatey packages
-choco upgrade all
+# Install chrome
+Invoke-WebRequest 'https://dl.google.com/chrome/install/latest/chrome_installer.exe' -OutFile "$HOME\Downloads\chrome_installer.exe"
+Start-Process -FilePath "$HOME\Downloads\chrome_installer.exe" -PassThru
+
+# To Update all installed choclatey packages use command:
+# choco upgrade all
 
 # Configure Python
 # Update pip
