@@ -577,6 +577,9 @@ choco install vscode
 # Install wireshark
 choco install wireshark
 
+# Install openjdk
+choco install openjdk
+
 # Install tinynvidiaupdater
 Invoke-WebRequest 'https://github.com/ElPumpo/TinyNvidiaUpdateChecker/releases/download/v1.13.0/TinyNvidiaUpdateChecker.v1.13.0.exe' -OutFile 'C:\Program Files\tinynvidiaupdatechecker\TinyNvidiaUpdateChecker.v1.13.0.exe'
 # Create shortcut
@@ -594,8 +597,15 @@ Invoke-WebRequest 'https://download.mozilla.org/?product=firefox-msi-latest-ssl&
 Invoke-WebRequest 'https://dl.google.com/chrome/install/latest/chrome_installer.exe' -OutFile "$HOME\Downloads\chrome_installer.exe"
 Start-Process -FilePath "$HOME\Downloads\chrome_installer.exe" -PassThru
 
+# Install freefilesync
+Invoke-WebRequest 'https://freefilesync.org/download/FreeFileSync_10.20_Windows_Setup.exe' -OutFile "$HOME\Downloads\FreeFileSync_10.20_Windows_Setup.exe"
+Start-Process -FilePath "$HOME\Downloads\FreeFileSync_10.20_Windows_Setup.exe" -PassThru
+
 # To Update all installed choclatey packages use command:
 # choco upgrade all
+
+# Reload PATH
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
 
 # Configure Python
 # Update pip
