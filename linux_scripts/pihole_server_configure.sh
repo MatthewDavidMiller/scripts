@@ -233,19 +233,11 @@ cd || exit
 rm -f '/etc/pihole/whitelist.txt'
 cat <<\EOF > '/etc/pihole/whitelist.txt'
 
-# Config for whitelist used with pihole
-# File location is /etc/pihole/whitelist.txt
-
-
 EOF
 
 # Configure blocklists
 rm -f '/etc/pihole/adlists.list'
 cat <<\EOF > '/etc/pihole/adlists.list'
-
-# Config for urls that contain blocklist used with pihole
-# File location is /etc/pihole/adlists.list
-
 https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt
 https://mirror1.malwaredomains.com/files/justdomains
 https://hosts-file.net/exp.txt
@@ -277,19 +269,11 @@ EOF
 rm -f '/etc/pihole/blacklist.txt'
 cat <<\EOF > '/etc/pihole/blacklist.txt'
 
-# Config for blacklist used with pihole
-# File location is /etc/pihole/blacklist.txt
-
-watson.telemetry.microsoft.com
-self.events.data.microsoft.com
-activity.windows.com
-
 EOF
 
 # Configure regex
 rm -f '/etc/pihole/regex.list'
 cat <<\EOF > '/etc/pihole/regex.list'
-
 ^.+\.(ru|cn|ro|ml|ga|gq|cf|tk|pw|ua|ug|ve|)$
 porn
 sex
