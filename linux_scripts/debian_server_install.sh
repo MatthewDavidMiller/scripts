@@ -110,7 +110,7 @@ cd /
 
 # Setup fstab
 {
-    printf '%s\n' "UUID=${uuid} /boot vfat defaults 0 0"
+    printf '%s\n' "UUID=${uuid} /boot/EFI vfat defaults 0 0"
     printf '%s\n' "UUID=${uuid2} none swap sw 0 0"
     printf '%s\n' "UUID=${uuid3} / ext4 defaults 0 0"
 } >> '/etc/fstab'
@@ -193,7 +193,7 @@ rm -f '/etc/default/grub'
     printf '%s\n' 'GRUB_CMDLINE_LINUX_DEFAULT="quiet"'
     printf '%s\n' "GRUB_CMDLINE_LINUX=\"\""
 } > '/etc/default/grub'
-grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=debian
+grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=debian
 update-grub
 
 # Add a user
