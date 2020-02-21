@@ -11,7 +11,7 @@ lsblk -f
 # Prompts and variables
 # Specify disk and partition numbers to use for install
 read -r -p "Specify disk to use for install. Example '/dev/sda': " disk
-read -r -p "Specify partition number for /boot. Example '1': " partition_number1
+read -r -p "Specify partition number for /boot/EFI. Example '1': " partition_number1
 read -r -p "Specify partition number for swap. Example '2': " partition_number2
 read -r -p "Specify partition number for root /. Example '3': " partition_number3
 partition1="${disk}${partition_number1}"
