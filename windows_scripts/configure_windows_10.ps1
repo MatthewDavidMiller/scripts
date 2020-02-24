@@ -1,42 +1,52 @@
 # Script to confgure settings in Windows 10
 
 # Prompts
-$InstallChoclatey = Read-Host 'Install chocolatey? y/n '
-$InstallShellCheck = Read-Host 'Install shellcheck? y/n '
-$InstallNotepadPlusPlus = Read-Host 'Install notepad++? y/n '
-$Install7Zip = Read-Host 'Install 7zip? y/n '
-$InstallNMap = Read-Host 'Install nmap? y/n '
-$InstallQBittorent = Read-Host 'Install qbittorent? y/n '
-$InstallRufus = Read-Host 'Install rufus? y/n '
-$InstallEtcher = Read-Host 'Install etcher? y/n '
-$InstallGimp = Read-Host 'Install gimp? y/n '
-$InstallGit = Read-Host 'Install git? y/n '
-$InstallVlc = Read-Host 'Install vlc? y/n '
-$InstallBlender = Read-Host 'Install blender? y/n '
-$InstallBitwarden = Read-Host 'Install bitwarden? y/n '
-$InstallWinSCP = Read-Host 'Install winscp? y/n '
-$InstallPutty = Read-Host 'Install putty? y/n '
-$InstallPython = Read-Host 'Install python? y/n '
-$InstallLibreoffice = Read-Host 'Install libreoffice? y/n '
-$InstallJava = Read-Host 'Install java? y/n '
-$InstallSysinternals = Read-Host 'Install sysinternals? y/n '
-$InstallVSCode = Read-Host 'Install vscode? y/n '
-$InstallWireshark = Read-Host 'Install wireshark? y/n '
-$InstallOpenJDK = Read-Host 'Install openjdk? y/n '
-$InstallTinyNvidiaUpdater = Read-Host 'Install tinynvidiaupdater? y/n '
-$InstallFirefox = Read-Host 'Install firefox? y/n '
-$InstallChrome = Read-Host 'Install chrome? y/n '
-$InstallFreeFileSync = Read-Host 'Install freefilesync? y/n '
-$InstallVmwarePlayer = Read-Host 'Install vmwareplayer? y/n '
-$InstallNvidiaProfileInspector = Read-Host 'Install nvidiaprofileinspector? y/n '
-$InstallSteam = Read-Host 'Install steam? y/n '
-$InstallOrigin = Read-Host 'Install origin? y/n '
-$InstallGOG = Read-Host 'Install gog? y/n '
-$InstallEpicStore = Read-Host 'Install epicstore? y/n '
-$InstallBethesdaLauncher = Read-Host 'Install bethesdalauncher? y/n '
-$DisableCortana = Read-Host 'Disable cortana? y/n '
-$DisableTelemetry = Read-Host 'Disable telemetry? y/n '
-$ConfigureFirewall = Read-Host 'Configure firewall? y/n '
+$InstallChoclatey = Read-Host 'Install Chocolatey? y/n '
+$InstallShellCheck = Read-Host 'Install ShellCheck? y/n '
+$InstallNotepadPlusPlus = Read-Host 'Install Notepad++? y/n '
+$Install7Zip = Read-Host 'Install 7Zip? y/n '
+$InstallNMap = Read-Host 'Install Nmap? y/n '
+$InstallQBittorent = Read-Host 'Install QBittorent? y/n '
+$InstallRufus = Read-Host 'Install Rufus? y/n '
+$InstallEtcher = Read-Host 'Install Etcher? y/n '
+$InstallGimp = Read-Host 'Install Gimp? y/n '
+$InstallGit = Read-Host 'Install Git? y/n '
+$InstallVlc = Read-Host 'Install Vlc? y/n '
+$InstallBlender = Read-Host 'Install Blender? y/n '
+$InstallBitwarden = Read-Host 'Install Bitwarden? y/n '
+$InstallWinSCP = Read-Host 'Install WinSCP? y/n '
+$InstallPutty = Read-Host 'Install Putty? y/n '
+$InstallPython = Read-Host 'Install Python? y/n '
+$InstallLibreoffice = Read-Host 'Install Libreoffice? y/n '
+$InstallJava = Read-Host 'Install Java? y/n '
+$InstallSysinternals = Read-Host 'Install Sysinternals? y/n '
+$InstallVSCode = Read-Host 'Install VsCode? y/n '
+$InstallWireshark = Read-Host 'Install Wireshark? y/n '
+$InstallOpenJDK = Read-Host 'Install OpenJDK? y/n '
+$InstallTinyNvidiaUpdater = Read-Host 'Install TinyNvidiaUpdater? y/n '
+$InstallFirefox = Read-Host 'Install Firefox? y/n '
+$InstallChrome = Read-Host 'Install Chrome? y/n '
+$InstallFreeFileSync = Read-Host 'Install FreeFileSync? y/n '
+$InstallVmwarePlayer = Read-Host 'Install VmwarePlayer? y/n '
+$InstallNvidiaProfileInspector = Read-Host 'Install NvidiaProfileInspector? y/n '
+$InstallSteam = Read-Host 'Install Steam? y/n '
+$InstallOrigin = Read-Host 'Install Origin? y/n '
+$InstallGOG = Read-Host 'Install GOG? y/n '
+$InstallEpicStore = Read-Host 'Install EpicStore? y/n '
+$InstallBethesdaLauncher = Read-Host 'Install BethesdaLauncher? y/n '
+$InstallBorderlessGaming = Read-Host 'Install BorderlessGaming? y/n '
+$InstallDiscord = Read-Host 'Install Discord? y/n '
+$InstallFedoraMediaWriter = Read-Host 'Install FedoraMediaWriter? y/n '
+$InstallVisualStudioCommunity = Read-Host 'Install VisualStudioCommunity? y/n '
+$InstallOpenVPN = Read-Host 'Install OpenVPN? y/n '
+$InstallVisualStudioCommunity = Read-Host 'Install VisualStudioCommunity? y/n '
+$InstallTwitch = Read-Host 'Install Twitch? y/n '
+$InstallVortex = Read-Host 'Install Vortex? y/n '
+$InstallVisualRedistributables = Read-Host 'Install Visual C++ Redistributables? y/n '
+$InstallRockstarLauncher = Read-Host 'Install RockstarLauncher? y/n '
+$DisableCortana = Read-Host 'Disable Cortana? y/n '
+$DisableTelemetry = Read-Host 'Disable Telemetry? y/n '
+$ConfigureFirewall = Read-Host 'Configure Firewall? y/n '
 $RemoveApplications = Read-Host 'Remove some of the default applications? y/n '
 $ConfigureAppPrivacy = Read-Host 'Configure app privacy settings? y/n '
 
@@ -757,6 +767,57 @@ if ($InstallEpicStore -eq 'y') {
 if ($InstallBethesdaLauncher -eq 'y') {
     Invoke-WebRequest 'https://download.cdp.bethesda.net/BethesdaNetLauncher_Setup.exe' -OutFile "$HOME\Downloads\bethesda_setup.exe"
     Start-Process -FilePath "$HOME\Downloads\bethesda_setup.exe" -PassThru
+}
+
+# Install BorderlessGaming
+if ($InstallBorderlessGaming -eq 'y') {
+    Invoke-WebRequest 'https://github.com/Codeusa/Borderless-Gaming/releases/download/9.5.6/BorderlessGaming9.5.6_admin_setup.exe' -OutFile "$HOME\Downloads\borderless_gaming_setup.exe"
+    Start-Process -FilePath "$HOME\Downloads\borderless_gaming_setup.exe" -PassThru
+}
+
+# Install Discord
+if ($InstallDiscord -eq 'y') {
+    Invoke-WebRequest 'https://discordapp.com/api/download?platform=win' -OutFile "$HOME\Downloads\discord_setup.exe"
+    Start-Process -FilePath "$HOME\Downloads\discord_setup.exe" -PassThru
+}
+
+# Install FedoraMediaWriter
+if ($InstallFedoraMediaWriter -eq 'y') {
+    Invoke-WebRequest 'https://getfedora.org/fmw/FedoraMediaWriter-win32-4.1.4.exe' -OutFile "$HOME\Downloads\fedora_media_writer_setup.exe"
+    Start-Process -FilePath "$HOME\Downloads\fedora_media_writer_setup.exe" -PassThru
+}
+
+# Install Visual Studio Community
+if ($InstallVisualStudioCommunity -eq 'y') {
+    choco install visualstudio2019community
+}
+
+# Install OpenVPN
+if ($InstallOpenVPN -eq 'y') {
+    Invoke-WebRequest 'https://swupdate.openvpn.org/community/releases/openvpn-install-2.4.8-I602-Win10.exe' -OutFile "$HOME\Downloads\openvpn_setup.exe"
+    Start-Process -FilePath "$HOME\Downloads\openvpn_setup.exe" -PassThru
+}
+
+# Install Twitch
+if ($InstallTwitch -eq 'y') {
+    Invoke-WebRequest 'https://desktop.twitchsvc.net/installer/windows/TwitchSetup.exe' -OutFile "$HOME\Downloads\twitch_setup.exe"
+    Start-Process -FilePath "$HOME\Downloads\twitch_setup.exe" -PassThru
+}
+
+# Install Vortex
+if ($InstallVortex -eq 'y') {
+    choco install vortex
+}
+
+# Install Visual C++ Redistributables
+if ($InstallVisualRedistributables -eq 'y') {
+    choco install vcredist-all
+}
+
+# Install RockstarLauncher
+if ($InstallRockstarLauncher -eq 'y') {
+    Invoke-WebRequest 'https://gamedownloads.rockstargames.com/public/installer/Rockstar-Games-Launcher.exe#_ga=2.130661071.1975042814.1582524189-583909228.1582524189' -OutFile "$HOME\Downloads\rockstar_setup.exe"
+    Start-Process -FilePath "$HOME\Downloads\rockstar_setup.exe" -PassThru
 }
 
 # To Update all installed choclatey packages use command:
