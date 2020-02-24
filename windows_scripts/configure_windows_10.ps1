@@ -29,6 +29,11 @@ $InstallChrome = Read-Host 'Install chrome? y/n '
 $InstallFreeFileSync = Read-Host 'Install freefilesync? y/n '
 $InstallVmwarePlayer = Read-Host 'Install vmwareplayer? y/n '
 $InstallNvidiaProfileInspector = Read-Host 'Install nvidiaprofileinspector? y/n '
+$InstallSteam = Read-Host 'Install steam? y/n '
+$InstallOrigin = Read-Host 'Install origin? y/n '
+$InstallGOG = Read-Host 'Install gog? y/n '
+$InstallEpicStore = Read-Host 'Install epicstore? y/n '
+$InstallBethesdaLauncher = Read-Host 'Install bethesdalauncher? y/n '
 $DisableCortana = Read-Host 'Disable cortana? y/n '
 $DisableTelemetry = Read-Host 'Disable telemetry? y/n '
 $ConfigureFirewall = Read-Host 'Configure firewall? y/n '
@@ -722,6 +727,36 @@ if ($InstallNvidiaProfileInspector -eq 'y') {
     $Shortcut.WorkingDirectory = 'C:\Program Files\NvidiaProfileInspector'
     $Shortcut.TargetPath = 'C:\Program Files\NvidiaProfileInspector\nvidiaProfileInspector.exe'
     $Shortcut.Save()
+}
+
+# Install steam
+if ($InstallSteam -eq 'y') {
+    Invoke-WebRequest 'https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe' -OutFile "$HOME\Downloads\steam_setup.exe"
+    Start-Process -FilePath "$HOME\Downloads\steam_setup.exe" -PassThru
+}
+
+# Install origin
+if ($InstallOrigin -eq 'y') {
+    Invoke-WebRequest 'https://www.dm.origin.com/download' -OutFile "$HOME\Downloads\origin_setup.exe"
+    Start-Process -FilePath "$HOME\Downloads\origin_setup.exe" -PassThru
+}
+
+# Install gog
+if ($InstallGOG -eq 'y') {
+    Invoke-WebRequest 'https://webinstallers.gog.com/download/GOG_Galaxy_2.0.exe?payload=fYZ_3idD0IMwmec-4TY3IRMzwqXwdRx0UKBBCJBP8OnhsfRaqYgGPffKJxBn8UsNiMpdHanmZrhLRtrm3U2TZ_lg95-4bfNi9tyhe-iPz1-JEjut5Pq51l3oHwGG4-oYaDaCax0I-1wi_0qxHQLI7l17-nKAoCTuiRayr5zw8lL8wgH0rKcZOf1fV7XFSo4_NFOTzVs5hpDgh2ZJlphuyCwyUyJOHIfXWEnMkIoD0qSSRW37tH_KET3LzSjdP9LekwFrtKMzSWMBTrXEeVU4-rYaYrb3ULsFxVBt2kTDCAOH9YIvMK0IZDcom4gnIghnfQkDAI-Q0QVdZK8N_Q3klZ17wA3GFaI8jh-hGmD8H9EDl6tYoygkHGUNVHMh81N5XhMIAmLE5d-3RRyvvXgZpJBRrHgj1fmG78FUntQQGpaHi-xiaZhVHJyirUsoVjpo9i3abkhSXeMZj5EXIk94r3ryDCaqRMf31-8VKvHeQrYMlhASPIKg49AB3Tt_pdPMRViiO7eSG3kZZcv5lXdRUG0LbKQ3zLtPnbYfvEQpU9_9MIe47Efopdrr8G95VHtPAi14OaQMm6Wtiu2PggA0NPHakauILGtzs9rx0C-8qDmtMzr-hVvBlcPf6XIa_3JAShscRLg0&_ga=2.163612671.1741456251.1582519704-2030968970.1574795753' -OutFile "$HOME\Downloads\gog_setup.exe"
+    Start-Process -FilePath "$HOME\Downloads\gog_setup.exe" -PassThru
+}
+
+# Install epicstore
+if ($InstallEpicStore -eq 'y') {
+    Invoke-WebRequest 'https://launcher-public-service-prod06.ol.epicgames.com/launcher/api/installer/download/EpicGamesLauncherInstaller.msi' -OutFile "$HOME\Downloads\epic_setup.exe"
+    Start-Process -FilePath "$HOME\Downloads\epic_setup.exe" -PassThru
+}
+
+# Install bethesdalauncher
+if ($InstallBethesdaLauncher -eq 'y') {
+    Invoke-WebRequest 'https://download.cdp.bethesda.net/BethesdaNetLauncher_Setup.exe' -OutFile "$HOME\Downloads\bethesda_setup.exe"
+    Start-Process -FilePath "$HOME\Downloads\bethesda_setup.exe" -PassThru
 }
 
 # To Update all installed choclatey packages use command:
