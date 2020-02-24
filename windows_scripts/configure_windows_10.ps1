@@ -812,6 +812,7 @@ if ($InstallVortex -eq 'y') {
 # Install Visual C++ Redistributables
 if ($InstallVisualRedistributables -eq 'y') {
     choco install vcredist-all
+    choco install vcredist140
 }
 
 # Install RockstarLauncher
