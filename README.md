@@ -17,7 +17,7 @@ Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 
 [batch_process_hard_links.bat](windows_scripts/batch_process_hard_links.bat) - Simple script to make hard links of all files from where the script is run from.
 
-[get_file_hash.ps1](windows_scripts/get_file_hash.ps1) - Powershell script to get the file hashes of all files from where the script is run from.
+[get_file_hash.ps1](windows_scripts/get_file_hash.ps1) - Powershell script to get the file hashes of all files in a directory.
 
 [printer_restart.bat](windows_scripts/printer_restart.bat) - Script to restart print spooler and clear temporary files from the spooler.
 
