@@ -3,7 +3,10 @@
 # Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 # Licensed under the MIT License.
 
-# Configuration script for Arch Linux.  Run after installing. Do not run as root.
+# Configuration script for Arch Linux.  Run after installing. Do not run as root. Clone entire repository.
+
+# Get script location
+script_location="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 # Enable bluetooth
 sudo systemctl enable bluetooth.service
@@ -33,6 +36,11 @@ EndSection
 
 EOF"
 
+# Rank mirrors
+cp '/etc/pacman.d/mirrorlist' '/etc/pacman.d/mirrorlist.backup'
+rm -f '/etc/pacman.d/mirrorlist'
+rankmirrors -n 40 '/etc/pacman.d/mirrorlist.backup' >> '/etc/pacman.d/mirrorlist'
+
 # Prompts
 read -r -p "Run arch_linux_packages script? [y/N] " arch_linux_packages
 read -r -p "Run configure_i3 script? [y/N] " configure_i3
@@ -53,113 +61,85 @@ read -r -p "Run setup_serial script? [y/N] " setup_serial
 # Run arch_linux_packages script
 if [[ "${arch_linux_packages}" =~ ^([yY][eE][sS]|[yY])+$ ]]
 then
-    wget 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/arch_linux_packages.sh'
-    chmod +x arch_linux_packages.sh
-    bash arch_linux_packages.sh
+    bash "${script_location}/arch_linux_packages.sh"
 fi
 
 # Run configure_i3 script
 if [[ "${configure_i3}" =~ ^([yY][eE][sS]|[yY])+$ ]]
 then
-    wget 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/configure_i3.sh'
-    chmod +x configure_i3.sh
-    bash configure_i3.sh
+    bash "${script_location}/configure_i3.sh"
 fi
 
 # Run connect_smb script
 if [[ "${connect_smb}" =~ ^([yY][eE][sS]|[yY])+$ ]]
 then
-    wget 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/connect_smb.sh'
-    chmod +x connect_smb.sh
-    bash connect_smb.sh
+    bash "${script_location}/connect_smb.sh"
 fi
 
 # Run configure_gdm script
 if [[ "${configure_gdm}" =~ ^([yY][eE][sS]|[yY])+$ ]]
 then
-    wget 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/configure_gdm.sh'
-    chmod +x configure_gdm.sh
-    bash configure_gdm.sh
+    bash "${script_location}/configure_gdm.sh"
 fi
 
 # Run configure_hyper_v_guest script
 if [[ "${configure_hyper_v_guest}" =~ ^([yY][eE][sS]|[yY])+$ ]]
 then
-    wget 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/configure_hyper_v_guest.sh'
-    chmod +x configure_hyper_v_guest.sh
-    bash configure_hyper_v_guest.sh
+    bash "${script_location}/configure_hyper_v_guest.sh"
 fi
 
 # Run configure_kvm script
 if [[ "${configure_kvm}" =~ ^([yY][eE][sS]|[yY])+$ ]]
 then
-    wget 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/configure_kvm.sh'
-    chmod +x configure_kvm.sh
-    bash configure_kvm.sh
+    bash "${script_location}/configure_kvm.sh"
 fi
 
 # Run configure_sway script
 if [[ "${configure_sway}" =~ ^([yY][eE][sS]|[yY])+$ ]]
 then
-    wget 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/configure_sway.sh'
-    chmod +x configure_sway.sh
-    bash configure_sway.sh
+    bash "${script_location}/configure_sway.sh"
 fi
 
 # Run configure_termite script
 if [[ "${configure_termite}" =~ ^([yY][eE][sS]|[yY])+$ ]]
 then
-    wget 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/configure_termite.sh'
-    chmod +x configure_termite.sh
-    bash configure_termite.sh
+    bash "${script_location}/configure_termite.sh"
 fi
 
 # Run install_aur_packages script
 if [[ "${install_aur_packages}" =~ ^([yY][eE][sS]|[yY])+$ ]]
 then
-    wget 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/install_aur_packages.sh'
-    chmod +x install_aur_packages.sh
-    bash install_aur_packages.sh
+    bash "${script_location}/install_aur_packages.sh"
 fi
 
 # Run mount_drives script
 if [[ "${mount_drives}" =~ ^([yY][eE][sS]|[yY])+$ ]]
 then
-    wget 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/mount_drives.sh'
-    chmod +x mount_drives.sh
-    bash mount_drives.sh
+    bash "${script_location}/mount_drives.sh"
 fi
 
 # Run setup_aliases script
 if [[ "${setup_aliases}" =~ ^([yY][eE][sS]|[yY])+$ ]]
 then
-    wget 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/setup_aliases.sh'
-    chmod +x setup_aliases.sh
-    bash setup_aliases.sh
+    bash "${script_location}/setup_aliases.sh"
 fi
 
 # Run setup_fwupd script
 if [[ "${setup_fwupd}" =~ ^([yY][eE][sS]|[yY])+$ ]]
 then
-    wget 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/setup_fwupd.sh'
-    chmod +x setup_fwupd.sh
-    bash setup_fwupd.sh
+    bash "${script_location}/setup_fwupd.sh"
 fi
 
 # Run setup_git script
 if [[ "${setup_git}" =~ ^([yY][eE][sS]|[yY])+$ ]]
 then
-    wget 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/setup_git.sh'
-    chmod +x setup_git.sh
-    bash setup_git.sh
+    bash "${script_location}/setup_git.sh"
 fi
 
 # Run setup_serial script
 if [[ "${setup_serial}" =~ ^([yY][eE][sS]|[yY])+$ ]]
 then
-    wget 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/setup_serial.sh'
-    chmod +x setup_serial.sh
-    bash setup_serial.sh
+    bash "${script_location}/setup_serial.sh"
 fi
 
 # Set a timer to select OS or kernel

@@ -20,7 +20,8 @@ read -r -p "Enter dns server ip. Example '10.1.10.5': " dns_address
 user_name=$(logname)
 
 # Get the interface name
-interface="(ip route get 8.8.8.8 | sed -nr 's/.*dev ([^\ ]+).*/\1/p')"
+interface="$(ip route get 8.8.8.8 | sed -nr 's/.*dev ([^\ ]+).*/\1/p')"
+echo "Interface name is ${interface}"
 
 # Configure network
 rm -f '/etc/network/interfaces'
@@ -37,10 +38,16 @@ iface ${interface} inet static
 
 EOF
 
+# Restart network interface
+ifdown "${interface}" && ifup "${interface}"
+
+# Fix all packages
+dpkg --configure -a
+
 # Install recommended packages
 apt-get update
 apt-get upgrade
-apt-get install -y wget vim git ufw ntp ssh apt-transport-https openssh-server
+apt-get install -y wget vim git ufw ntp ssh apt-transport-https openssh-server unattended-upgrades
 
 # Configure ufw
 
@@ -74,10 +81,6 @@ ufw allow proto tcp from fe80::/10 to any port 138
 ufw allow proto tcp from 10.0.0.0/8 to any port 139
 ufw allow proto tcp from fe80::/10 to any port 139
 
-# Enable ufw
-systemctl enable ufw.service
-ufw enable
-
 # Get scripts
 
 # Script to archive config files for backup
@@ -106,37 +109,32 @@ chmod 600 "/home/${user_name}/.ssh/authorized_keys"
 cat "/home/${user_name}/nas_key.pub" >> "/home/${user_name}/.ssh/authorized_keys"
 printf '%s\n' '' >> "/home/${user_name}/.ssh/authorized_keys"
 chown -R "${user_name}" "/home/${user_name}"
-read -r -p "Remember to copy the ssh private key to the client before restarting the device after install: " >> '/dev/null'
+python -m SimpleHTTPServer 40080 &
+server_pid=$!
+read -r -p "Copy the key from the webserver on port 40080 before continuing: " >> '/dev/null'
+kill "${server_pid}"
+
+# Enable ufw
+systemctl enable ufw.service
+ufw enable
 
 # Secure ssh access
 
 # Turn off password authentication
-sed -i 's,#PasswordAuthentication\s*yes,PasswordAuthentication no,' /etc/ssh/sshd_config
-sed -i 's,#PasswordAuthentication\s*no,PasswordAuthentication no,' /etc/ssh/sshd_config
-sed -i 's,PasswordAuthentication\s*yes,PasswordAuthentication no,' /etc/ssh/sshd_config
+grep -q ".*PasswordAuthentication" '/etc/ssh/sshd_config' && sed -i "s,.*PasswordAuthentication.*,PasswordAuthentication no," '/etc/ssh/sshd_config' || printf '%s\n' 'PasswordAuthentication no' >> '/etc/ssh/sshd_config'
 
 # Do not allow empty passwords
-sed -i 's,#PermitEmptyPasswords\s*yes,PermitEmptyPasswords no,' /etc/ssh/sshd_config
-sed -i 's,#PermitEmptyPasswords\s*no,PermitEmptyPasswords no,' /etc/ssh/sshd_config
-sed -i 's,PermitEmptyPasswords\s*yes,PermitEmptyPasswords no,' /etc/ssh/sshd_config
+grep -q ".*PermitEmptyPasswords" '/etc/ssh/sshd_config' && sed -i "s,.*PermitEmptyPasswords.*,PermitEmptyPasswords no," '/etc/ssh/sshd_config' || printf '%s\n' 'PermitEmptyPasswords no' >> '/etc/ssh/sshd_config'
 
 # Turn off PAM
-sed -i 's,#UsePAM\s*yes,UsePAM no,' /etc/ssh/sshd_config
-sed -i 's,#UsePAM\s*no,UsePAM no,' /etc/ssh/sshd_config
-sed -i 's,UsePAM\s*yes,UsePAM no,' /etc/ssh/sshd_config
+grep -q ".*UsePAM" '/etc/ssh/sshd_config' && sed -i "s,.*UsePAM.*,UsePAM no," '/etc/ssh/sshd_config' || printf '%s\n' 'UsePAM no' >> '/etc/ssh/sshd_config'
 
 # Turn off root ssh access
-sed -i 's,#PermitRootLogin\s*prohibit-password,PermitRootLogin no,' /etc/ssh/sshd_config
-sed -i 's,PermitRootLogin\s*prohibit-password,PermitRootLogin no,' /etc/ssh/sshd_config
-sed -i 's,#PermitRootLogin\s*yes,PermitRootLogin no,' /etc/ssh/sshd_config
-sed -i 's,PermitRootLogin\s*yes,PermitRootLogin no,' /etc/ssh/sshd_config
-sed -i 's,#PermitRootLogin\s*no,PermitRootLogin no,' /etc/ssh/sshd_config
+grep -q ".*PermitRootLogin" '/etc/ssh/sshd_config' && sed -i "s,.*PermitRootLogin.*,PermitRootLogin no," '/etc/ssh/sshd_config' || printf '%s\n' 'PermitRootLogin no' >> '/etc/ssh/sshd_config'
 
 # Enable public key authentication
-sed -i 's,#AuthorizedKeysFile\s*.ssh/authorized_keys\s*.ssh/authorized_keys2,AuthorizedKeysFile .ssh/authorized_keys,' /etc/ssh/sshd_config
-sed -i 's,#PubkeyAuthentication\s*no,PubkeyAuthentication yes,' /etc/ssh/sshd_config
-sed -i 's,#PubkeyAuthentication\s*yes,PubkeyAuthentication yes,' /etc/ssh/sshd_config
-sed -i 's,PubkeyAuthentication\s*no,PubkeyAuthentication yes,' /etc/ssh/sshd_config
+grep -q ".*AuthorizedKeysFile" '/etc/ssh/sshd_config' && sed -i "s,.*AuthorizedKeysFile\s*.ssh/authorized_keys\s*.ssh/authorized_keys2,AuthorizedKeysFile .ssh/authorized_keys," '/etc/ssh/sshd_config' || printf '%s\n' 'AuthorizedKeysFile .ssh/authorized_keys' >> '/etc/ssh/sshd_config'
+grep -q ".*PubkeyAuthentication" '/etc/ssh/sshd_config' && sed -i "s,.*PubkeyAuthentication.*,PubkeyAuthentication yes," '/etc/ssh/sshd_config' || printf '%s\n' 'PubkeyAuthentication yes' >> '/etc/ssh/sshd_config'
 
 # Configure automatic updates
 
@@ -144,8 +142,9 @@ rm -f '/etc/apt/apt.conf.d/50unattended-upgrades'
 
 cat <<\EOF > '/etc/apt/apt.conf.d/50unattended-upgrades'
 Unattended-Upgrade::Origins-Pattern {
-        "origin=Debian,a=oldstable";
-        "origin=Debian,a=oldstable-updates";
+        "origin=Debian,n=stretch,l=Debian";
+        "origin=Debian,n=stretch,l=Debian-Security";
+        "origin=Debian,n=stretch-updates";
 };
 
 Unattended-Upgrade::Package-Blacklist {
