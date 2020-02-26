@@ -20,3 +20,5 @@ if ($CompressFiles -eq 'y') {
 
     }
 }
+
+Read-Host -Prompt "Script finished.  Press enter to exit."
