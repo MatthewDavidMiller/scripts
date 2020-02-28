@@ -544,12 +544,12 @@ function InstallApplications {
     $InstallEtcher = Read-Host 'Install Etcher? y/n '
     $InstallGimp = Read-Host 'Install Gimp? y/n '
     $InstallGit = Read-Host 'Install Git? y/n '
-    $InstallVlc = Read-Host 'Install Vlc? y/n '
-    $InstallBlender = Read-Host 'Install Blender? y/n '
-    $InstallBitwarden = Read-Host 'Install Bitwarden? y/n '
+    $InstallVlc = Read-Host 'Install Vlc? Enter n if you want to install the windows store version. y/n '
+    $InstallBlender = Read-Host 'Install Blender? Enter n if you want to install the windows store version. y/n '
+    $InstallBitwarden = Read-Host 'Install Bitwarden? Enter n if you want to install the windows store version. y/n '
     $InstallWinSCP = Read-Host 'Install WinSCP? y/n '
     $InstallPutty = Read-Host 'Install Putty? y/n '
-    $InstallPython = Read-Host 'Install Python? y/n '
+    $InstallPython = Read-Host 'Install Python? Enter n if you want to install the windows store version. y/n '
     $InstallLibreoffice = Read-Host 'Install Libreoffice? y/n '
     $InstallJava = Read-Host 'Install Java? y/n '
     $InstallSysinternals = Read-Host 'Install Sysinternals? y/n '
@@ -877,6 +877,11 @@ function InstallApplications {
         Read-Host 'Press enter when downloads are complete '
         Start-Process -FilePath "$HOME\Downloads\RPGVXAce*.exe" -PassThru -Wait
     }
+
+    # Install windows store apps
+    Read-Host 'Windows store will be opened.  Install any windows store apps used. Press enter to begin '
+    Start-Process 'ms-windows-store://pdp'
+    Read-Host 'Press enter when finished installing windows store apps '
 }
 
 # To Update all installed choclatey packages use command:
