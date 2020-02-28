@@ -576,6 +576,7 @@ function InstallApplications {
     $InstallVortex = Read-Host 'Install Vortex? y/n '
     $InstallVisualRedistributables = Read-Host 'Install Visual C++ Redistributables? y/n '
     $InstallRockstarLauncher = Read-Host 'Install RockstarLauncher? y/n '
+    $InstallRPGMakerRTPs = Read-Host 'Install RPGMaker RTPs? y/n '
 
     # Install chocolatey
     if ($InstallChocolatey -eq 'y') {
@@ -827,7 +828,10 @@ function InstallApplications {
 
     # Install Visual Studio Community
     if ($InstallVisualStudioCommunity -eq 'y') {
-        choco install visualstudio2019community
+        Read-Host 'A web browser will be opened.  Download visual studio community into downloads folder. Press enter to begin '
+        Start-Process 'https://visualstudio.microsoft.com/vs/community/' -PassThru -Wait
+        Read-Host 'Press enter when download is complete '
+        Start-Process -FilePath "$HOME\Downloads\vs_community*.exe" -PassThru -Wait
     }
 
     # Install OpenVPN
@@ -864,6 +868,14 @@ function InstallApplications {
     if ($InstallRockstarLauncher -eq 'y') {
         Invoke-WebRequest 'https://gamedownloads.rockstargames.com/public/installer/Rockstar-Games-Launcher.exe#_ga=2.130661071.1975042814.1582524189-583909228.1582524189' -OutFile "$HOME\Downloads\rockstar_setup.exe"
         Start-Process -FilePath "$HOME\Downloads\rockstar_setup.exe" -PassThru -Wait
+    }
+
+    # Install rpgmaker rtps
+    if ($InstallRPGMakerRTPs -eq 'y') {
+        Read-Host 'A web browser will be opened.  Download all of the RPGMaker RTPs into the downloads folder. Press enter to begin '
+        Start-Process 'https://www.rpgmakerweb.com/download/additional/run-time-packages' -PassThru -Wait
+        Read-Host 'Press enter when downloads are complete '
+        Start-Process -FilePath "$HOME\Downloads\RPGVXAce*.exe" -PassThru -Wait
     }
 }
 
