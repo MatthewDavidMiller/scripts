@@ -23,22 +23,19 @@ time='720'
 PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
 
 # Check if script is already running.
-function check_script {
-    if pidof -x "${script_name}" -o $$ > /dev/null
-    then
-        echo "Process already running" >> "${log}"
+function check_script() {
+    if pidof -x "${script_name}" -o $$ >/dev/null; then
+        echo "Process already running" >>"${log}"
         exit 1
     fi
 }
 
 # Searches newlines for a specified string in a file and emails admin if the string is found.
-function check_connections {
-    while read -r "new_connection_established"
-    do
-        if printf "%s" "${new_connection_established}" | grep -q "${search_for_these_words}"
-        then
+function check_connections() {
+    while read -r "new_connection_established"; do
+        if printf "%s" "${new_connection_established}" | grep -q "${search_for_these_words}"; then
             python3 "/usr/local/bin/email_on_vpn_connections.py"
-            echo """${new_connection_established}""" >> "${log}"
+            echo """${new_connection_established}""" >>"${log}"
             sleep "${time}"
         fi
     done < <(tail -f -c 0 "${file_to_search_for_words}") &

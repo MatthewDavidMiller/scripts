@@ -6,7 +6,7 @@
 # Configuration script for Arch Linux.  Run after installing. Do not run as root. Clone entire repository.
 
 # Get script location
-script_location="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+script_location="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 # Enable bluetooth
 sudo systemctl enable bluetooth.service
@@ -39,7 +39,7 @@ EOF"
 # Rank mirrors
 cp '/etc/pacman.d/mirrorlist' '/etc/pacman.d/mirrorlist.backup'
 rm -f '/etc/pacman.d/mirrorlist'
-rankmirrors -n 40 '/etc/pacman.d/mirrorlist.backup' >> '/etc/pacman.d/mirrorlist'
+rankmirrors -n 40 '/etc/pacman.d/mirrorlist.backup' >>'/etc/pacman.d/mirrorlist'
 
 # Prompts
 read -r -p "Run arch_linux_packages script? [y/N] " arch_linux_packages
@@ -59,94 +59,79 @@ read -r -p "Run setup_git script? [y/N] " setup_git
 read -r -p "Run setup_serial script? [y/N] " setup_serial
 
 # Run arch_linux_packages script
-if [[ "${arch_linux_packages}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-then
+if [[ "${arch_linux_packages}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     bash "${script_location}/arch_linux_packages.sh"
 fi
 
 # Run configure_i3 script
-if [[ "${configure_i3}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-then
+if [[ "${configure_i3}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     bash "${script_location}/configure_i3.sh"
 fi
 
 # Run connect_smb script
-if [[ "${connect_smb}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-then
+if [[ "${connect_smb}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     bash "${script_location}/connect_smb.sh"
 fi
 
 # Run configure_gdm script
-if [[ "${configure_gdm}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-then
+if [[ "${configure_gdm}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     bash "${script_location}/configure_gdm.sh"
 fi
 
 # Run configure_hyper_v_guest script
-if [[ "${configure_hyper_v_guest}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-then
+if [[ "${configure_hyper_v_guest}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     bash "${script_location}/configure_hyper_v_guest.sh"
 fi
 
 # Run configure_kvm script
-if [[ "${configure_kvm}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-then
+if [[ "${configure_kvm}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     bash "${script_location}/configure_kvm.sh"
 fi
 
 # Run configure_sway script
-if [[ "${configure_sway}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-then
+if [[ "${configure_sway}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     bash "${script_location}/configure_sway.sh"
 fi
 
 # Run configure_termite script
-if [[ "${configure_termite}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-then
+if [[ "${configure_termite}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     bash "${script_location}/configure_termite.sh"
 fi
 
 # Run install_aur_packages script
-if [[ "${install_aur_packages}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-then
+if [[ "${install_aur_packages}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     bash "${script_location}/install_aur_packages.sh"
 fi
 
 # Run mount_drives script
-if [[ "${mount_drives}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-then
+if [[ "${mount_drives}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     bash "${script_location}/mount_drives.sh"
 fi
 
 # Run setup_aliases script
-if [[ "${setup_aliases}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-then
+if [[ "${setup_aliases}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     bash "${script_location}/setup_aliases.sh"
 fi
 
 # Run setup_fwupd script
-if [[ "${setup_fwupd}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-then
+if [[ "${setup_fwupd}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     bash "${script_location}/setup_fwupd.sh"
 fi
 
 # Run setup_git script
-if [[ "${setup_git}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-then
+if [[ "${setup_git}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     bash "${script_location}/setup_git.sh"
 fi
 
 # Run setup_serial script
-if [[ "${setup_serial}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-then
+if [[ "${setup_serial}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     bash "${script_location}/setup_serial.sh"
 fi
 
 # Set a timer to select OS or kernel
-if [[ "${ostimer}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-then
+if [[ "${ostimer}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     {
         printf '%s\n' 'timeout 60'
         printf '%s\n' ''
-    } >> '/boot/loader/loader.conf'
+    } >>'/boot/loader/loader.conf'
 fi

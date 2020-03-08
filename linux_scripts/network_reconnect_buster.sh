@@ -8,46 +8,46 @@
 # Add this to /etc/rc.local
 # /bin/bash /usr/local/bin/network_reconnect_buster.sh &
 
-# Script name
-script_name='network_reconnect_buster.sh'
-
-# Log file location
-log='/var/log/network_reconnect_buster.sh.log'
-
-# Check if script is already running.
-if pidof -x "${script_name}" -o $$ > /dev/null
-then
-    echo "Process already running" >> "${log}"
-    exit 1
-fi
-
-# Gateway ip
-gateway='10.2.1.1'
-
-# Interface
-interface='wlan0'
-
-# Time to wait before pinging again.
-ping_time='300'
-
-# Time to wait after restarting interface.
-interface_time='300'
-
 # Define path to commands.
 PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
 
-while true
-do
-    if ping -c2 "${gateway}" > "/dev/null"
-    then
-        echo "Network is up at the time of ""$(date)""" >> "${log}"
-        sleep "${ping_time}"
-    else
-        # Restart the interface
-        echo "Restarting ""${interface}"" at the time of ""$(date)""" >> "${log}"
-        ip link set "${interface}" down
-        sleep 12
-        ip link set "${interface}" up
-        sleep "${interface_time}"
+function check_script() {
+    # Check if script is already running.
+    if pidof -x "${script_name}" -o $$ >/dev/null; then
+        echo "Process already running" >>"${log}"
+        exit 1
     fi
-done
+}
+
+function test_network() {
+    # Script name
+    script_name='network_reconnect_buster.sh'
+    # Log file location
+    log='/var/log/network_reconnect_buster.sh.log'
+    # Gateway ip
+    gateway='10.2.1.1'
+    # Interface
+    interface='wlan0'
+    # Time to wait before pinging again.
+    ping_time='300'
+    # Time to wait after restarting interface.
+    interface_time='300'
+
+    while true; do
+        if ping -c2 "${gateway}" >"/dev/null"; then
+            echo "Network is up at the time of ""$(date)""" >>"${log}"
+            sleep "${ping_time}"
+        else
+            # Restart the interface
+            echo "Restarting ""${interface}"" at the time of ""$(date)""" >>"${log}"
+            ip link set "${interface}" down
+            sleep 12
+            ip link set "${interface}" up
+            sleep "${interface_time}"
+        fi
+    done
+}
+
+# Call functions
+check_script
+test_network

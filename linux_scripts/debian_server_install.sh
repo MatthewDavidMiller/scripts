@@ -29,14 +29,12 @@ read -r -p "Specify a username for a new user: " user_name
 read -r -p "Use stretch [1] or buster [2]? [1/2]: " specify_version
 
 # Specify version
-if [[ "${specify_version}" =~ ^([1])+$ ]]
-then
+if [[ "${specify_version}" =~ ^([1])+$ ]]; then
     version='stretch'
 fi
 
 # Specify version
-if [[ "${specify_version}" =~ ^([2])+$ ]]
-then
+if [[ "${specify_version}" =~ ^([2])+$ ]]; then
     version='buster'
 fi
 
@@ -45,11 +43,9 @@ apt-get update
 apt-get install -y gdisk binutils debootstrap dosfstools
 
 # Delete all parititions on ${disk}
-if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-then
+if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     read -r -p "Are you sure you want to delete everything on ${disk}? [y/N] " response2
-    if [[ "${response2}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-    then
+    if [[ "${response2}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         # Deletes all partitions on disk
         sgdisk -Z "${disk}"
         sgdisk -og "${disk}"
@@ -57,8 +53,7 @@ then
 fi
 
 # Get cpu type
-if [[ "${ucode_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-then
+if [[ "${ucode_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     ucode='intel-microcode'
 else
     ucode='amd64-microcode'
@@ -82,7 +77,7 @@ debootstrap --arch amd64 --components=main,contrib,non-free ${version} /mnt 'htt
 {
     printf '%s\n' 'proc /mnt/proc proc defaults 0 0'
     printf '%s\n' 'sysfs /mnt/sys sysfs defaults 0 0'
-} >> '/etc/fstab'
+} >>'/etc/fstab'
 mount proc /mnt/proc -t proc
 mount sysfs /mnt/sys -t sysfs
 
@@ -99,7 +94,7 @@ echo "Interface name is ${interface}"
 touch '/mnt/debian_server_install.sh'
 chmod +x '/mnt/debian_server_install.sh'
 
-cat <<EOF > /mnt/debian_server_install.sh
+cat <<EOF >/mnt/debian_server_install.sh
 #!/bin/bash
 
 # Create device files
@@ -189,7 +184,7 @@ rm -f '/etc/default/grub'
 {
     printf '%s\n' 'GRUB_DEFAULT=0'
     printf '%s\n' 'GRUB_TIMEOUT=0'
-    printf '%s\n' 'GRUB_DISTRIBUTOR=$(lsb_release -i -s 2> /dev/null || echo Debian)'
+    printf '%s\n' 'GRUB_DISTRIBUTOR=$(lsb_release -i -s 2>/dev/null || echo Debian)'
     printf '%s\n' 'GRUB_CMDLINE_LINUX_DEFAULT="quiet"'
     printf '%s\n' "GRUB_CMDLINE_LINUX=\"\""
 } > '/etc/default/grub'
