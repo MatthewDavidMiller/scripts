@@ -577,6 +577,7 @@ function InstallApplications {
     $InstallVisualRedistributables = Read-Host 'Install Visual C++ Redistributables? y/n '
     $InstallRockstarLauncher = Read-Host 'Install RockstarLauncher? y/n '
     $InstallRPGMakerRTPs = Read-Host 'Install RPGMaker RTPs? y/n '
+    $InstallGolang = Read-Host 'Install Go programming language? y/n '
 
     # Install chocolatey
     if ($InstallChocolatey -eq 'y') {
@@ -930,6 +931,14 @@ function InstallApplications {
         Start-Process 'https://www.rpgmakerweb.com/download/additional/run-time-packages' -PassThru -Wait
         Read-Host 'Press enter when downloads are complete '
         Start-Process -FilePath "$HOME\Downloads\RPGVXAce*.exe" -PassThru -Wait
+    }
+
+    # Install Golang
+    if ($InstallGolang -eq 'y') {
+        Read-Host 'A web browser will be opened.  Download the Golang binary into the downloads folder. Press enter to begin '
+        Start-Process 'https://golang.org/dl/' -PassThru -Wait
+        Read-Host 'Press enter when downloads are complete '
+        Start-Process -FilePath "$HOME\Downloads\go*.windows-amd64.msi" -PassThru -Wait
     }
 
     # Install windows store apps
