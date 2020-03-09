@@ -12,6 +12,8 @@
 PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
 
 function check_script() {
+    # Script name
+    script_name='network_reconnect.sh'
     # Check if script is already running.
     if pidof -x "${script_name}" -o $$ >/dev/null; then
         echo "Process already running" >>"${log}"
@@ -20,8 +22,6 @@ function check_script() {
 }
 
 function test_network() {
-    # Script name
-    script_name='network_reconnect.sh'
     # Log file location
     log='/var/log/network_reconnect.sh.log'
     # Gateway ip
