@@ -6,6 +6,8 @@
 function check_script() {
     # Script name
     script_name='backup_configs.sh'
+    # Log file location
+    log='/var/log/backup_configs.sh.log'
     # Check if script is already running.
     if pidof -x "${script_name}" -o $$ >/dev/null; then
         echo "Process already running" >>"${log}"
