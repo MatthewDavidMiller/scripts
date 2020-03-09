@@ -3,6 +3,16 @@
 # Script to backup the /etc directory into a tar archive.
 # Add * 0 * * 1 bash /usr/local/bin/backup_configs.sh & to cron
 
+function check_script() {
+    # Script name
+    script_name='backup_configs.sh'
+    # Check if script is already running.
+    if pidof -x "${script_name}" -o $$ >/dev/null; then
+        echo "Process already running" >>"${log}"
+        exit 1
+    fi
+}
+
 function backup_configs() {
     # Define path to commands.
     PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
@@ -23,4 +33,5 @@ function backup_configs() {
 }
 
 # Call functions
+check_script
 backup_configs
