@@ -81,7 +81,7 @@ function DisableTelemetry {
         New-ItemProperty -Path $TelemetryKey -Name $TelemetryKeyName -Value "0" -PropertyType DWORD -Force | Out-Null
     }
 
-    Get-Service -Name $TelemetryService1 | Set-Service -Status Stopped
+    Get-Service -Name $TelemetryService1 | Stop-Service -Force
     Get-Service -Name $TelemetryService1 | Set-Service -StartupType Disabled
 }
 
