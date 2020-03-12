@@ -471,6 +471,8 @@ function InstallApplications {
     # Install chocolatey
     if ($InstallChocolatey -eq 'y') {
         Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+        # Reload PATH
+        $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
     }
 
     # Install shellcheck
