@@ -8,8 +8,53 @@ $RemoveApplications = Read-Host 'Remove some of the default applications? y/n '
 $ConfigureAppPrivacy = Read-Host 'Configure app privacy settings? y/n '
 $ConfigureNTP = Read-Host 'Configure NTP? y/n '
 $InstallApplications = Read-Host 'Install some applications? y/n '
+if ($InstallApplications -eq 'y') {
+    $InstallChocolatey = Read-Host 'Install Chocolatey? y/n '
+    $InstallShellCheck = Read-Host 'Install ShellCheck? y/n '
+    $InstallNotepadPlusPlus = Read-Host 'Install Notepad++? y/n '
+    $Install7Zip = Read-Host 'Install 7Zip? y/n '
+    $InstallNMap = Read-Host 'Install Nmap? y/n '
+    $InstallQBittorent = Read-Host 'Install QBittorent? y/n '
+    $InstallRufus = Read-Host 'Install Rufus? y/n '
+    $InstallEtcher = Read-Host 'Install Etcher? y/n '
+    $InstallGimp = Read-Host 'Install Gimp? y/n '
+    $InstallGit = Read-Host 'Install Git? y/n '
+    $InstallVlc = Read-Host 'Install Vlc? Enter n if you want to install the windows store version. y/n '
+    $InstallBlender = Read-Host 'Install Blender? Enter n if you want to install the windows store version. y/n '
+    $InstallBitwarden = Read-Host 'Install Bitwarden? Enter n if you want to install the windows store version. y/n '
+    $InstallWinSCP = Read-Host 'Install WinSCP? y/n '
+    $InstallPutty = Read-Host 'Install Putty? y/n '
+    $InstallPython = Read-Host 'Install Python? Enter n if you want to install the windows store version. y/n '
+    $InstallLibreoffice = Read-Host 'Install Libreoffice? y/n '
+    $InstallJava = Read-Host 'Install Java? y/n '
+    $InstallSysinternals = Read-Host 'Install Sysinternals? y/n '
+    $InstallVSCode = Read-Host 'Install VsCode? y/n '
+    $InstallWireshark = Read-Host 'Install Wireshark? y/n '
+    $InstallOpenJDK = Read-Host 'Install OpenJDK? y/n '
+    $InstallTinyNvidiaUpdater = Read-Host 'Install TinyNvidiaUpdater? y/n '
+    $InstallFirefox = Read-Host 'Install Firefox? y/n '
+    $InstallChrome = Read-Host 'Install Chrome? y/n '
+    $InstallFreeFileSync = Read-Host 'Install FreeFileSync? y/n '
+    $InstallVmwarePlayer = Read-Host 'Install VmwarePlayer? y/n '
+    $InstallNvidiaProfileInspector = Read-Host 'Install NvidiaProfileInspector? y/n '
+    $InstallSteam = Read-Host 'Install Steam? y/n '
+    $InstallOrigin = Read-Host 'Install Origin? y/n '
+    $InstallGOG = Read-Host 'Install GOG? y/n '
+    $InstallEpicStore = Read-Host 'Install EpicStore? y/n '
+    $InstallBethesdaLauncher = Read-Host 'Install BethesdaLauncher? y/n '
+    $InstallBorderlessGaming = Read-Host 'Install BorderlessGaming? y/n '
+    $InstallDiscord = Read-Host 'Install Discord? y/n '
+    $InstallFedoraMediaWriter = Read-Host 'Install FedoraMediaWriter? y/n '
+    $InstallVisualStudioCommunity = Read-Host 'Install VisualStudioCommunity? y/n '
+    $InstallOpenVPN = Read-Host 'Install OpenVPN? y/n '
+    $InstallTwitch = Read-Host 'Install Twitch? y/n '
+    $InstallVortex = Read-Host 'Install Vortex? y/n '
+    $InstallVisualRedistributables = Read-Host 'Install Visual C++ Redistributables? y/n '
+    $InstallRockstarLauncher = Read-Host 'Install RockstarLauncher? y/n '
+    $InstallRPGMakerRTPs = Read-Host 'Install RPGMaker RTPs? y/n '
+    $InstallGolang = Read-Host 'Install Go programming language? y/n '
+}
 
-# Disable Cortana
 function DisableCortana {
     $CortanaKey = "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"
     $CortanaKeyName = "AllowCortana"
@@ -23,7 +68,6 @@ function DisableCortana {
     }
 }
 
-# Disable telemetry
 function DisableTelemetry {
     $TelemetryKey = "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
     $TelemetryKeyName = "AllowTelemetry"
@@ -41,7 +85,6 @@ function DisableTelemetry {
     Get-Service -Name $TelemetryService1 | Set-Service -StartupType Disabled
 }
 
-# Configure firewall
 function ConfigureFirewall {
     $WindowsFirewall = "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall"
     $FirewallRules = "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\FirewallRules"
@@ -241,7 +284,6 @@ function ConfigureFirewall {
     }
 }
 
-# Remove applications
 function RemoveApplications {
     # Applications base name
     $AppBase = "Microsoft."
@@ -306,7 +348,6 @@ function RemoveApplications {
     Get-AppxPackage -name "$($AppBase)$($AppWallet)" | Remove-AppxPackage
 }
 
-# Configure app privacy settings
 function ConfigureAppPrivacy {
     $AppPrivacy = "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"
     $ForceAllowBackgroundApps = @"
@@ -426,54 +467,7 @@ windows.immersivecontrolpanel_cw5n1h2txyewy
     }
 }
 
-# Install applications
 function InstallApplications {
-    # Prompts
-    $InstallChocolatey = Read-Host 'Install Chocolatey? y/n '
-    $InstallShellCheck = Read-Host 'Install ShellCheck? y/n '
-    $InstallNotepadPlusPlus = Read-Host 'Install Notepad++? y/n '
-    $Install7Zip = Read-Host 'Install 7Zip? y/n '
-    $InstallNMap = Read-Host 'Install Nmap? y/n '
-    $InstallQBittorent = Read-Host 'Install QBittorent? y/n '
-    $InstallRufus = Read-Host 'Install Rufus? y/n '
-    $InstallEtcher = Read-Host 'Install Etcher? y/n '
-    $InstallGimp = Read-Host 'Install Gimp? y/n '
-    $InstallGit = Read-Host 'Install Git? y/n '
-    $InstallVlc = Read-Host 'Install Vlc? Enter n if you want to install the windows store version. y/n '
-    $InstallBlender = Read-Host 'Install Blender? Enter n if you want to install the windows store version. y/n '
-    $InstallBitwarden = Read-Host 'Install Bitwarden? Enter n if you want to install the windows store version. y/n '
-    $InstallWinSCP = Read-Host 'Install WinSCP? y/n '
-    $InstallPutty = Read-Host 'Install Putty? y/n '
-    $InstallPython = Read-Host 'Install Python? Enter n if you want to install the windows store version. y/n '
-    $InstallLibreoffice = Read-Host 'Install Libreoffice? y/n '
-    $InstallJava = Read-Host 'Install Java? y/n '
-    $InstallSysinternals = Read-Host 'Install Sysinternals? y/n '
-    $InstallVSCode = Read-Host 'Install VsCode? y/n '
-    $InstallWireshark = Read-Host 'Install Wireshark? y/n '
-    $InstallOpenJDK = Read-Host 'Install OpenJDK? y/n '
-    $InstallTinyNvidiaUpdater = Read-Host 'Install TinyNvidiaUpdater? y/n '
-    $InstallFirefox = Read-Host 'Install Firefox? y/n '
-    $InstallChrome = Read-Host 'Install Chrome? y/n '
-    $InstallFreeFileSync = Read-Host 'Install FreeFileSync? y/n '
-    $InstallVmwarePlayer = Read-Host 'Install VmwarePlayer? y/n '
-    $InstallNvidiaProfileInspector = Read-Host 'Install NvidiaProfileInspector? y/n '
-    $InstallSteam = Read-Host 'Install Steam? y/n '
-    $InstallOrigin = Read-Host 'Install Origin? y/n '
-    $InstallGOG = Read-Host 'Install GOG? y/n '
-    $InstallEpicStore = Read-Host 'Install EpicStore? y/n '
-    $InstallBethesdaLauncher = Read-Host 'Install BethesdaLauncher? y/n '
-    $InstallBorderlessGaming = Read-Host 'Install BorderlessGaming? y/n '
-    $InstallDiscord = Read-Host 'Install Discord? y/n '
-    $InstallFedoraMediaWriter = Read-Host 'Install FedoraMediaWriter? y/n '
-    $InstallVisualStudioCommunity = Read-Host 'Install VisualStudioCommunity? y/n '
-    $InstallOpenVPN = Read-Host 'Install OpenVPN? y/n '
-    $InstallTwitch = Read-Host 'Install Twitch? y/n '
-    $InstallVortex = Read-Host 'Install Vortex? y/n '
-    $InstallVisualRedistributables = Read-Host 'Install Visual C++ Redistributables? y/n '
-    $InstallRockstarLauncher = Read-Host 'Install RockstarLauncher? y/n '
-    $InstallRPGMakerRTPs = Read-Host 'Install RPGMaker RTPs? y/n '
-    $InstallGolang = Read-Host 'Install Go programming language? y/n '
-
     # Install chocolatey
     if ($InstallChocolatey -eq 'y') {
         Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
