@@ -490,7 +490,12 @@ function InstallApplications {
         Read-Host 'A web browser will be opened.  Download notepad++ into the downloads folder. Press enter to begin '
         Start-Process 'https://notepad-plus-plus.org/downloads/' 
         Read-Host 'Press enter when downloads are complete '
-        Start-Process -FilePath "$HOME\Downloads\npp*.exe" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\npp*.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\npp*.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install 7zip
@@ -509,7 +514,12 @@ function InstallApplications {
         Read-Host 'A web browser will be opened.  Download nmap into the downloads folder. Press enter to begin '
         Start-Process 'https://nmap.org/download.html' 
         Read-Host 'Press enter when downloads are complete '
-        Start-Process -FilePath "$HOME\Downloads\nmap*.exe" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\nmap*.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\nmap*.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install qbittorrent
@@ -541,7 +551,12 @@ function InstallApplications {
         Read-Host 'A web browser will be opened.  Download etcher into the downloads folder. Press enter to begin '
         Start-Process 'https://www.balena.io/etcher/' 
         Read-Host 'Press enter when downloads are complete '
-        Start-Process -FilePath "$HOME\Downloads\balenaetcher*.exe" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\balenaetcher*.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\balenaetcher*.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install gimp
@@ -549,7 +564,12 @@ function InstallApplications {
         Read-Host 'A web browser will be opened.  Download gimp into the downloads folder. Press enter to begin '
         Start-Process 'https://www.gimp.org/downloads/' 
         Read-Host 'Press enter when downloads are complete '
-        Start-Process -FilePath "$HOME\Downloads\gimp*.exe" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\gimp*.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\gimp*.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install git
@@ -557,7 +577,12 @@ function InstallApplications {
         Read-Host 'A web browser will be opened.  Download git into the downloads folder. Press enter to begin '
         Start-Process 'https://git-scm.com/downloads' 
         Read-Host 'Press enter when downloads are complete '
-        Start-Process -FilePath "$HOME\Downloads\git*.exe" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\git*.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\git*.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install vlc
@@ -565,7 +590,12 @@ function InstallApplications {
         Read-Host 'A web browser will be opened.  Download vlc into the downloads folder. Press enter to begin '
         Start-Process 'https://www.videolan.org/vlc/download-windows.html' 
         Read-Host 'Press enter when downloads are complete '
-        Start-Process -FilePath "$HOME\Downloads\vlc*.exe" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\vlc*.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\vlc*.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install blender
@@ -573,13 +603,23 @@ function InstallApplications {
         Read-Host 'A web browser will be opened.  Download blender into the downloads folder. Press enter to begin '
         Start-Process 'https://www.blender.org/download/' 
         Read-Host 'Press enter when downloads are complete '
-        Start-Process -FilePath "$HOME\Downloads\blender*.msi" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\blender*.msi" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\blender*.msi" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install bitwarden
     if ($InstallBitwarden -eq 'y') {
         Invoke-WebRequest 'https://vault.bitwarden.com/download/?app=desktop&platform=windows' -OutFile "$HOME\Downloads\bitwarden_installer.exe"
-        Start-Process -FilePath "$HOME\Downloads\bitwarden_installer.exe" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\bitwarden_installer.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\bitwarden_installer.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install winscp
@@ -587,7 +627,12 @@ function InstallApplications {
         Read-Host 'A web browser will be opened.  Download winscp into the downloads folder. Press enter to begin '
         Start-Process 'https://winscp.net/eng/download.php' 
         Read-Host 'Press enter when downloads are complete '
-        Start-Process -FilePath "$HOME\Downloads\winscp*.exe" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\winscp*.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\winscp*.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install putty
@@ -595,7 +640,12 @@ function InstallApplications {
         Read-Host 'A web browser will be opened.  Download putty into the downloads folder. Press enter to begin '
         Start-Process 'https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html' 
         Read-Host 'Press enter when downloads are complete '
-        Start-Process -FilePath "$HOME\Downloads\putty*.msi" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\putty*.msi" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\putty*.msi" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install python
@@ -603,15 +653,20 @@ function InstallApplications {
         Read-Host 'A web browser will be opened.  Download python into the downloads folder. Press enter to begin '
         Start-Process 'https://www.python.org/downloads/windows/' 
         Read-Host 'Press enter when downloads are complete '
-        Start-Process -FilePath "$HOME\Downloads\python*.exe" -Wait
-        # Reload PATH
-        $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\python*.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\python*.exe" -Wait
+            # Reload PATH
+            $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
 
-        # Configure Python
-        # Update pip
-        python -m pip install -U pip
-        # Install pylint
-        pip install pylint
+            # Configure Python
+            # Update pip
+            python -m pip install -U pip
+            # Install pylint
+            pip install pylint
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install libreoffice
@@ -619,7 +674,12 @@ function InstallApplications {
         Read-Host 'A web browser will be opened.  Download libreoffice fresh into the downloads folder. Press enter to begin '
         Start-Process 'https://www.libreoffice.org/download/download/' 
         Read-Host 'Press enter when downloads are complete '
-        Start-Process -FilePath "$HOME\Downloads\libreoffice*.msi" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\libreoffice*.msi" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\libreoffice*.msi" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install java
@@ -627,7 +687,12 @@ function InstallApplications {
         Read-Host 'A web browser will be opened.  Download java 64 bit into the downloads folder. Press enter to begin '
         Start-Process 'https://www.java.com/en/download/manual.jsp' 
         Read-Host 'Press enter when downloads are complete '
-        Start-Process -FilePath "$HOME\Downloads\jre*.exe" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\jre*.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\jre*.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install sysinternals
@@ -646,7 +711,12 @@ function InstallApplications {
     # Install vscode
     if ($InstallVSCode -eq 'y') {
         Invoke-WebRequest 'https://aka.ms/win32-x64-user-stable' -OutFile "$HOME\Downloads\vscode_installer.exe"
-        Start-Process -FilePath "$HOME\Downloads\vscode_installer.exe" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\vscode_installer.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\vscode_installer.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install wireshark
@@ -654,7 +724,12 @@ function InstallApplications {
         Read-Host 'A web browser will be opened.  Download wireshark into the downloads folder. Press enter to begin '
         Start-Process 'https://www.wireshark.org/#download' 
         Read-Host 'Press enter when downloads are complete '
-        Start-Process -FilePath "$HOME\Downloads\wireshark*.exe" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\wireshark*.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\wireshark*.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install openjdk
@@ -662,7 +737,12 @@ function InstallApplications {
         Read-Host 'A web browser will be opened.  Download openjdk into the downloads folder. Press enter to begin '
         Start-Process 'https://adoptopenjdk.net/' 
         Read-Host 'Press enter when downloads are complete '
-        Start-Process -FilePath "$HOME\Downloads\openjdk*.msi" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\openjdk*.msi" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\openjdk*.msi" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install tinynvidiaupdater
@@ -684,13 +764,23 @@ function InstallApplications {
     # Install firefox
     if ($InstallFirefox -eq 'y') {
         Invoke-WebRequest 'https://download.mozilla.org/?product=firefox-msi-latest-ssl&os=win64&lang=en-US' -OutFile "$HOME\Downloads\firefox.msi"
-        Start-Process -FilePath "$HOME\Downloads\firefox.msi" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\firefox.msi" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\firefox.msi" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install chrome
     if ($InstallChrome -eq 'y') {
         Invoke-WebRequest 'https://dl.google.com/chrome/install/latest/chrome_installer.exe' -OutFile "$HOME\Downloads\chrome_installer.exe"
-        Start-Process -FilePath "$HOME\Downloads\chrome_installer.exe" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\chrome_installer.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\chrome_installer.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install freefilesync
@@ -698,13 +788,23 @@ function InstallApplications {
         Read-Host 'A web browser will be opened.  Download freefilesync into the downloads folder. Press enter to begin '
         Start-Process 'https://freefilesync.org/download.php' 
         Read-Host 'Press enter when downloads are complete '
-        Start-Process -FilePath "$HOME\Downloads\FreeFileSync*.exe" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\FreeFileSync*.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\FreeFileSync*.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install vmware player
     if ($InstallVmwarePlayer -eq 'y') {
         Invoke-WebRequest 'https://www.vmware.com/go/getplayer-win' -OutFile "$HOME\Downloads\vmware_player_setup.exe"
-        Start-Process -FilePath "$HOME\Downloads\vmware_player_setup.exe" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\vmware_player_setup.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\vmware_player_setup.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install nvidiaprofileinspector
@@ -725,13 +825,23 @@ function InstallApplications {
     # Install steam
     if ($InstallSteam -eq 'y') {
         Invoke-WebRequest 'https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe' -OutFile "$HOME\Downloads\steam_setup.exe"
-        Start-Process -FilePath "$HOME\Downloads\steam_setup.exe" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\steam_setup.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\steam_setup.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install origin
     if ($InstallOrigin -eq 'y') {
         Invoke-WebRequest 'https://www.dm.origin.com/download' -OutFile "$HOME\Downloads\origin_setup.exe"
-        Start-Process -FilePath "$HOME\Downloads\origin_setup.exe" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\origin_setup.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\origin_setup.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install gog
@@ -739,19 +849,34 @@ function InstallApplications {
         Read-Host 'A web browser will be opened.  Download gog into the downloads folder. Press enter to begin '
         Start-Process 'https://www.gog.com/galaxy' 
         Read-Host 'Press enter when downloads are complete '
-        Start-Process -FilePath "$HOME\Downloads\gog_galaxy*.exe" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\gog_galaxy*.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\gog_galaxy*.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install epicstore
     if ($InstallEpicStore -eq 'y') {
         Invoke-WebRequest 'https://launcher-public-service-prod06.ol.epicgames.com/launcher/api/installer/download/EpicGamesLauncherInstaller.msi' -OutFile "$HOME\Downloads\epic_setup.exe"
-        Start-Process -FilePath "$HOME\Downloads\epic_setup.exe" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\epic_setup.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\epic_setup.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install bethesdalauncher
     if ($InstallBethesdaLauncher -eq 'y') {
         Invoke-WebRequest 'https://download.cdp.bethesda.net/BethesdaNetLauncher_Setup.exe' -OutFile "$HOME\Downloads\bethesda_setup.exe"
-        Start-Process -FilePath "$HOME\Downloads\bethesda_setup.exe" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\bethesda_setup.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\bethesda_setup.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install BorderlessGaming
@@ -759,13 +884,23 @@ function InstallApplications {
         Read-Host 'A web browser will be opened.  Download borderlessgaming into the downloads folder. Press enter to begin '
         Start-Process 'https://github.com/Codeusa/Borderless-Gaming/releases' 
         Read-Host 'Press enter when downloads are complete '
-        Start-Process -FilePath "$HOME\Downloads\borderlessgaming*.exe" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\borderlessgaming*.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\borderlessgaming*.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install Discord
     if ($InstallDiscord -eq 'y') {
         Invoke-WebRequest 'https://discordapp.com/api/download?platform=win' -OutFile "$HOME\Downloads\discord_setup.exe"
-        Start-Process -FilePath "$HOME\Downloads\discord_setup.exe" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\discord_setup.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\discord_setup.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install FedoraMediaWriter
@@ -773,7 +908,12 @@ function InstallApplications {
         Read-Host 'A web browser will be opened.  Download fedoramediawriter into the downloads folder. Press enter to begin '
         Start-Process 'https://getfedora.org/en/workstation/download/' 
         Read-Host 'Press enter when downloads are complete '
-        Start-Process -FilePath "$HOME\Downloads\fedoramedia*.exe" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\fedoramedia*.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\fedoramedia*.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install Visual Studio Community
@@ -781,7 +921,12 @@ function InstallApplications {
         Read-Host 'A web browser will be opened.  Download visual studio community into downloads folder. Press enter to begin '
         Start-Process 'https://visualstudio.microsoft.com/vs/community/' 
         Read-Host 'Press enter when download is complete '
-        Start-Process -FilePath "$HOME\Downloads\vs_community*.exe" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\vs_community*.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\vs_community*.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install OpenVPN
@@ -789,13 +934,23 @@ function InstallApplications {
         Read-Host 'A web browser will be opened.  Download openvpn into the downloads folder. Press enter to begin '
         Start-Process 'https://openvpn.net/community-downloads/' 
         Read-Host 'Press enter when downloads are complete '
-        Start-Process -FilePath "$HOME\Downloads\openvpn*.exe" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\openvpn*.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\openvpn*.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install Twitch
     if ($InstallTwitch -eq 'y') {
         Invoke-WebRequest 'https://desktop.twitchsvc.net/installer/windows/TwitchSetup.exe' -OutFile "$HOME\Downloads\twitch_setup.exe"
-        Start-Process -FilePath "$HOME\Downloads\twitch_setup.exe" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\twitch_setup.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\twitch_setup.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install Vortex
@@ -803,7 +958,12 @@ function InstallApplications {
         Read-Host 'A web browser will be opened.  Download vortex into the downloads folder. Press enter to begin '
         Start-Process 'https://github.com/Nexus-Mods/Vortex/releases' 
         Read-Host 'Press enter when downloads are complete '
-        Start-Process -FilePath "$HOME\Downloads\Vortex*.exe" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\Vortex*.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\Vortex*.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install Visual C++ Redistributables
@@ -818,7 +978,12 @@ function InstallApplications {
         Read-Host 'A web browser will be opened.  Download the rockstar game launcher into the downloads folder. Press enter to begin '
         Start-Process 'https://socialclub.rockstargames.com/rockstar-games-launcher' 
         Read-Host 'Press enter when downloads are complete '
-        Start-Process -FilePath "$HOME\Downloads\Rockstar*.exe" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\Rockstar*.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\Rockstar*.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install rpgmaker rtps
@@ -834,7 +999,12 @@ function InstallApplications {
         Read-Host 'A web browser will be opened.  Download the Golang binary into the downloads folder. Press enter to begin '
         Start-Process 'https://golang.org/dl/'
         Read-Host 'Press enter when downloads are complete '
-        Start-Process -FilePath "$HOME\Downloads\go*.windows-amd64.msi" -Wait
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\go*.windows-amd64.msi" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\go*.windows-amd64.msi" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install windows store apps
