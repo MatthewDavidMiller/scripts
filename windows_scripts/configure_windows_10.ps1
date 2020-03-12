@@ -483,7 +483,7 @@ function InstallApplications {
     # Install notepad++
     if ($InstallNotepadPlusPlus -eq 'y') {
         Read-Host 'A web browser will be opened.  Download notepad++ into the downloads folder. Press enter to begin '
-        Start-Process 'https://notepad-plus-plus.org/downloads/' -Wait
+        Start-Process 'https://notepad-plus-plus.org/downloads/' 
         Read-Host 'Press enter when downloads are complete '
         Start-Process -FilePath "$HOME\Downloads\npp*.exe" -Wait
     }
@@ -491,7 +491,7 @@ function InstallApplications {
     # Install 7zip
     if ($Install7Zip -eq 'y') {
         Read-Host 'A web browser will be opened.  Download 7zip 32 bit and 64 bit into the downloads folder. Press enter to begin '
-        Start-Process 'https://www.7-zip.org/download.html' -Wait
+        Start-Process 'https://www.7-zip.org/download.html' 
         Read-Host 'Press enter when downloads are complete '
         New-Item -ItemType Directory -Force -Path "$HOME\Downloads\7zip_64_bit"
         Move-Item -Path "$HOME\Downloads\7z*x64.exe" -Destination "$HOME\Downloads\7zip_64_bit\7zip_x64.exe"
@@ -502,7 +502,7 @@ function InstallApplications {
     # Install nmap
     if ($InstallNMap -eq 'y') {
         Read-Host 'A web browser will be opened.  Download nmap into the downloads folder. Press enter to begin '
-        Start-Process 'https://nmap.org/download.html' -Wait
+        Start-Process 'https://nmap.org/download.html' 
         Read-Host 'Press enter when downloads are complete '
         Start-Process -FilePath "$HOME\Downloads\nmap*.exe" -Wait
     }
@@ -510,7 +510,7 @@ function InstallApplications {
     # Install qbittorrent
     if ($InstallQBittorent -eq 'y') {
         Read-Host 'A web browser will be opened.  Download qbittorrent into the downloads folder. Press enter to begin '
-        Start-Process 'https://www.qbittorrent.org/download.php' -Wait
+        Start-Process 'https://www.qbittorrent.org/download.php' 
         Read-Host 'Press enter when downloads are complete '
         Start-Process -FilePath "$HOME\Downloads\qbittorrent*.exe" -Wait
     }
@@ -518,7 +518,7 @@ function InstallApplications {
     # Install rufus
     if ($InstallRufus -eq 'y') {
         Read-Host 'A web browser will be opened.  Download rufus into the downloads folder. Press enter to begin '
-        Start-Process 'https://rufus.ie/' -Wait
+        Start-Process 'https://rufus.ie/' 
         Read-Host 'Press enter when downloads are complete '
         Get-ChildItem "$HOME\Downloads\rufus*.exe" | Rename-Item -NewName 'rufus.exe'
         New-Item -ItemType Directory -Force -Path 'C:\Program Files\Rufus'
@@ -534,7 +534,7 @@ function InstallApplications {
     # Install etcher
     if ($InstallEtcher -eq 'y') {
         Read-Host 'A web browser will be opened.  Download etcher into the downloads folder. Press enter to begin '
-        Start-Process 'https://www.balena.io/etcher/' -Wait
+        Start-Process 'https://www.balena.io/etcher/' 
         Read-Host 'Press enter when downloads are complete '
         Start-Process -FilePath "$HOME\Downloads\balenaetcher*.exe" -Wait
     }
@@ -542,7 +542,7 @@ function InstallApplications {
     # Install gimp
     if ($InstallGimp -eq 'y') {
         Read-Host 'A web browser will be opened.  Download gimp into the downloads folder. Press enter to begin '
-        Start-Process 'https://www.gimp.org/downloads/' -Wait
+        Start-Process 'https://www.gimp.org/downloads/' 
         Read-Host 'Press enter when downloads are complete '
         Start-Process -FilePath "$HOME\Downloads\gimp*.exe" -Wait
     }
@@ -550,7 +550,7 @@ function InstallApplications {
     # Install git
     if ($InstallGit -eq 'y') {
         Read-Host 'A web browser will be opened.  Download git into the downloads folder. Press enter to begin '
-        Start-Process 'https://git-scm.com/downloads' -Wait
+        Start-Process 'https://git-scm.com/downloads' 
         Read-Host 'Press enter when downloads are complete '
         Start-Process -FilePath "$HOME\Downloads\git*.exe" -Wait
     }
@@ -558,7 +558,7 @@ function InstallApplications {
     # Install vlc
     if ($InstallVlc -eq 'y') {
         Read-Host 'A web browser will be opened.  Download vlc into the downloads folder. Press enter to begin '
-        Start-Process 'https://www.videolan.org/vlc/download-windows.html' -Wait
+        Start-Process 'https://www.videolan.org/vlc/download-windows.html' 
         Read-Host 'Press enter when downloads are complete '
         Start-Process -FilePath "$HOME\Downloads\vlc*.exe" -Wait
     }
@@ -566,7 +566,7 @@ function InstallApplications {
     # Install blender
     if ($InstallBlender -eq 'y') {
         Read-Host 'A web browser will be opened.  Download blender into the downloads folder. Press enter to begin '
-        Start-Process 'https://www.blender.org/download/' -Wait
+        Start-Process 'https://www.blender.org/download/' 
         Read-Host 'Press enter when downloads are complete '
         Start-Process -FilePath "$HOME\Downloads\blender*.msi" -Wait
     }
@@ -580,7 +580,7 @@ function InstallApplications {
     # Install winscp
     if ($InstallWinSCP -eq 'y') {
         Read-Host 'A web browser will be opened.  Download winscp into the downloads folder. Press enter to begin '
-        Start-Process 'https://winscp.net/eng/download.php' -Wait
+        Start-Process 'https://winscp.net/eng/download.php' 
         Read-Host 'Press enter when downloads are complete '
         Start-Process -FilePath "$HOME\Downloads\winscp*.exe" -Wait
     }
@@ -588,7 +588,7 @@ function InstallApplications {
     # Install putty
     if ($InstallPutty -eq 'y') {
         Read-Host 'A web browser will be opened.  Download putty into the downloads folder. Press enter to begin '
-        Start-Process 'https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html' -Wait
+        Start-Process 'https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html' 
         Read-Host 'Press enter when downloads are complete '
         Start-Process -FilePath "$HOME\Downloads\putty*.msi" -Wait
     }
@@ -596,7 +596,7 @@ function InstallApplications {
     # Install python
     if ($InstallPython -eq 'y') {
         Read-Host 'A web browser will be opened.  Download python into the downloads folder. Press enter to begin '
-        Start-Process 'https://www.python.org/downloads/windows/' -Wait
+        Start-Process 'https://www.python.org/downloads/windows/' 
         Read-Host 'Press enter when downloads are complete '
         Start-Process -FilePath "$HOME\Downloads\python*.exe" -Wait
         # Reload PATH
@@ -612,7 +612,7 @@ function InstallApplications {
     # Install libreoffice
     if ($InstallLibreoffice -eq 'y') {
         Read-Host 'A web browser will be opened.  Download libreoffice fresh into the downloads folder. Press enter to begin '
-        Start-Process 'https://www.libreoffice.org/download/download/' -Wait
+        Start-Process 'https://www.libreoffice.org/download/download/' 
         Read-Host 'Press enter when downloads are complete '
         Start-Process -FilePath "$HOME\Downloads\libreoffice*.msi" -Wait
     }
@@ -620,7 +620,7 @@ function InstallApplications {
     # Install java
     if ($InstallJava -eq 'y') {
         Read-Host 'A web browser will be opened.  Download java 64 bit into the downloads folder. Press enter to begin '
-        Start-Process 'https://www.java.com/en/download/manual.jsp' -Wait
+        Start-Process 'https://www.java.com/en/download/manual.jsp' 
         Read-Host 'Press enter when downloads are complete '
         Start-Process -FilePath "$HOME\Downloads\jre*.exe" -Wait
     }
@@ -647,7 +647,7 @@ function InstallApplications {
     # Install wireshark
     if ($InstallWireshark -eq 'y') {
         Read-Host 'A web browser will be opened.  Download wireshark into the downloads folder. Press enter to begin '
-        Start-Process 'https://www.wireshark.org/#download' -Wait
+        Start-Process 'https://www.wireshark.org/#download' 
         Read-Host 'Press enter when downloads are complete '
         Start-Process -FilePath "$HOME\Downloads\wireshark*.exe" -Wait
     }
@@ -655,7 +655,7 @@ function InstallApplications {
     # Install openjdk
     if ($InstallOpenJDK -eq 'y') {
         Read-Host 'A web browser will be opened.  Download openjdk into the downloads folder. Press enter to begin '
-        Start-Process 'https://adoptopenjdk.net/' -Wait
+        Start-Process 'https://adoptopenjdk.net/' 
         Read-Host 'Press enter when downloads are complete '
         Start-Process -FilePath "$HOME\Downloads\openjdk*.msi" -Wait
     }
@@ -663,7 +663,7 @@ function InstallApplications {
     # Install tinynvidiaupdater
     if ($InstallTinyNvidiaUpdater -eq 'y') {
         Read-Host 'A web browser will be opened.  Download tinynvidiaupdater into the downloads folder. Press enter to begin '
-        Start-Process 'https://github.com/ElPumpo/TinyNvidiaUpdateChecker/releases' -Wait
+        Start-Process 'https://github.com/ElPumpo/TinyNvidiaUpdateChecker/releases' 
         Read-Host 'Press enter when downloads are complete '
         Get-ChildItem "$HOME\Downloads\TinyNvidiaUpdateChecker*.exe" | Rename-Item -NewName 'TinyNvidiaUpdateChecker.exe'
         New-Item -ItemType Directory -Force -Path 'C:\Program Files\TinyNvidiaUpdateChecker'
@@ -691,7 +691,7 @@ function InstallApplications {
     # Install freefilesync
     if ($InstallFreeFileSync -eq 'y') {
         Read-Host 'A web browser will be opened.  Download freefilesync into the downloads folder. Press enter to begin '
-        Start-Process 'https://freefilesync.org/download.php' -Wait
+        Start-Process 'https://freefilesync.org/download.php' 
         Read-Host 'Press enter when downloads are complete '
         Start-Process -FilePath "$HOME\Downloads\FreeFileSync*.exe" -Wait
     }
@@ -705,7 +705,7 @@ function InstallApplications {
     # Install nvidiaprofileinspector
     if ($InstallNvidiaProfileInspector -eq 'y') {
         Read-Host 'A web browser will be opened.  Download nvidiaprofileinspector into the downloads folder. Press enter to begin '
-        Start-Process 'https://github.com/Orbmu2k/nvidiaProfileInspector/releases' -Wait
+        Start-Process 'https://github.com/Orbmu2k/nvidiaProfileInspector/releases' 
         Read-Host 'Press enter when downloads are complete '
         # Extract zip folder
         Expand-Archive -LiteralPath "$HOME\Downloads\nvidiaProfileInspector.zip" -DestinationPath 'C:\Program Files\NvidiaProfileInspector'
@@ -732,7 +732,7 @@ function InstallApplications {
     # Install gog
     if ($InstallGOG -eq 'y') {
         Read-Host 'A web browser will be opened.  Download gog into the downloads folder. Press enter to begin '
-        Start-Process 'https://www.gog.com/galaxy' -Wait
+        Start-Process 'https://www.gog.com/galaxy' 
         Read-Host 'Press enter when downloads are complete '
         Start-Process -FilePath "$HOME\Downloads\gog_galaxy*.exe" -Wait
     }
@@ -752,7 +752,7 @@ function InstallApplications {
     # Install BorderlessGaming
     if ($InstallBorderlessGaming -eq 'y') {
         Read-Host 'A web browser will be opened.  Download borderlessgaming into the downloads folder. Press enter to begin '
-        Start-Process 'https://github.com/Codeusa/Borderless-Gaming/releases' -Wait
+        Start-Process 'https://github.com/Codeusa/Borderless-Gaming/releases' 
         Read-Host 'Press enter when downloads are complete '
         Start-Process -FilePath "$HOME\Downloads\borderlessgaming*.exe" -Wait
     }
@@ -766,7 +766,7 @@ function InstallApplications {
     # Install FedoraMediaWriter
     if ($InstallFedoraMediaWriter -eq 'y') {
         Read-Host 'A web browser will be opened.  Download fedoramediawriter into the downloads folder. Press enter to begin '
-        Start-Process 'https://getfedora.org/en/workstation/download/' -Wait
+        Start-Process 'https://getfedora.org/en/workstation/download/' 
         Read-Host 'Press enter when downloads are complete '
         Start-Process -FilePath "$HOME\Downloads\fedoramedia*.exe" -Wait
     }
@@ -774,7 +774,7 @@ function InstallApplications {
     # Install Visual Studio Community
     if ($InstallVisualStudioCommunity -eq 'y') {
         Read-Host 'A web browser will be opened.  Download visual studio community into downloads folder. Press enter to begin '
-        Start-Process 'https://visualstudio.microsoft.com/vs/community/' -Wait
+        Start-Process 'https://visualstudio.microsoft.com/vs/community/' 
         Read-Host 'Press enter when download is complete '
         Start-Process -FilePath "$HOME\Downloads\vs_community*.exe" -Wait
     }
@@ -782,7 +782,7 @@ function InstallApplications {
     # Install OpenVPN
     if ($InstallOpenVPN -eq 'y') {
         Read-Host 'A web browser will be opened.  Download openvpn into the downloads folder. Press enter to begin '
-        Start-Process 'https://openvpn.net/community-downloads/' -Wait
+        Start-Process 'https://openvpn.net/community-downloads/' 
         Read-Host 'Press enter when downloads are complete '
         Start-Process -FilePath "$HOME\Downloads\openvpn*.exe" -Wait
     }
@@ -796,7 +796,7 @@ function InstallApplications {
     # Install Vortex
     if ($InstallVortex -eq 'y') {
         Read-Host 'A web browser will be opened.  Download vortex into the downloads folder. Press enter to begin '
-        Start-Process 'https://github.com/Nexus-Mods/Vortex/releases' -Wait
+        Start-Process 'https://github.com/Nexus-Mods/Vortex/releases' 
         Read-Host 'Press enter when downloads are complete '
         Start-Process -FilePath "$HOME\Downloads\Vortex*.exe" -Wait
     }
@@ -804,14 +804,14 @@ function InstallApplications {
     # Install Visual C++ Redistributables
     if ($InstallVisualRedistributables -eq 'y') {
         Read-Host 'A web browser will be opened.  Download and install the Visual C++ Redistributables. Press enter to begin '
-        Start-Process 'https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads' -Wait
+        Start-Process 'https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads' 
         Read-Host 'Press enter when finished installing '
     }
 
     # Install RockstarLauncher
     if ($InstallRockstarLauncher -eq 'y') {
         Read-Host 'A web browser will be opened.  Download the rockstar game launcher into the downloads folder. Press enter to begin '
-        Start-Process 'https://socialclub.rockstargames.com/rockstar-games-launcher' -Wait
+        Start-Process 'https://socialclub.rockstargames.com/rockstar-games-launcher' 
         Read-Host 'Press enter when downloads are complete '
         Start-Process -FilePath "$HOME\Downloads\Rockstar*.exe" -Wait
     }
@@ -819,7 +819,7 @@ function InstallApplications {
     # Install rpgmaker rtps
     if ($InstallRPGMakerRTPs -eq 'y') {
         Read-Host 'A web browser will be opened.  Download all of the RPGMaker RTPs into the downloads folder. Press enter to begin '
-        Start-Process 'https://www.rpgmakerweb.com/download/additional/run-time-packages' -Wait
+        Start-Process 'https://www.rpgmakerweb.com/download/additional/run-time-packages'
         Read-Host 'Press enter when downloads are complete '
         Start-Process -FilePath "$HOME\Downloads\RPGVXAce*.exe" -Wait
     }
@@ -827,14 +827,14 @@ function InstallApplications {
     # Install Golang
     if ($InstallGolang -eq 'y') {
         Read-Host 'A web browser will be opened.  Download the Golang binary into the downloads folder. Press enter to begin '
-        Start-Process 'https://golang.org/dl/' -Wait
+        Start-Process 'https://golang.org/dl/'
         Read-Host 'Press enter when downloads are complete '
         Start-Process -FilePath "$HOME\Downloads\go*.windows-amd64.msi" -Wait
     }
 
     # Install windows store apps
     Read-Host 'Windows store will be opened.  Install any windows store apps used. Press enter to begin '
-    Start-Process 'ms-windows-store://pdp' -Wait
+    Start-Process 'ms-windows-store://pdp'
     Read-Host 'Press enter when finished installing windows store apps '
 }
 
