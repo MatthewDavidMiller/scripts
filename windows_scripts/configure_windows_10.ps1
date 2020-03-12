@@ -1,6 +1,11 @@
 # Script to confgure settings in Windows 10
 
 # Prompts
+$ConfigureComputerName = Read-Host 'Configure computer hostname? y/n '
+if ($ConfigureComputerName -eq 'y') {
+    $ComputerName = Read-Host 'Enter computer hostname '
+}
+$ConfigurePowerOptions = Read-Host 'Configure power options? y/n '
 $DisableCortana = Read-Host 'Disable Cortana? y/n '
 $DisableTelemetry = Read-Host 'Disable Telemetry? y/n '
 $ConfigureFirewall = Read-Host 'Configure Firewall? y/n '
@@ -879,7 +884,33 @@ function ConfigureNTP {
 
 }
 
+function ConfigureComputerName {
+    Rename-Computer -NewName "$ComputerName"
+}
+
+function ConfigurePowerOptions {
+    # Disable hibernate
+    powercfg /hibernate off
+    powercfg /change -hibernate-timeout-ac 0
+    powercfg /change -hibernate-timeout-dc 0
+    # Set disk poweroff to 20 minutes
+    powercfg /change -disk-timeout-ac 20
+    powercfg /change -disk-timeout-dc 20
+    # Set display turnoff to 5 minutes
+    powercfg /change -monitor-timeout-ac 5
+    powercfg /change -monitor-timeout-dc 5
+    # Set standby timeout
+    Powercfg /change -standby-timeout-ac 0
+    powercfg /change -standby-timeout-dc 0
+}
+
 # Calling Functions
+if ($ConfigureComputerName -eq 'y') {
+    ConfigureComputerName
+}
+if ($ConfigurePowerOptions -eq 'y') {
+    ConfigurePowerOptions
+}
 if ($DisableCortana -eq 'y') {
     DisableCortana
 }
