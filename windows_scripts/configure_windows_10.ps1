@@ -41,6 +41,7 @@ if ($InstallApplications -eq 'y') {
     $InstallTinyNvidiaUpdater = Read-Host 'Install TinyNvidiaUpdater? y/n '
     $InstallFirefox = Read-Host 'Install Firefox? y/n '
     $InstallChrome = Read-Host 'Install Chrome? y/n '
+    $InstallEdge = Read-Host 'Install Microsoft Edge? y/n '
     $InstallFreeFileSync = Read-Host 'Install FreeFileSync? y/n '
     $InstallVmwarePlayer = Read-Host 'Install VmwarePlayer? y/n '
     $InstallNvidiaProfileInspector = Read-Host 'Install NvidiaProfileInspector? y/n '
@@ -1003,6 +1004,19 @@ function InstallApplications {
         Read-Host 'Press enter when downloads are complete '
         if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\go*.windows-amd64.msi" | Where-Object { $_.Status -eq "Valid" }) {
             Start-Process -FilePath "$HOME\Downloads\go*.windows-amd64.msi" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
+    }
+
+    # Install Microsoft Edge
+    if ($InstallEdge -eq 'y') {
+        Read-Host 'A web browser will be opened.  Download the edge binary into the downloads folder. Press enter to begin '
+        Start-Process 'https://www.microsoft.com/en-us/edge'
+        Read-Host 'Press enter when downloads are complete '
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\MicrosoftEdgeSetup.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\MicrosoftEdgeSetup.exe" -Wait
         }
         else {
             read-host "Signature is not valid, application will not be installed"
