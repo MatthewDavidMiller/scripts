@@ -12,6 +12,8 @@ $ConfigureFirewall = Read-Host 'Configure Firewall? y/n '
 $RemoveApplications = Read-Host 'Remove some of the default applications? y/n '
 $ConfigureAppPrivacy = Read-Host 'Configure app privacy settings? y/n '
 $ConfigureNTP = Read-Host 'Configure NTP? y/n '
+$InstallFeatures = Read-Host 'Install features? y/n '
+$RemoveFeatures = Read-Host 'Remove features? y/n '
 $InstallApplications = Read-Host 'Install some applications? y/n '
 if ($InstallApplications -eq 'y') {
     $InstallChocolatey = Read-Host 'Install Chocolatey? y/n '
@@ -1074,6 +1076,20 @@ function ConfigurePowerOptions {
     powercfg /change -standby-timeout-dc 0
 }
 
+function InstallFeatures {
+    # Enable Hyper-V
+    Enable-WindowsOptionalFeature -Online -FeatureName 'Microsoft-Hyper-V' -All
+    # Enable WSL
+    Enable-WindowsOptionalFeature -Online -FeatureName 'Microsoft-Windows-Subsystem-Linux'
+}
+
+function RemoveFeatures {
+    # Disable internet explorer
+    Disable-WindowsOptionalFeature -Online -FeatureName 'Internet-Explorer-Optional-amd64'
+    # Disable powershell 2.0
+    Disable-WindowsOptionalFeature -Online -FeatureName 'MicrosoftWindowsPowerShellV2Root'
+}
+
 # Calling Functions
 if ($ConfigureComputerName -eq 'y') {
     ConfigureComputerName
@@ -1098,6 +1114,12 @@ if ($ConfigureAppPrivacy -eq 'y') {
 }
 if ($ConfigureNTP -eq 'y') {
     ConfigureNTP
+}
+if ($InstallFeatures -eq 'y') {
+    InstallFeatures
+}
+if ($RemoveFeatures -eq 'y') {
+    RemoveFeatures
 }
 if ($InstallApplications -eq 'y') {
     InstallApplications
