@@ -11,6 +11,8 @@ Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 
 [configure_windows_10.ps1](windows_scripts/configure_windows_10.ps1) - Powershell script to configure Windows 10 settings I use such as disabling telemetry, disabling cortana, and configuring the firewall.
 
+[configure_wsl.sh](windows_scripts/configure_wsl.sh) - Bash script to configure WSL.
+
 ### Small Scripts:
 
 [7z_batch_compress.ps1](windows_scripts/7z_batch_compress.ps1) - Powershell script to batch compress files and folders to a 7z archive.
@@ -96,8 +98,6 @@ Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 [openwrt_restrict_luci_access.sh](linux_scripts/openwrt_restrict_luci_access.sh) - Simple script to limit access to luci gui as well as redirect http to https.
 
 [secure_ssh_access.sh](linux_scripts/secure_ssh_access.sh) - A bash script that changes the configuration for ssh to not allow password authentication and enables key based authentication. Also disables root login over ssh.
-
-[setup_wsl_gui.sh](linux_scripts/setup_wsl_gui.sh) - Simple bash script to setup the xserver in Windows Subsystem for Linux.
 
 [setup_git.sh](linux_scripts/setup_git.sh) - Bash script to configure git.
 
