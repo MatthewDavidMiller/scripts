@@ -29,6 +29,7 @@ EOF
 
 function copy_ssh_keys() {
     # Mount network drives
+    mkdir /mnt/matt_files
     sudo mount -t drvfs N: /mnt/matt_files
 
     # Copy ssh keys
