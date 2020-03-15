@@ -42,6 +42,7 @@ function copy_ssh_keys() {
 
 function install_packages() {
     sudo apt-get update
+    sudo apt-get upgrade
     sudo apt-get install git ssh
 }
 
