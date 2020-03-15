@@ -13,7 +13,7 @@ function configure_bashrc() {
     cat <<\EOF >>"/home/${user_name}/.bashrc"
 
 # Mount network drives
-mount -t drvfs N: /mnt/matt_files
+sudo mount -t drvfs N: /mnt/matt_files
 
 # Aliases
 alias sudo='sudo '
