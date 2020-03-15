@@ -1111,9 +1111,9 @@ function MapDrives {
     $Share2 = '\\matt-nas.miller.lan\matthew_versions'
     $Share3 = '\\matt-nas.miller.lan\vm_backup'
     # Mount Network Shares
-    New-PSDrive –Name "N" –PSProvider FileSystem –Root "$Share1" –Persist
-    New-PSDrive –Name "O" –PSProvider FileSystem –Root "$Share2" –Persist
-    New-PSDrive –Name "P" –PSProvider FileSystem –Root "$Share3" –Persist
+    New-PSDrive -Name "N" -PSProvider 'FileSystem' -Root "$Share1" -Persist
+    New-PSDrive -Name "O" -PSProvider 'FileSystem' -Root "$Share2" -Persist
+    New-PSDrive -Name "P" -PSProvider 'FileSystem' -Root "$Share3" -Persist
 }
 
 # Calling Functions
