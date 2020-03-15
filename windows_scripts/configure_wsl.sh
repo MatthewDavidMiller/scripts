@@ -3,7 +3,7 @@
 # Do not run as root
 
 # Get username
-user_name=$(logname)
+user_name=$(whoami)
 
 function setup_wsl_gui() {
     bash -c "echo export DISPLAY=localhost:0.0" >>~/.bashrc
