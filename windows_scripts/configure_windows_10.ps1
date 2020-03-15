@@ -1,20 +1,21 @@
 # Script to confgure settings in Windows 10
 
 # Prompts
-$ConfigureComputerName = Read-Host 'Configure computer hostname? y/n '
+$ConfigureComputerName = Read-Host 'Configure computer hostname? Requires running as admin. y/n '
 if ($ConfigureComputerName -eq 'y') {
     $ComputerName = Read-Host 'Enter computer hostname '
 }
-$ConfigurePowerOptions = Read-Host 'Configure power options? y/n '
-$DisableCortana = Read-Host 'Disable Cortana? y/n '
-$DisableTelemetry = Read-Host 'Disable Telemetry? y/n '
-$ConfigureFirewall = Read-Host 'Configure Firewall? y/n '
-$RemoveApplications = Read-Host 'Remove some of the default applications? y/n '
-$ConfigureAppPrivacy = Read-Host 'Configure app privacy settings? y/n '
-$ConfigureNTP = Read-Host 'Configure NTP? y/n '
-$InstallFeatures = Read-Host 'Install features? y/n '
-$RemoveFeatures = Read-Host 'Remove features? y/n '
-$InstallApplications = Read-Host 'Install some applications? y/n '
+$ConfigurePowerOptions = Read-Host 'Configure power options? Requires running as admin. y/n '
+$DisableCortana = Read-Host 'Disable Cortana? Requires running as admin. y/n '
+$DisableTelemetry = Read-Host 'Disable Telemetry? Requires running as admin. y/n '
+$ConfigureFirewall = Read-Host 'Configure Firewall? Requires running as admin. y/n '
+$RemoveApplications = Read-Host 'Remove some of the default applications? Requires running as admin. y/n '
+$ConfigureAppPrivacy = Read-Host 'Configure app privacy settings? Requires running as admin. y/n '
+$ConfigureNTP = Read-Host 'Configure NTP? Requires running as admin. y/n '
+$InstallFeatures = Read-Host 'Install features? Requires running as admin. y/n '
+$RemoveFeatures = Read-Host 'Remove features? Requires running as admin. y/n '
+$MapDrives = Read-Host 'Map network drives? Requires running as a normal user. y/n '
+$InstallApplications = Read-Host 'Install some applications? Run as a normal user. y/n '
 if ($InstallApplications -eq 'y') {
     $InstallChocolatey = Read-Host 'Install Chocolatey? y/n '
     $InstallShellCheck = Read-Host 'Install ShellCheck? y/n '
@@ -1104,6 +1105,17 @@ function RemoveFeatures {
     Disable-WindowsOptionalFeature -Online -FeatureName 'MicrosoftWindowsPowerShellV2Root'
 }
 
+function MapDrives {
+    # Network Share locations
+    $Share1 = '\\matt-nas.miller.lan\matt_files'
+    $Share2 = '\\matt-nas.miller.lan\matthew_versions'
+    $Share3 = '\\matt-nas.miller.lan\vm_backup'
+    # Mount Network Shares
+    New-PSDrive –Name "N" –PSProvider FileSystem –Root "$Share1" –Persist
+    New-PSDrive –Name "O" –PSProvider FileSystem –Root "$Share2" –Persist
+    New-PSDrive –Name "P" –PSProvider FileSystem –Root "$Share3" –Persist
+}
+
 # Calling Functions
 if ($ConfigureComputerName -eq 'y') {
     ConfigureComputerName
@@ -1134,6 +1146,9 @@ if ($InstallFeatures -eq 'y') {
 }
 if ($RemoveFeatures -eq 'y') {
     RemoveFeatures
+}
+if ($MapDrives -eq 'y') {
+    MapDrives
 }
 if ($InstallApplications -eq 'y') {
     InstallApplications
