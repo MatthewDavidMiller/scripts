@@ -29,7 +29,7 @@ EOF
 
 function copy_ssh_keys() {
     # Mount network drives
-    mount -t drvfs N: /mnt/matt_files
+    sudo mount -t drvfs N: /mnt/matt_files
 
     # Copy ssh keys
     sudo cp '/mnt/matt_files/SSHConfigs/matt_homelab/nas_key' '.ssh/nas_key'
