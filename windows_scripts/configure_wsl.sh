@@ -22,7 +22,7 @@ alias ssh_openwrt="ssh -i '.ssh/openwrt_key' matthew@mattopenwrt.miller.lan"
 alias ssh_proxmox="ssh -i '.ssh/proxmox_key' matthew@matt-prox.miller.lan"
 alias ssh_vpn="ssh -i '.ssh/vpn_key' matthew@matt-vpn.miller.lan"
 alias ssh_pihole="ssh -i '.ssh/pihole_key' matthew@matt-pihole.miller.lan"
-alias ls_git='ls /mnt/matt_files/Matthew_Cloud/git'
+alias cd_git='cd /mnt/matt_files/Matthew_Cloud/git'
 
 EOF
 }
@@ -40,7 +40,13 @@ function copy_ssh_keys() {
     sudo cp '/mnt/matt_files/SSHConfigs/matt_homelab/pihole_key' '.ssh/pihole_key'
 }
 
+function install_packages() {
+    sudo apt-get update
+    sudo apt-get install git ssh
+}
+
 # Call functions
 setup_wsl_gui
 configure_bashrc
 copy_ssh_keys
+install_packages
