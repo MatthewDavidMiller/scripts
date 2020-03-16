@@ -10,74 +10,74 @@ read -r -p "Do you want to upgrade all installed packages? [y/N] " update_packag
 read -r -p "Do you want to install the packages? [y/N] " install_packages_response
 
 function create_user() {
-    useradd "${user_name}"
-    mkdir '/home'
-    mkdir "/home/${user_name}"
-    passwd "${user_name}"
-    chown "${user_name}" "/home/${user_name}"
+        useradd "${user_name}"
+        mkdir '/home'
+        mkdir "/home/${user_name}"
+        passwd "${user_name}"
+        chown "${user_name}" "/home/${user_name}"
 }
 
 function configure_sudo() {
-    bash -c "printf '%s\n' \"${user_name} ALL=(ALL) ALL\" >> '/etc/sudoers'"
+        bash -c "printf '%s\n' \"${user_name} ALL=(ALL) ALL\" >> '/etc/sudoers'"
 }
 
 function configure_shell() {
-    chsh -s /bin/bash
-    chsh -s /bin/bash "${user_name}"
+        chsh -s /bin/bash
+        chsh -s /bin/bash "${user_name}"
 }
 
 function install_packages() {
-    # Updates package lists
-    opkg update
-    # Installs packages
-    opkg install luci-app-upnp ipset luci-ssl iptables-mod-geoip sudo bash coreutils openssh-keygen shadow-useradd shadow-chsh python3
+        # Updates package lists
+        opkg update
+        # Installs packages
+        opkg install luci-app-upnp ipset luci-ssl iptables-mod-geoip sudo bash coreutils openssh-keygen shadow-useradd shadow-chsh python3
 }
 
 function restrict_luci_access() {
-    # Set http port and ip to listen to.
-    uci set uhttpd.main.listen_http='10.1.10.1:80'
-    # Set https port and ip to listen to.
-    uci set uhttpd.main.listen_https='10.1.10.1:443'
-    # Redirect http to https.
-    uci set uhttpd.main.redirect_https='1'
-    # Apply changes
-    uci commit
+        # Set http port and ip to listen to.
+        uci set uhttpd.main.listen_http='10.1.10.1:80'
+        # Set https port and ip to listen to.
+        uci set uhttpd.main.listen_https='10.1.10.1:443'
+        # Redirect http to https.
+        uci set uhttpd.main.redirect_https='1'
+        # Apply changes
+        uci commit
 }
 
 function update_openwrt_packages() {
-    # Updates package lists
-    opkg update
-    # Upgrades all installed packages
-    opkg list-upgradable | cut -f 1 -d ' ' | xargs opkg upgrade
+        # Updates package lists
+        opkg update
+        # Upgrades all installed packages
+        opkg list-upgradable | cut -f 1 -d ' ' | xargs opkg upgrade
 }
 
 function generate_ssh_key() {
-    # Generate an ecdsa 521 bit key
-    ssh-keygen -f "/home/$user_name/openwrt_key" -t ecdsa -b 521
+        # Generate an ecdsa 521 bit key
+        ssh-keygen -f "/home/$user_name/openwrt_key" -t ecdsa -b 521
 
-    # Authorize the key for use with ssh
-    sudo mkdir "/home/$user_name/.ssh"
-    sudo chmod 700 "/home/$user_name/.ssh"
-    sudo touch "/home/$user_name/.ssh/authorized_keys"
-    sudo chmod 600 "/home/$user_name/.ssh/authorized_keys"
-    sudo bash -c "cat \"/home/$user_name/openwrt_key.pub\" >> \"/home/$user_name/.ssh/authorized_keys\""
-    sudo bash -c "printf '%s\n' '' >> \"/home/$user_name/.ssh/authorized_keys\""
-    sudo chown -R "$user_name" "/home/$user_name"
-    python3 -m SimpleHTTPServer 40080 &
-    server_pid=$!
-    read -r -p "Copy the key from the webserver on port 40080 before continuing: " >>'/dev/null'
-    kill "${server_pid}"
+        # Authorize the key for use with ssh
+        sudo mkdir "/home/$user_name/.ssh"
+        sudo chmod 700 "/home/$user_name/.ssh"
+        sudo touch "/home/$user_name/.ssh/authorized_keys"
+        sudo chmod 600 "/home/$user_name/.ssh/authorized_keys"
+        sudo bash -c "cat \"/home/$user_name/openwrt_key.pub\" >> \"/home/$user_name/.ssh/authorized_keys\""
+        sudo bash -c "printf '%s\n' '' >> \"/home/$user_name/.ssh/authorized_keys\""
+        sudo chown -R "$user_name" "/home/$user_name"
+        python3 -m SimpleHTTPServer 40080 &
+        server_pid=$!
+        read -r -p "Copy the key from the webserver on port 40080 before continuing: " >>'/dev/null'
+        kill "${server_pid}"
 
-    # Dropbear setup
-    bash -c "cat \"/home/$user_name/openwrt_key.pub\" >> '/etc/dropbear/authorized_keys'"
-    bash -c "printf '%s\n' '' >> '/etc/dropbear/authorized_keys'"
-    chmod 0700 /etc/dropbear
-    chmod 0600 /etc/dropbear/authorized_keys
+        # Dropbear setup
+        bash -c "cat \"/home/$user_name/openwrt_key.pub\" >> '/etc/dropbear/authorized_keys'"
+        bash -c "printf '%s\n' '' >> '/etc/dropbear/authorized_keys'"
+        chmod 0700 /etc/dropbear
+        chmod 0600 /etc/dropbear/authorized_keys
 }
 
 function configure_dropbear() {
-    rm -f '/etc/config/dropbear'
-    cat <<EOF >'/etc/config/dropbear'
+        rm -f '/etc/config/dropbear'
+        cat <<EOF >'/etc/config/dropbear'
 config dropbear
         option Port '22'
         option Interface 'Vlan_10'
@@ -85,32 +85,32 @@ config dropbear
         option RootPasswordAuth 'off'
 
 EOF
-    uci set dropbear.@dropbear[0].PasswordAuth="off"
-    uci set dropbear.@dropbear[0].RootPasswordAuth="off"
-    uci commit dropbear
+        uci set dropbear.@dropbear[0].PasswordAuth="off"
+        uci set dropbear.@dropbear[0].RootPasswordAuth="off"
+        uci commit dropbear
 }
 
 function configure_ssh() {
-    # Turn off password authentication
-    grep -q ".*PasswordAuthentication" '/etc/ssh/sshd_config' && sed -i "s,.*PasswordAuthentication.*,PasswordAuthentication no," '/etc/ssh/sshd_config' || printf '%s\n' 'PasswordAuthentication no' >>'/etc/ssh/sshd_config'
+        # Turn off password authentication
+        grep -q ".*PasswordAuthentication" '/etc/ssh/sshd_config' && sed -i "s,.*PasswordAuthentication.*,PasswordAuthentication no," '/etc/ssh/sshd_config' || printf '%s\n' 'PasswordAuthentication no' >>'/etc/ssh/sshd_config'
 
-    # Do not allow empty passwords
-    grep -q ".*PermitEmptyPasswords" '/etc/ssh/sshd_config' && sed -i "s,.*PermitEmptyPasswords.*,PermitEmptyPasswords no," '/etc/ssh/sshd_config' || printf '%s\n' 'PermitEmptyPasswords no' >>'/etc/ssh/sshd_config'
+        # Do not allow empty passwords
+        grep -q ".*PermitEmptyPasswords" '/etc/ssh/sshd_config' && sed -i "s,.*PermitEmptyPasswords.*,PermitEmptyPasswords no," '/etc/ssh/sshd_config' || printf '%s\n' 'PermitEmptyPasswords no' >>'/etc/ssh/sshd_config'
 
-    # Turn off PAM
-    grep -q ".*UsePAM" '/etc/ssh/sshd_config' && sed -i "s,.*UsePAM.*,UsePAM no," '/etc/ssh/sshd_config' || printf '%s\n' 'UsePAM no' >>'/etc/ssh/sshd_config'
+        # Turn off PAM
+        grep -q ".*UsePAM" '/etc/ssh/sshd_config' && sed -i "s,.*UsePAM.*,UsePAM no," '/etc/ssh/sshd_config' || printf '%s\n' 'UsePAM no' >>'/etc/ssh/sshd_config'
 
-    # Turn off root ssh access
-    grep -q ".*PermitRootLogin" '/etc/ssh/sshd_config' && sed -i "s,.*PermitRootLogin.*,PermitRootLogin no," '/etc/ssh/sshd_config' || printf '%s\n' 'PermitRootLogin no' >>'/etc/ssh/sshd_config'
+        # Turn off root ssh access
+        grep -q ".*PermitRootLogin" '/etc/ssh/sshd_config' && sed -i "s,.*PermitRootLogin.*,PermitRootLogin no," '/etc/ssh/sshd_config' || printf '%s\n' 'PermitRootLogin no' >>'/etc/ssh/sshd_config'
 
-    # Enable public key authentication
-    grep -q ".*AuthorizedKeysFile" '/etc/ssh/sshd_config' && sed -i "s,.*AuthorizedKeysFile\s*.ssh/authorized_keys\s*.ssh/authorized_keys2,AuthorizedKeysFile .ssh/authorized_keys," '/etc/ssh/sshd_config' || printf '%s\n' 'AuthorizedKeysFile .ssh/authorized_keys' >>'/etc/ssh/sshd_config'
-    grep -q ".*PubkeyAuthentication" '/etc/ssh/sshd_config' && sed -i "s,.*PubkeyAuthentication.*,PubkeyAuthentication yes," '/etc/ssh/sshd_config' || printf '%s\n' 'PubkeyAuthentication yes' >>'/etc/ssh/sshd_config'
+        # Enable public key authentication
+        grep -q ".*AuthorizedKeysFile" '/etc/ssh/sshd_config' && sed -i "s,.*AuthorizedKeysFile\s*.ssh/authorized_keys\s*.ssh/authorized_keys2,AuthorizedKeysFile .ssh/authorized_keys," '/etc/ssh/sshd_config' || printf '%s\n' 'AuthorizedKeysFile .ssh/authorized_keys' >>'/etc/ssh/sshd_config'
+        grep -q ".*PubkeyAuthentication" '/etc/ssh/sshd_config' && sed -i "s,.*PubkeyAuthentication.*,PubkeyAuthentication yes," '/etc/ssh/sshd_config' || printf '%s\n' 'PubkeyAuthentication yes' >>'/etc/ssh/sshd_config'
 }
 
 function configure_interfaces() {
-    rm -f '/etc/config/network'
-    cat <<EOF >'/etc/config/network'
+        rm -f '/etc/config/network'
+        cat <<EOF >'/etc/config/network'
 config interface 'loopback'
         option ifname 'lo'
         option proto 'static'
@@ -223,8 +223,8 @@ EOF
 }
 
 function configure_dhcp() {
-    rm -f '/etc/config/dhcp'
-    cat <<EOF >'/etc/config/dhcp'
+        rm -f '/etc/config/dhcp'
+        cat <<EOF >'/etc/config/dhcp'
 config dnsmasq
         option domainneeded '1'
         option localise_queries '1'
@@ -338,18 +338,22 @@ EOF
 }
 
 function configure_wifi() {
-    # Prompts
-    read -r -p "Set SSID 1 name " ssid1_name
-    read -r -p "Set SSID 1 Password " ssid1_password
-    read -r -p "Set SSID 2 name " ssid2_name
-    read -r -p "Set SSID 2 Password " ssid2_password
-    read -r -p "Set SSID 3 name " ssid3_name
-    read -r -p "Set SSID 3 Password " ssid3_password
-    read -r -p "Set SSID 4 name " ssid4_name
-    read -r -p "Set SSID 4 Password " ssid4_password
+        # Prompts
+        # SSID 1 setup for LAN
+        read -r -p "Set SSID 1 name " ssid1_name
+        read -r -p "Set SSID 1 Password " ssid1_password
+        # SSID 2 Setup for a guest network
+        read -r -p "Set SSID 2 name " ssid2_name
+        read -r -p "Set SSID 2 Password " ssid2_password
+        # SSID 3 Setup for an admin/management network
+        read -r -p "Set SSID 3 name " ssid3_name
+        read -r -p "Set SSID 3 Password " ssid3_password
+        # SSID 4 setup for an IOT network
+        read -r -p "Set SSID 4 name " ssid4_name
+        read -r -p "Set SSID 4 Password " ssid4_password
 
-    rm -f '/etc/config/wireless'
-    cat <<EOF >'/etc/config/wireless'
+        rm -f '/etc/config/wireless'
+        cat <<EOF >'/etc/config/wireless'
     config wifi-device 'radio0'
         option type 'mac80211'
         option hwmode '11g'
@@ -457,8 +461,8 @@ EOF
 }
 
 function configure_firewall() {
-    rm -f '/etc/config/firewall'
-    cat <<EOF >'/etc/config/firewall'
+        rm -f '/etc/config/firewall'
+        cat <<EOF >'/etc/config/firewall'
 config rule
         option src 'vlan_1'
         option name 'allow guests access to dns'
@@ -598,11 +602,11 @@ EOF
 }
 
 function configure_upnp() {
-    # Prompts
-    read -r -p "Enter Device UUID " device_uuid
+        # Prompts
+        read -r -p "Enter Device UUID " device_uuid
 
-    rm -f '/etc/config/upnpd'
-    cat <<EOF >'/etc/config/upnpd'
+        rm -f '/etc/config/upnpd'
+        cat <<EOF >'/etc/config/upnpd'
 config perm_rule
         option comment 'Allow port 53'
         option ext_ports '53'
@@ -661,11 +665,11 @@ EOF
 create_user
 
 if [[ "${install_packages_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-    install_packages
+        install_packages
 fi
 
 if [[ "${update_packages_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-    update_openwrt_packages
+        update_openwrt_packages
 fi
 
 configure_sudo
