@@ -661,6 +661,15 @@ config upnpd 'config'
 EOF
 }
 
+# Configure directories to be backed up
+function configure_sysupgrade() {
+    rm -f '/etc/sysupgrade.conf'
+    cat <<EOF >'/etc/sysupgrade.conf'
+/home
+
+EOF
+}
+
 # Call functions
 create_user
 
@@ -681,5 +690,6 @@ configure_dhcp
 configure_wifi
 configure_firewall
 configure_upnp
+configure_sysupgrade
 configure_dropbear
 configure_ssh
