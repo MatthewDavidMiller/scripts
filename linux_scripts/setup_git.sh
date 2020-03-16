@@ -10,7 +10,7 @@ function configure_git() {
     # Email address
     email='matthewdavidmiller1@gmail.com'
     # SSH key location
-    key_location='/mnt/matt-nas/SSHConfigs/github/github_ssh'
+    key_location='/mnt/matt_files/SSHConfigs/github/github_ssh'
     # SSH key filename
     key='github_ssh'
 

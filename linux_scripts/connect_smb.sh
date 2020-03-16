@@ -13,9 +13,9 @@ function connect_smb() {
     while [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; do
         # Prompts
         # Share location
-        read -r -p "Specify share location. Example'//matt-nas.miller.lan/matt_files': " share
+        read -r -p "Specify share location. Example'//matt_files.miller.lan/matt_files': " share
         # Mount point location
-        read -r -p "Specify mount location. Example'/mnt/matt-nas': " mount_location
+        read -r -p "Specify mount location. Example'/mnt/matt_files': " mount_location
         # Username
         read -r -p "Specify Username. Example'matthew': " username
         # Password
