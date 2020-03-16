@@ -203,6 +203,245 @@ EOF
     bash 'openmediavault_install.sh'
 }
 
+# Customize based on use case
+function configure_samba() {
+    rm -f '/etc/samba/smb.conf'
+    cat <<\EOF >>'/etc/samba/smb.conf'
+#======================= Global Settings =======================
+[global]
+workgroup = WORKGROUP
+server string = %h server
+dns proxy = no
+log level = 0
+log file = /var/log/samba/log.%m
+max log size = 1000
+logging = syslog
+panic action = /usr/share/samba/panic-action %d
+encrypt passwords = true
+passdb backend = tdbsam
+obey pam restrictions = no
+unix password sync = no
+passwd program = /usr/bin/passwd %u
+passwd chat = *Enter\snew\s*\spassword:* %n\n *Retype\snew\s*\spassword:* %n\n *password\supdated\ssuccessfully* .
+pam password change = yes
+socket options = TCP_NODELAY IPTOS_LOWDELAY
+guest account = nobody
+load printers = no
+disable spoolss = yes
+printing = bsd
+printcap name = /dev/null
+unix extensions = yes
+wide links = no
+create mask = 0777
+directory mask = 0777
+map to guest = Bad User
+use sendfile = yes
+aio read size = 16384
+aio write size = 16384
+local master = yes
+time server = no
+wins support = no
+
+#======================= Share Definitions =======================
+[vm_backup]
+path = /srv/dev-disk-by-label-Matthew_Backup/matt_files/vm_backup
+guest ok = no
+read only = no
+browseable = yes
+inherit acls = yes
+inherit permissions = no
+ea support = no
+store dos attributes = no
+vfs objects =
+printable = no
+create mask = 0664
+force create mode = 0664
+directory mask = 0775
+force directory mode = 0775
+hide special files = yes
+follow symlinks = yes
+hide dot files = yes
+valid users = "matthew"
+invalid users =
+read list =
+write list = "matthew"
+
+[matt_files]
+path = /srv/dev-disk-by-label-Matthew_Backup/matt_files
+guest ok = no
+read only = no
+browseable = yes
+inherit acls = yes
+inherit permissions = no
+ea support = no
+store dos attributes = no
+vfs objects =
+printable = no
+create mask = 0664
+force create mode = 0664
+directory mask = 0775
+force directory mode = 0775
+hide special files = yes
+follow symlinks = yes
+hide dot files = yes
+valid users = "matthew"
+invalid users =
+read list =
+write list = "matthew"
+
+[maryicloudphotos]
+path = /srv/dev-disk-by-label-Matthew_Backup/mary_backup/icloud photos
+guest ok = no
+read only = no
+browseable = yes
+inherit acls = yes
+inherit permissions = no
+ea support = no
+store dos attributes = no
+vfs objects =
+printable = no
+create mask = 0664
+force create mode = 0664
+directory mask = 0775
+force directory mode = 0775
+hide special files = yes
+follow symlinks = yes
+hide dot files = yes
+valid users = "mary"
+invalid users =
+read list =
+write list = "mary"
+
+[maryiclouddrive]
+path = /srv/dev-disk-by-label-Matthew_Backup/mary_backup/icloud drive
+guest ok = no
+read only = no
+browseable = yes
+inherit acls = yes
+inherit permissions = no
+ea support = no
+store dos attributes = no
+vfs objects =
+printable = no
+create mask = 0664
+force create mode = 0664
+directory mask = 0775
+force directory mode = 0775
+hide special files = yes
+follow symlinks = yes
+hide dot files = yes
+valid users = "mary"
+invalid users =
+read list =
+write list = "mary"
+
+[public]
+path = /srv/dev-disk-by-label-Matthew_Backup/public
+guest ok = yes
+guest only = yes
+read only = no
+browseable = yes
+inherit acls = yes
+inherit permissions = no
+ea support = no
+store dos attributes = no
+vfs objects =
+printable = no
+create mask = 0664
+force create mode = 0664
+directory mask = 0775
+force directory mode = 0775
+hide special files = yes
+follow symlinks = yes
+hide dot files = yes
+
+[matthew_versions]
+path = /srv/dev-disk-by-label-Matthew_Backup/matthew_versions
+guest ok = no
+read only = no
+browseable = yes
+inherit acls = yes
+inherit permissions = no
+ea support = no
+store dos attributes = no
+vfs objects =
+printable = no
+create mask = 0664
+force create mode = 0664
+directory mask = 0775
+force directory mode = 0775
+hide special files = yes
+follow symlinks = yes
+hide dot files = yes
+valid users = "matthew"
+invalid users =
+read list =
+write list = "matthew"
+
+[mary_versions]
+path = /srv/dev-disk-by-label-Matthew_Backup/mary_versions
+guest ok = no
+read only = no
+browseable = yes
+inherit acls = yes
+inherit permissions = no
+ea support = no
+store dos attributes = no
+vfs objects =
+printable = no
+create mask = 0664
+force create mode = 0664
+directory mask = 0775
+force directory mode = 0775
+hide special files = yes
+follow symlinks = yes
+hide dot files = yes
+valid users = "mary"
+invalid users =
+read list =
+write list = "mary"
+
+[mary_backup]
+path = /srv/dev-disk-by-label-Matthew_Backup/mary_backup
+guest ok = no
+read only = no
+browseable = yes
+inherit acls = yes
+inherit permissions = no
+ea support = no
+store dos attributes = no
+vfs objects =
+printable = no
+create mask = 0664
+force create mode = 0664
+directory mask = 0775
+force directory mode = 0775
+hide special files = yes
+follow symlinks = yes
+hide dot files = yes
+valid users = "mary"
+invalid users =
+read list =
+write list = "mary"
+
+EOF
+}
+
+function create_users() {
+    read -r -p "Add a user? [y/N] " create_users
+    while [[ "${create_users}" =~ ^([yY][eE][sS]|[yY])+$ ]]; do
+        read -r -p "Set username. " new_user_name
+        # Add a user
+        useradd -m "${new_user_name}"
+        echo "Set the password for ${new_user_name}"
+        passwd "${new_user_name}"
+        read -r -p "Do you want to add another user? [y/N] " continue_create_users
+        if [[ "${continue_create_users}" =~ ^([nN][oO]|[nN])+$ ]]; then
+            break
+        fi
+    done
+}
+
 # Call functions
 configure_network
 configure_packages
@@ -211,3 +450,5 @@ configure_firewall
 configure_scripts
 configure_auto_updates
 configure_openmediavault
+create_users
+configure_samba
