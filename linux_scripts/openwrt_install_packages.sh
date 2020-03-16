@@ -7,7 +7,7 @@ function install_packages() {
     # Updates package lists
     sudo opkg update
     # Installs packages
-    sudo opkg install luci-app-upnp ipset luci-ssl iptables-mod-geoip sudo bash coreutils openssh-keygen shadow-useradd shadow-chsh
+    sudo opkg install luci-app-upnp ipset luci-ssl iptables-mod-geoip sudo bash coreutils openssh-keygen shadow-useradd shadow-chsh python3
 }
 
 # Call functions
