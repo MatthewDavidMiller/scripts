@@ -3,7 +3,7 @@
 # Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 # Licensed under the MIT License.
 
-# Configuration script for Arch Linux.  Run after installing. Do not run as root. Clone entire repository.
+# Configuration script for Arch Linux.  Run after installing. Do not run as root.
 
 # Get script location
 # script_location="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
