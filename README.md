@@ -49,8 +49,9 @@ Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 
 [openwrt_configure.sh](linux_scripts/openwrt_configure.sh) - Bash script to automate the configuration of my router.
 
-
 [pihole_server_configure.sh](linux_scripts/pihole_server_configure.sh) - Bash script to automate the configuration of my pihole server.
+
+[proxmox_configure.sh](linux_scripts/proxmox_configure.sh) - Bash script to automate the configuration of my proxmox setup.
 
 [vpn_server_configure.sh](linux_scripts/vpn_server_configure.sh) - Bash script to automate the configuration of my vpn server.
 
