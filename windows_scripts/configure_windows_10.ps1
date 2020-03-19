@@ -63,6 +63,7 @@ if ($InstallApplications -eq 'y') {
     $InstallRPGMakerRTPs = Read-Host 'Install RPGMaker RTPs? y/n '
     $InstallGolang = Read-Host 'Install Go programming language? y/n '
     $InstallReolink = Read-Host 'Install reolink? y/n '
+    $InstallUplay = Read-Host 'Install uplay? y/n '
 }
 
 function DisableCortana {
@@ -1034,6 +1035,19 @@ function InstallApplications {
         Get-ChildItem "$HOME\Downloads\Reolink*.zip" | Expand-Archive -DestinationPath "$HOME\Downloads\Reolink"
         if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\Reolink\Reolink*.exe" | Where-Object { $_.Status -eq "Valid" }) {
             Start-Process -FilePath "$HOME\Downloads\Reolink\Reolink*.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
+    }
+
+    # Install Uplay
+    if ($InstallUplay -eq 'y') {
+        Read-Host 'A web browser will be opened.  Download the uplay binary into the downloads folder. Press enter to begin '
+        Start-Process 'https://uplay.ubisoft.com/'
+        Read-Host 'Press enter when downloads are complete '
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\UplayInstaller.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\UplayInstaller.exe" -Wait
         }
         else {
             read-host "Signature is not valid, application will not be installed"
