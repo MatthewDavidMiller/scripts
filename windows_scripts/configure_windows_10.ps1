@@ -62,6 +62,7 @@ if ($InstallApplications -eq 'y') {
     $InstallRockstarLauncher = Read-Host 'Install RockstarLauncher? y/n '
     $InstallRPGMakerRTPs = Read-Host 'Install RPGMaker RTPs? y/n '
     $InstallGolang = Read-Host 'Install Go programming language? y/n '
+    $InstallReolink = Read-Host 'Install reolink? y/n '
 }
 
 function DisableCortana {
@@ -1018,6 +1019,21 @@ function InstallApplications {
         Read-Host 'Press enter when downloads are complete '
         if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\MicrosoftEdgeSetup.exe" | Where-Object { $_.Status -eq "Valid" }) {
             Start-Process -FilePath "$HOME\Downloads\MicrosoftEdgeSetup.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
+    }
+
+    # Install Reolink
+    if ($InstallReolink -eq 'y') {
+        Read-Host 'A web browser will be opened.  Download the reolink binary into the downloads folder. Press enter to begin '
+        Start-Process 'https://reolink.com/software-and-manual/'
+        Read-Host 'Press enter when downloads are complete '
+        # Extract zip folder
+        Get-ChildItem "$HOME\Downloads\Reolink*.zip" | Expand-Archive -DestinationPath "$HOME\Downloads\Reolink"
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\Reolink\Reolink*.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\Reolink\Reolink*.exe" -Wait
         }
         else {
             read-host "Signature is not valid, application will not be installed"
