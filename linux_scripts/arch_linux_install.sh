@@ -8,8 +8,7 @@
 # Start dhcpcd
 systemctl start "dhcpcd.service"
 
-if false ping -c2 "google.com"
-then
+if false ping -c2 "google.com"; then
     echo 'No internet'
     exit 1
 fi
@@ -41,11 +40,9 @@ read -r -p "Set the device hostname: " device_hostname
 read -r -p "Specify a username for a new user: " user_name
 
 # Delete all parititions on ${disk}
-if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-then
+if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     read -r -p "Are you sure you want to delete everything on ${disk}? [y/N] " response2
-    if [[ "${response2}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-    then
+    if [[ "${response2}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         # Deletes all partitions on disk
         sgdisk -Z "${disk}"
         sgdisk -og "${disk}"
@@ -53,16 +50,14 @@ then
 fi
 
 # Get cpu type
-if [[ "${ucode_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-then
+if [[ "${ucode_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     ucode='intel-ucode'
 else
     ucode='amd-ucode'
 fi
 
 # Configure Windows duel boot
-if [[ "${windows_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-then
+if [[ "${windows_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     # Creates one partition.  Partition uses the rest of the free space avalailable to create a Linux filesystem partition.
     sgdisk -n 0:0:0 -c "${partition_number2}":"Linux Filesystem" -t "${partition_number2}":8300 "${disk}"
 else
@@ -72,11 +67,11 @@ else
 fi
 
 # Use luks encryption on partition 2
-printf '%s\n' "${disk_password}" > '/tmp/disk_password'
-cryptsetup -q luksFormat "${partition2}" < '/tmp/disk_password'
+printf '%s\n' "${disk_password}" >'/tmp/disk_password'
+cryptsetup -q luksFormat "${partition2}" <'/tmp/disk_password'
 
 # Setup lvm on partition 2
-cryptsetup open "${partition2}" cryptlvm < '/tmp/disk_password'
+cryptsetup open "${partition2}" cryptlvm <'/tmp/disk_password'
 pvcreate '/dev/mapper/cryptlvm'
 vgcreate Archlvm '/dev/mapper/cryptlvm'
 lvcreate -L 2G Archlvm -n swap
@@ -85,8 +80,7 @@ lvcreate -l 100%FREE Archlvm -n home
 rm -f '/tmp/disk_password'
 
 # Configure Windows duel boot
-if [[ "${windows_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-then
+if [[ "${windows_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     # Setup and mount filesystems
     mkfs.ext4 '/dev/Archlvm/root'
     mkfs.ext4 '/dev/Archlvm/home'
@@ -111,9 +105,37 @@ else
     mount "${partition1}" '/mnt/boot'
 fi
 
-# Change mirrors to US based ones
-cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
-awk '/^## US$/{f=1}f==0{next}/^$/{exit}{print substr($0, 2)}' /etc/pacman.d/mirrorlist
+# Configure mirrors
+rm -f '/etc/pacman.d/mirrorlist'
+cat <<\EOF >'/etc/pacman.d/mirrorlist'
+Server = https://archlinux.surlyjake.com/archlinux/$repo/os/$arch
+Server = https://mirror.arizona.edu/archlinux/$repo/os/$arch
+Server = https://arch.mirror.constant.com/$repo/os/$arch
+Server = https://mirror.dc02.hackingand.coffee/arch/$repo/os/$arch
+Server = https://repo.ialab.dsu.edu/archlinux/$repo/os/$arch
+Server = https://mirrors.kernel.org/archlinux/$repo/os/$arch
+Server = https://mirror.dal10.us.leaseweb.net/archlinux/$repo/os/$arch
+Server = https://mirror.mia11.us.leaseweb.net/archlinux/$repo/os/$arch
+Server = https://mirror.sfo12.us.leaseweb.net/archlinux/$repo/os/$arch
+Server = https://mirror.wdc1.us.leaseweb.net/archlinux/$repo/os/$arch
+Server = https://mirror.lty.me/archlinux/$repo/os/$arch
+Server = https://reflector.luehm.com/arch/$repo/os/$arch
+Server = https://mirrors.lug.mtu.edu/archlinux/$repo/os/$arch
+Server = https://mirror.kaminski.io/archlinux/$repo/os/$arch
+Server = https://iad.mirrors.misaka.one/archlinux/$repo/os/$arch
+Server = https://mirrors.ocf.berkeley.edu/archlinux/$repo/os/$arch
+Server = https://dfw.mirror.rackspace.com/archlinux/$repo/os/$arch
+Server = https://iad.mirror.rackspace.com/archlinux/$repo/os/$arch
+Server = https://ord.mirror.rackspace.com/archlinux/$repo/os/$arch
+Server = https://mirrors.rit.edu/archlinux/$repo/os/$arch
+Server = https://mirrors.rutgers.edu/archlinux/$repo/os/$arch
+Server = https://mirrors.sonic.net/archlinux/$repo/os/$arch
+Server = https://arch.mirror.square-r00t.net/$repo/os/$arch
+Server = https://mirror.stephen304.com/archlinux/$repo/os/$arch
+Server = https://mirror.pit.teraswitch.com/archlinux/$repo/os/$arch
+Server = https://mirrors.xtom.com/archlinux/$repo/os/$arch
+
+EOF
 
 # Install base packages
 pacstrap /mnt --noconfirm base base-devel linux linux-lts linux-firmware systemd e2fsprogs ntfs-3g exfat-utils vi man-db man-pages texinfo lvm2 xf86-video-intel xf86-video-amdgpu xf86-video-nouveau bash bash-completion ntp util-linux
@@ -122,7 +144,7 @@ pacstrap /mnt --noconfirm base base-devel linux linux-lts linux-firmware systemd
 pacstrap /mnt --noconfirm ${ucode} efibootmgr pacman-contrib sudo networkmanager nm-connection-editor networkmanager-openvpn ufw wget gdm xorg xorg-xinit xorg-drivers xorg-server xorg-apps bluez bluez-utils blueman pulseaudio pulseaudio-bluetooth pavucontrol libinput xf86-input-libinput i3-wm i3-bar i3-status dmenu firefox gnome-keyring seahorse termite htop dolphin cron kdenetwork-filesharing
 
 # Setup fstab
-genfstab -U /mnt >> '/mnt/etc/fstab'
+genfstab -U /mnt >>'/mnt/etc/fstab'
 
 # Setup part 2 script
 touch '/mnt/arch_linux_install_part_2.sh'
@@ -132,7 +154,7 @@ chmod +x '/mnt/arch_linux_install_part_2.sh'
 uuid="$(blkid -o value -s UUID "${partition2}")"
 uuid2="$(blkid -o value -s UUID /dev/Archlvm/root)"
 
-cat <<EOF > /mnt/arch_linux_install_part_2.sh
+cat <<EOF >/mnt/arch_linux_install_part_2.sh
 #!/bin/bash
 
 # Set the timezone

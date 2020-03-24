@@ -11,7 +11,7 @@ lsblk -f
 # Prompts and variables
 # Specify disk and partition numbers to use for install
 read -r -p "Specify disk to use for install. Example '/dev/sda': " disk
-read -r -p "Specify partition number for /boot. Example '1': " partition_number1
+read -r -p "Specify partition number for /boot/EFI. Example '1': " partition_number1
 read -r -p "Specify partition number for swap. Example '2': " partition_number2
 read -r -p "Specify partition number for root /. Example '3': " partition_number3
 partition1="${disk}${partition_number1}"
@@ -25,17 +25,27 @@ read -r -p "Is the cpu intel? [y/N] " ucode_response
 read -r -p "Set the device hostname: " device_hostname
 # Specify user name
 read -r -p "Specify a username for a new user: " user_name
+# Specify version
+read -r -p "Use stretch [1] or buster [2]? [1/2]: " specify_version
+
+# Specify version
+if [[ "${specify_version}" =~ ^([1])+$ ]]; then
+    version='stretch'
+fi
+
+# Specify version
+if [[ "${specify_version}" =~ ^([2])+$ ]]; then
+    version='buster'
+fi
 
 # Install needed packages
 apt-get update
 apt-get install -y gdisk binutils debootstrap dosfstools
 
 # Delete all parititions on ${disk}
-if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-then
+if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     read -r -p "Are you sure you want to delete everything on ${disk}? [y/N] " response2
-    if [[ "${response2}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-    then
+    if [[ "${response2}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         # Deletes all partitions on disk
         sgdisk -Z "${disk}"
         sgdisk -og "${disk}"
@@ -43,8 +53,7 @@ then
 fi
 
 # Get cpu type
-if [[ "${ucode_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]
-then
+if [[ "${ucode_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     ucode='intel-microcode'
 else
     ucode='amd64-microcode'
@@ -62,13 +71,13 @@ mkswap "${partition2}"
 mkfs.fat -F32 "${partition1}"
 
 # Install base packages
-debootstrap --arch amd64 --components=main,contrib,non-free stable /mnt 'http://ftp.us.debian.org/debian'
+debootstrap --arch amd64 --components=main,contrib,non-free ${version} /mnt 'http://ftp.us.debian.org/debian'
 
 # Mount proc and sysfs
 {
     printf '%s\n' 'proc /mnt/proc proc defaults 0 0'
     printf '%s\n' 'sysfs /mnt/sys sysfs defaults 0 0'
-} >> '/etc/fstab'
+} >>'/etc/fstab'
 mount proc /mnt/proc -t proc
 mount sysfs /mnt/sys -t sysfs
 
@@ -78,13 +87,14 @@ uuid2="$(blkid -o value -s UUID "${partition2}")"
 uuid3="$(blkid -o value -s UUID "${partition3}")"
 
 # Get the interface name
-interface="(ip route get 8.8.8.8 | sed -nr 's/.*dev ([^\ ]+).*/\1/p')"
+interface="$(ip route get 8.8.8.8 | sed -nr 's/.*dev ([^\ ]+).*/\1/p')"
+echo "Interface name is ${interface}"
 
 # Setup part 2 script
-touch '/mnt/vpn_server_install_part_2.sh'
-chmod +x '/mnt/vpn_server_install_part_2.sh'
+touch '/mnt/debian_server_install.sh'
+chmod +x '/mnt/debian_server_install.sh'
 
-cat <<EOF > /mnt/vpn_server_install_part_2.sh
+cat <<EOF >/mnt/debian_server_install.sh
 #!/bin/bash
 
 # Create device files
@@ -95,7 +105,7 @@ cd /
 
 # Setup fstab
 {
-    printf '%s\n' "UUID=${uuid} /boot vfat defaults 0 0"
+    printf '%s\n' "UUID=${uuid} /boot/EFI vfat defaults 0 0"
     printf '%s\n' "UUID=${uuid2} none swap sw 0 0"
     printf '%s\n' "UUID=${uuid3} / ext4 defaults 0 0"
 } >> '/etc/fstab'
@@ -120,26 +130,18 @@ dpkg-reconfigure locales
 # Set language to English
 rm -f '/etc/locale.conf'
 {
-    printf '%s\n' '# language config'
-    printf '%s\n' '# file location is /etc/locale.conf'
-    printf '%s\n' ''
     printf '%s\n' 'LANG=en_US.UTF-8'
 } >> '/etc/locale.conf'
 
 # Set hostname
 rm -f '/etc/hostname'
 {
-    printf '%s\n' '# hostname file'
-    printf '%s\n' '# File location is /etc/hostname'
     printf '%s\n' "${device_hostname}"
 } >> '/etc/hostname'
 
 # Setup hosts file
 rm -f '/etc/hosts'
 {
-    printf '%s\n' '# host file'
-    printf '%s\n' '# file location is /etc/hosts'
-    printf '%s\n' ''
     printf '%s\n' '127.0.0.1 localhost'
     printf '%s\n' '::1 localhost'
     printf '%s\n' "127.0.1.1 ${device_hostname}.localdomain ${device_hostname}"
@@ -147,18 +149,17 @@ rm -f '/etc/hosts'
 
 # Setup mirrors and sources
 {
-    printf '%s\n' 'deb http://mirrors.advancedhosters.com/debian/ stable main'
-    printf '%s\n' 'deb-src http://mirrors.advancedhosters.com/debian/ stable main'
-    printf '%s\n' 'deb http://mirrors.advancedhosters.com/debian/ stable-updates main'
-    printf '%s\n' 'deb-src http://mirrors.advancedhosters.com/debian/ stable-updates main'
-    printf '%s\n' 'deb-src http://ftp.us.debian.org/debian stable main'
-    printf '%s\n' 'deb http://security.debian.org/ stable/updates main'
-    printf '%s\n' 'deb-src http://security.debian.org/ stable/updates main'
+    printf '%s\n' 'deb https://mirrors.wikimedia.org/debian/ ${version} main contrib non-free'
+    printf '%s\n' 'deb-src https://mirrors.wikimedia.org/debian/ ${version} main contrib non-free'
+    printf '%s\n' 'deb https://mirrors.wikimedia.org/debian/ ${version}-updates main contrib non-free'
+    printf '%s\n' 'deb-src https://mirrors.wikimedia.org/debian/ ${version}-updates main contrib non-free'
+    printf '%s\n' 'deb http://security.debian.org/debian-security/ ${version}/updates main contrib non-free'
+    printf '%s\n' 'deb-src http://security.debian.org/debian-security/ ${version}/updates main contrib non-free'
 } >> '/etc/apt/sources.list'
 
 # Install standard packages
 tasksel install standard
-apt-get install -y systemd linux-image-amd64 ${ucode} efibootmgr grub-efi initramfs-tools sudo
+apt-get install -y systemd linux-image-amd64 ${ucode} efibootmgr grub-efi initramfs-tools sudo apt-transport-https
 
 # Update kernel
 update-initramfs -u
@@ -174,8 +175,8 @@ passwd root
 {
     printf '%s\n' 'auto lo'
     printf '%s\n' 'iface lo inet loopback'
-    printf '%s\n' 'auto ${interface}'
-    printf '%s\n' 'iface ${interface} inet dhcp'
+    printf '%s\n' "auto ${interface}"
+    printf '%s\n' "iface ${interface} inet dhcp"
 } >> '/etc/network/interfaces'
 
 # Setup grub
@@ -183,11 +184,11 @@ rm -f '/etc/default/grub'
 {
     printf '%s\n' 'GRUB_DEFAULT=0'
     printf '%s\n' 'GRUB_TIMEOUT=0'
-    printf '%s\n' 'GRUB_DISTRIBUTOR=$(lsb_release -i -s 2> /dev/null || echo Debian)'
+    printf '%s\n' 'GRUB_DISTRIBUTOR=$(lsb_release -i -s 2>/dev/null || echo Debian)'
     printf '%s\n' 'GRUB_CMDLINE_LINUX_DEFAULT="quiet"'
     printf '%s\n' "GRUB_CMDLINE_LINUX=\"\""
 } > '/etc/default/grub'
-grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=debian
+grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=debian
 update-grub
 
 # Add a user
@@ -208,4 +209,4 @@ exit
 EOF
 
 # Move to installation
-LANG=C.UTF-8 chroot /mnt "./vpn_server_install_part_2.sh"
+LANG=C.UTF-8 chroot /mnt "./debian_server_install.sh"

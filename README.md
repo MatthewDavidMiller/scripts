@@ -11,11 +11,15 @@ Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 
 [configure_windows_10.ps1](windows_scripts/configure_windows_10.ps1) - Powershell script to configure Windows 10 settings I use such as disabling telemetry, disabling cortana, and configuring the firewall.
 
+[configure_wsl.sh](windows_scripts/configure_wsl.sh) - Bash script to configure WSL.
+
 ### Small Scripts:
+
+[7z_batch_compress.ps1](windows_scripts/7z_batch_compress.ps1) - Powershell script to batch compress files and folders to a 7z archive.
 
 [batch_process_hard_links.bat](windows_scripts/batch_process_hard_links.bat) - Simple script to make hard links of all files from where the script is run from.
 
-[get_file_hash.ps1](windows_scripts/get_file_hash.ps1) - Powershell script to get the file hashes of all files from where the script is run from.
+[get_file_hash.ps1](windows_scripts/get_file_hash.ps1) - Powershell script to get the file hashes of all files in a directory.
 
 [printer_restart.bat](windows_scripts/printer_restart.bat) - Script to restart print spooler and clear temporary files from the spooler.
 
@@ -37,11 +41,17 @@ Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 
 [arch_linux_configure.sh](linux_scripts/arch_linux_configure.sh) - Bash script to automate my configuration of Arch Linux.
 
+[configure_omada_controller.sh](linux_scripts/configure_omada_controller.sh) - A bash script to configure TP Link Omada Controller.
+
 [debian_server_install.sh](linux_scripts/debian_server_install.sh) - Bash script to automate the install of debian servers.
 
-[debian_oldstable_server_install.sh](linux_scripts/debian_oldstable_server_install.sh) - Bash script to automate the install of debian servers using oldstable version.
-
 [nas_server_configure.sh](linux_scripts/nas_server_configure.sh) - Bash script to automate the configuration of my nas.
+
+[openwrt_configure.sh](linux_scripts/openwrt_configure.sh) - Bash script to automate the configuration of my router.
+
+[pihole_server_configure.sh](linux_scripts/pihole_server_configure.sh) - Bash script to automate the configuration of my pihole server.
+
+[proxmox_configure.sh](linux_scripts/proxmox_configure.sh) - Bash script to automate the configuration of my proxmox setup.
 
 [vpn_server_configure.sh](linux_scripts/vpn_server_configure.sh) - Bash script to automate the configuration of my vpn server.
 
@@ -60,8 +70,6 @@ Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 [configure_i3.sh](linux_scripts/configure_i3.sh) - A bash script to configure the i3 window manager.
 
 [configure_kvm.sh](linux_scripts/configure_kvm.sh) - A bash script to configure kvm.
-
-[configure_omada_controller.sh](linux_scripts/configure_omada_controller.sh) - A bash script to configure TP Link Omada Controller.
 
 [configure_sway.sh](linux_scripts/configure_sway.sh) - A bash script to configure the sway window manager.
 
@@ -94,8 +102,6 @@ Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 [openwrt_restrict_luci_access.sh](linux_scripts/openwrt_restrict_luci_access.sh) - Simple script to limit access to luci gui as well as redirect http to https.
 
 [secure_ssh_access.sh](linux_scripts/secure_ssh_access.sh) - A bash script that changes the configuration for ssh to not allow password authentication and enables key based authentication. Also disables root login over ssh.
-
-[setup_wsl_gui.sh](linux_scripts/setup_wsl_gui.sh) - Simple bash script to setup the xserver in Windows Subsystem for Linux.
 
 [setup_git.sh](linux_scripts/setup_git.sh) - Bash script to configure git.
 

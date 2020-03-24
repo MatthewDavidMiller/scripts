@@ -21,6 +21,14 @@ full_email.attach(MIMEText(email_body, 'plain'))
 email = full_email.as_string()
 
 # Script to email admin on VPN connection.
-email_ssl.login(email_address, email_password)
-email_ssl.sendmail(email_address, email_address_to_send_to, email)
-email_ssl.close()
+
+
+def send_vpn_email():
+    email_ssl.login(email_address, email_password)
+    email_ssl.sendmail(email_address, email_address_to_send_to, email)
+    email_ssl.close()
+    return
+
+
+# Call functions
+send_vpn_email()
