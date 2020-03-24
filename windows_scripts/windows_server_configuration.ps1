@@ -5,15 +5,15 @@
 # Prompts
 $DomainCredential = Read-Host -AsSecureString "Enter domain credential."
 
-$ConfigureTime = Read-Host "Configure time? y/n "
-if ($ConfigureTime -eq 'y') {
+$ConfigureTimeVar = Read-Host "Configure time? y/n "
+if ($ConfigureTimeVar -eq 'y') {
     $Date = Read-Host "Enter date in format xx/xx/xxxx"
     $Time = Read-Host "Enter time in format xx:xxpm"
     $Timezone = Read-Host "Enter timezone. A formatting example is: US Eastern Standard Time"
 }
 
-$ConfigureNetwork = Read-Host "Configure network? y/n "
-if ($ConfigureNetwork -eq 'y') {
+$ConfigureNetworkVar = Read-Host "Configure network? y/n "
+if ($ConfigureNetworkVar -eq 'y') {
     $IPAddress = Read-Host "Enter IP address"
     $PrefixLength = Read-Host "Enter prefix length"
     $DefaultGateway = Read-Host "Enter default gateway"
@@ -21,25 +21,25 @@ if ($ConfigureNetwork -eq 'y') {
     $DNSServerAddress = Read-Host "Enter DNS servers"
 }
 
-$ICMPRequest = Read-Host "Block ICMP requests? y/n "
+$ICMPRequestVar = Read-Host "Block ICMP requests? y/n "
 
-$ConfigureServerName = Read-Host "Configure server name? y/n "
-if ($ConfigureServerName -eq 'y') {
+$ConfigureServerNameVar = Read-Host "Configure server name? y/n "
+if ($ConfigureServerNameVar -eq 'y') {
     $NewName = Read-Host "Enter the name for the server."
 }
 
-$AddLocalUser = Read-Host "Add a local user? y/n "
-if ($AddLocalUser -eq 'y') {
+$AddLocalUserVar = Read-Host "Add a local user? y/n "
+if ($AddLocalUserVar -eq 'y') {
     $LocalUserUsername = Read-Host -AsSecureString "Enter username for new user."
     $LocalUserPassword = Read-Host -AsSecureString "Enter password for new user."
     $LocalUserFullName = Read-Host -AsSecureString "Enter full name for new user."
     $LocalUserDescription = Read-Host -AsSecureString "Enter description for new user."
 }
 
-$ConfigureSSH = Read-Host "Configure SSH? y/n "
+$ConfigureSSHVar = Read-Host "Configure SSH? y/n "
 
 function ConfigureTime {
-    Set-Date "$Date $Time"
+    Set-Date "($Date) ($Time)"
     Set-TimeZone "$Timezone"
 }
 
@@ -73,26 +73,26 @@ function ConfigureSSH {
 }
 
 # Call functions
-if ($ConfigureTime -eq 'y') {
+if ($ConfigureTimeVar -eq 'y') {
     ConfigureTime
 }
 
-if ($ConfigureNetwork -eq 'y') {
+if ($ConfigureNetworkVar -eq 'y') {
     ConfigureNetwork
 }
 
-if ($ICMPRequest -eq 'y') {
+if ($ICMPRequestVar -eq 'y') {
     BlockICMPRequests
 }
 
-if ($ConfigureServerName -eq 'y') {
+if ($ConfigureServerNameVar -eq 'y') {
     ConfigureServerName
 }
 
-if ($AddLocalUser -eq 'y') {
+if ($AddLocalUserVar -eq 'y') {
     AddLocalUser
 }
 
-if ($ConfigureSSH -eq 'y') {
+if ($ConfigureSSHVar -eq 'y') {
     ConfigureSSH
 }
