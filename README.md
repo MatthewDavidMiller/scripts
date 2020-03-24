@@ -13,6 +13,8 @@ Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 
 [configure_wsl.sh](windows_scripts/configure_wsl.sh) - Bash script to configure WSL.
 
+[windows_server_configuration.ps1](windows_scripts/windows_server_configuration.ps1) - Powershell script to configure Windows Server.
+
 ### Small Scripts:
 
 [7z_batch_compress.ps1](windows_scripts/7z_batch_compress.ps1) - Powershell script to batch compress files and folders to a 7z archive.
