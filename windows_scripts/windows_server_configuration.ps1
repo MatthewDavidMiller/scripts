@@ -1,91 +1,98 @@
 # Copyright (c) 2019 Matthew David Miller. All rights reserved.
-
 # Licensed under the MIT License.
-
-# Script is currently a work in progress.  Some portions of the script may not work yet.
-
 # Run the script as admin.
 
-# Set the time, date, and timezone.
+# Prompts
+$DomainCredential = Read-Host -AsSecureString "Enter domain credential."
 
-$Date = Read-Host "Enter date in format xx/xx/xxxx"
-$Time = Read-Host "Enter time in format xx:xxpm"
-$Timezone = Read-Host "Enter timezone. A formatting example is: US Eastern Standard Time"
-
-Set-Date "$Date $Time"
-Set-TimeZone "$Timezone"
-
-# Configure Network settings.
-
-$IP_address = Read-Host "Enter IP address"
-$Prefix_length = Read-Host "Enter prefix length"
-$Default_gateway = Read-Host "Enter default gateway"
-$Interface_alias = Read-Host "Enter interface alias"
-$DNS_server_address = Read-Host "Enter DNS servers"
-
-New-NetIPAddress $IP_address -PrefixLength $Prefix_length -DefaultGateway $Default_gateway -InterfaceAlias $Interface_alias
-Set-DnsClientServerAddress-InterfaceAlias $Interface_alias -ServerAddresses $DNS_server_address
-
-# Block ICMP requests.
-
-$ICMP_request = Read-Host "Block ICMP requests? Yes (y) or No (n)"
-
-while("y","n" -notcontains $ICMP_request)
-{
-$ICMP_request = "Answer with y or n"
+$ConfigureTime = Read-Host "Configure time? y/n "
+if ($ConfigureTime -eq 'y') {
+    $Date = Read-Host "Enter date in format xx/xx/xxxx"
+    $Time = Read-Host "Enter time in format xx:xxpm"
+    $Timezone = Read-Host "Enter timezone. A formatting example is: US Eastern Standard Time"
 }
 
-If ($ICMP_request = "y")
-{
-Write-Host "Proceeding to block ICMP requests."
-netsh advfirewall firewall add rule name="ICMP Block incoming V4 echo request" protocol=icmpv4:8,any dir=in action=block
+$ConfigureNetwork = Read-Host "Configure network? y/n "
+if ($ConfigureNetwork -eq 'y') {
+    $IPAddress = Read-Host "Enter IP address"
+    $PrefixLength = Read-Host "Enter prefix length"
+    $DefaultGateway = Read-Host "Enter default gateway"
+    $InterfaceAlias = Read-Host "Enter interface alias"
+    $DNSServerAddress = Read-Host "Enter DNS servers"
 }
 
-If ($ICMP_request = "n")
-{
-Write-Host "Moving on to next portion of the script."
+$ICMPRequest = Read-Host "Block ICMP requests? y/n "
+
+$ConfigureServerName = Read-Host "Configure server name? y/n "
+if ($ConfigureServerName -eq 'y') {
+    $NewName = Read-Host "Enter the name for the server."
 }
 
-# Configure the Server's name.
-
-$New_name = Read-Host "Enter the name for the server."
-$Domain_credential = Read-Host -AsSecureString "Enter domain credential."
-Read-Host "Restart after name change? Yes (y) or No (n)."
-
-while("y","n" -notcontains $Domain_credential)
-{
-$Domain_credential = "Answer with y or n"
+$AddLocalUser = Read-Host "Add a local user? y/n "
+if ($AddLocalUser -eq 'y') {
+    $LocalUserUsername = Read-Host -AsSecureString "Enter username for new user."
+    $LocalUserPassword = Read-Host -AsSecureString "Enter password for new user."
+    $LocalUserFullName = Read-Host -AsSecureString "Enter full name for new user."
+    $LocalUserDescription = Read-Host -AsSecureString "Enter description for new user."
 }
 
-If ($Domain_credential = "y")
-{
-Write-Host "Prepare for restart."
-Rename-Computer -NewName "$New_name" -DomainCredential $Domain_credential -Restart
+$ConfigureSSH = Read-Host "Configure SSH? y/n "
+
+function ConfigureTime {
+    Set-Date "$Date $Time"
+    Set-TimeZone "$Timezone"
 }
 
-If ($Domain_credential = "n")
-{
-Write-Host "Moving on to the next portion of the script."
-Rename-Computer -NewName "$New_name" -DomainCredential $Domain_credential
+function ConfigureNetwork {
+    New-NetIPAddress $IPAddress -PrefixLength $PrefixLength -DefaultGateway $DefaultGateway -InterfaceAlias $InterfaceAlias
+    Set-DnsClientServerAddress-InterfaceAlias $InterfaceAlias -ServerAddresses $DNSServerAddress
 }
 
-# Add a local user
-$Local_user_username = Read-Host -AsSecureString "Enter username for new user."
-$Local_user_password = Read-Host -AsSecureString "Enter password for new user."
-$Local_user_full_name = Read-Host -AsSecureString "Enter full name for new user."
-$Local_user_description = Read-Host -AsSecureString "Enter description for new user."
+function BlockICMPRequests {
+    Write-Host "Proceeding to block ICMP requests."
+    netsh advfirewall firewall add rule name="ICMP Block incoming V4 echo request" protocol=icmpv4:8, any dir=in action=block
+}
 
-New-LocalUser "$Local_user_username" -Password $Local_user_password -FullName "$Local_user_full_name" -Description "$Local_user_description"
+function ConfigureServerName {
+    Rename-Computer -NewName "$NewName" -DomainCredential $DomainCredential
+}
 
-## Install and configure SSH
-Get-WindowsCapability -Online | ? Name -like 'OpenSSH*'
-$OpenSSH = Read-Host "Enter OpenSSH Server full name."
+function AddLocalUser {
+    New-LocalUser "$LocalUserUsername" -Password $LocalUserPassword -FullName "$LocalUserFullName" -Description "$LocalUserDescription"
+}
 
-Add-WindowsCapability -Online -Name $OpenSSH
-Set-Service -Name sshd -StartupType 'Automatic'
-Start-Service sshd
-Install-Module -Force OpenSSHUtils -Scope AllUsers
-Set-Service -Name ssh-agent -StartupType 'Automatic'
-Start-Service ssh-agent
-cd ~\.ssh\
-ssh-keygen
+function ConfigureSSH {
+    Get-WindowsCapability -Online | Where-Object Name -like 'OpenSSH.Server*' | Add-WindowsCapability -Online
+    Set-Service -Name sshd -StartupType 'Automatic'
+    Start-Service sshd
+    Install-Module -Force OpenSSHUtils -Scope AllUsers
+    Set-Service -Name ssh-agent -StartupType 'Automatic'
+    Start-Service ssh-agent
+    Set-Location ~\.ssh\
+    ssh-keygen
+}
+
+# Call functions
+if ($ConfigureTime -eq 'y') {
+    ConfigureTime
+}
+
+if ($ConfigureNetwork -eq 'y') {
+    ConfigureNetwork
+}
+
+if ($ICMPRequest -eq 'y') {
+    BlockICMPRequests
+}
+
+if ($ConfigureServerName -eq 'y') {
+    ConfigureServerName
+}
+
+if ($AddLocalUser -eq 'y') {
+    AddLocalUser
+}
+
+if ($ConfigureSSH -eq 'y') {
+    ConfigureSSH
+}
