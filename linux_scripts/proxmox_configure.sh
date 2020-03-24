@@ -235,7 +235,7 @@ function configure_proxmox_vms() {
     # Configure pihole vm
     qm create 101 -scsi0 local-lvm:13 -net0 virtio -balloon 512 -bios ovmf -cores 1 -cpu host -bootdisk scsi0 -efidisk0 local-lvm: -name matt-pihole -memory 4096 -numa 0 -onboot 1 -ostype l26 -sockets 1 -cdrom ${debian_iso}
 
-    #Configure vpn vm
+    # Configure vpn vm
     qm create 102 -scsi0 local-lvm:13 -net0 virtio -balloon 512 -bios ovmf -cores 1 -cpu host -bootdisk scsi0 -efidisk0 local-lvm: -name matt-vpn -memory 2048 -numa 0 -onboot 1 -ostype l26 -sockets 1 -cdrom ${debian_iso}
 }
 
