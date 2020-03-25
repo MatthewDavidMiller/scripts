@@ -590,6 +590,8 @@ function InstallApplications {
         else {
             read-host "Signature is not valid, application will not be installed"
         }
+        # Add ssh key
+        Copy-Item 'N:\SSHConfigs\github\github_ssh' -Destination "$HOME\.ssh\id_rsa"
     }
 
     # Install vlc
