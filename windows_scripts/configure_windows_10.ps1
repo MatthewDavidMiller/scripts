@@ -764,12 +764,13 @@ function InstallApplications {
 
     # Install tinynvidiaupdater
     if ($InstallTinyNvidiaUpdater -eq 'y') {
-        Read-Host 'A web browser will be opened.  Download tinynvidiaupdater into the downloads folder. Press enter to begin '
+        Read-Host 'A web browser will be opened.  Download tinynvidiaupdater and the dll file into the downloads folder. Press enter to begin '
         Start-Process 'https://github.com/ElPumpo/TinyNvidiaUpdateChecker/releases' 
         Read-Host 'Press enter when downloads are complete '
         Get-ChildItem "$HOME\Downloads\TinyNvidiaUpdateChecker*.exe" | Rename-Item -NewName 'TinyNvidiaUpdateChecker.exe'
         New-Item -ItemType Directory -Force -Path 'C:\Program Files\TinyNvidiaUpdateChecker'
         Move-Item -Path "$HOME\Downloads\TinyNvidiaUpdateChecker.exe" -Destination 'C:\Program Files\TinyNvidiaUpdateChecker\TinyNvidiaUpdateChecker.exe'
+        Move-Item -Path "$HOME\Downloads\HtmlAgilityPack.dll" -Destination 'C:\Program Files\TinyNvidiaUpdateChecker\HtmlAgilityPack.dll'
         # Create shortcut
         $WScriptShell = New-Object -ComObject WScript.Shell
         $Shortcut = $WScriptShell.CreateShortcut('C:\ProgramData\Microsoft\Windows\Start Menu\Programs\TinyNvidiaUpdateChecker.lnk')
