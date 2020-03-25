@@ -33,6 +33,7 @@ function copy_ssh_keys() {
     sudo mount -t drvfs N: /mnt/matt_files
 
     # Copy ssh keys
+    mkdir -p '.ssh'
     sudo cp '/mnt/matt_files/SSHConfigs/matt_homelab/nas_key' '.ssh/nas_key'
     sudo cp '/mnt/matt_files/SSHConfigs/matt_homelab/openwrt_key' '.ssh/openwrt_key'
     sudo cp '/mnt/matt_files/SSHConfigs/matt_homelab/proxmox_key' '.ssh/proxmox_key'
