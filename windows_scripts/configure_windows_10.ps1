@@ -358,6 +358,14 @@ function RemoveApplications {
     Get-AppxPackage -name "$($AppBase)$($AppScreenSketch)" | Remove-AppxPackage
     Get-AppxPackage -name "$($AppBase)$($AppOfficeOnenote)" | Remove-AppxPackage
     Get-AppxPackage -name "$($AppBase)$($AppWallet)" | Remove-AppxPackage
+
+    # Uninstall Onedrive
+    if (Test-Path "$env:systemroot\System32\OneDriveSetup.exe") {
+        Start-Process -FilePath "$env:systemroot\System32\OneDriveSetup.exe" /uninstall -Wait
+    }
+    if (Test-Path "$env:systemroot\SysWOW64\OneDriveSetup.exe") {
+        Start-Process -FilePath "$env:systemroot\SysWOW64\OneDriveSetup.exe" /uninstall -Wait
+    }
 }
 
 function ConfigureAppPrivacy {
@@ -501,7 +509,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\npp*.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -525,7 +533,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\nmap*.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -562,7 +570,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\balenaetcher*.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -575,7 +583,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\gimp*.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -588,7 +596,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\git*.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
         # Add ssh key
         Copy-Item 'N:\SSHConfigs\github\github_ssh' -Destination "$HOME\.ssh\id_rsa"
@@ -603,7 +611,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\vlc*.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -616,7 +624,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\blender*.msi" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -627,7 +635,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\bitwarden_installer.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -640,7 +648,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\winscp*.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -653,7 +661,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\putty*.msi" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -674,7 +682,7 @@ function InstallApplications {
             pip install pylint
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -687,7 +695,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\libreoffice*.msi" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -700,7 +708,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\jre*.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -724,7 +732,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\vscode_installer.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -737,7 +745,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\wireshark*.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -750,7 +758,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\openjdk*.msi" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -777,7 +785,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\firefox.msi" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -788,7 +796,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\chrome_installer.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -801,7 +809,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\FreeFileSync*.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -812,7 +820,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\vmware_player_setup.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -838,7 +846,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\steam_setup.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -849,7 +857,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\origin_setup.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -862,7 +870,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\gog_galaxy*.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -875,7 +883,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\EpicInstaller*.msi" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -886,7 +894,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\bethesda_setup.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -899,7 +907,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\borderlessgaming*.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -910,7 +918,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\discord_setup.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -923,7 +931,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\fedoramedia*.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -936,7 +944,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\vs_community*.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -949,7 +957,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\openvpn*.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -960,7 +968,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\twitch_setup.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -973,7 +981,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\Vortex*.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -993,7 +1001,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\Rockstar*.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -1013,7 +1021,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\go*.windows-amd64.msi" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -1026,7 +1034,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\MicrosoftEdgeSetup.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -1041,7 +1049,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\Reolink\Reolink*.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -1054,7 +1062,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\UplayInstaller.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
@@ -1067,7 +1075,7 @@ function InstallApplications {
             Start-Process -FilePath "$HOME\Downloads\*O365ProPlusRetail*.exe" -Wait
         }
         else {
-            read-host "Signature is not valid, application will not be installed"
+            Read-Host "Signature is not valid, application will not be installed"
         }
     }
 
