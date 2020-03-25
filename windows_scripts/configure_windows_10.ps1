@@ -15,7 +15,7 @@ $ConfigureNTPVar = Read-Host 'Configure NTP? Requires running as admin. y/n '
 $InstallFeaturesVar = Read-Host 'Install features? Requires running as admin. y/n '
 $RemoveFeaturesVar = Read-Host 'Remove features? Requires running as admin. y/n '
 $MapDrivesVar = Read-Host 'Map network drives? Requires running as a normal user. y/n '
-$InstallApplicationsVar = Read-Host 'Install some applications? Run as a normal user. y/n '
+$InstallApplicationsVar = Read-Host 'Install some applications? Requires running as admin. y/n '
 if ($InstallApplicationsVar -eq 'y') {
     $InstallChocolatey = Read-Host 'Install Chocolatey? y/n '
     $InstallShellCheck = Read-Host 'Install ShellCheck? y/n '
@@ -64,6 +64,7 @@ if ($InstallApplicationsVar -eq 'y') {
     $InstallGolang = Read-Host 'Install Go programming language? y/n '
     $InstallReolink = Read-Host 'Install reolink? y/n '
     $InstallUplay = Read-Host 'Install uplay? y/n '
+    $InstallMicrosoftOffice = Read-Host 'Install Microsoft Office? y/n '
 }
 
 function DisableCortana {
@@ -488,7 +489,7 @@ function InstallApplications {
 
     # Install shellcheck
     if ($InstallShellCheck -eq 'y') {
-        choco install shellcheck
+        choco 'install' 'shellcheck' '-y'
     }
 
     # Install notepad++
@@ -865,9 +866,11 @@ function InstallApplications {
 
     # Install epicstore
     if ($InstallEpicStore -eq 'y') {
-        Invoke-WebRequest 'https://launcher-public-service-prod06.ol.epicgames.com/launcher/api/installer/download/EpicGamesLauncherInstaller.msi' -OutFile "$HOME\Downloads\epic_setup.exe"
-        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\epic_setup.exe" | Where-Object { $_.Status -eq "Valid" }) {
-            Start-Process -FilePath "$HOME\Downloads\epic_setup.exe" -Wait
+        Read-Host 'A web browser will be opened.  Download epic launcher into the downloads folder. Press enter to begin '
+        Start-Process 'https://www.epicgames.com/store/en-US/' 
+        Read-Host 'Press enter when downloads are complete '
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\EpicInstaller*.msi" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\EpicInstaller*.msi" -Wait
         }
         else {
             read-host "Signature is not valid, application will not be installed"
@@ -994,10 +997,9 @@ function InstallApplications {
 
     # Install rpgmaker rtps
     if ($InstallRPGMakerRTPs -eq 'y') {
-        Read-Host 'A web browser will be opened.  Download all of the RPGMaker RTPs into the downloads folder. Press enter to begin '
+        Read-Host 'A web browser will be opened.  Download and install all of the RPGMaker RTPs into the downloads folder. Press enter to begin '
         Start-Process 'https://www.rpgmakerweb.com/download/additional/run-time-packages'
-        Read-Host 'Press enter when downloads are complete '
-        Start-Process -FilePath "$HOME\Downloads\RPGVXAce*.exe" -Wait
+        Read-Host 'Press enter when finished installing '
     }
 
     # Install Golang
@@ -1048,6 +1050,19 @@ function InstallApplications {
         Read-Host 'Press enter when downloads are complete '
         if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\UplayInstaller.exe" | Where-Object { $_.Status -eq "Valid" }) {
             Start-Process -FilePath "$HOME\Downloads\UplayInstaller.exe" -Wait
+        }
+        else {
+            read-host "Signature is not valid, application will not be installed"
+        }
+    }
+
+    # Install Microsoft Office
+    if ($InstallMicrosoftOffice -eq 'y') {
+        Read-Host 'A web browser will be opened.  Download the office binary into the downloads folder. Press enter to begin '
+        Start-Process 'https://portal.office.com/account/'
+        Read-Host 'Press enter when downloads are complete '
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\*O365ProPlusRetail*.exe" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\*O365ProPlusRetail*.exe" -Wait
         }
         else {
             read-host "Signature is not valid, application will not be installed"
