@@ -331,6 +331,12 @@ config host
         option mac '34:97:F6:83:31:E6'
         option ip '10.1.10.247'
 
+config host
+        option name 'Tim-PC'
+        option dns '1'
+        option mac '4C:CC:6A:4F:F7:3B'
+        option ip '10.1.1.244'
+
 config domain
         option name 'david-roku'
 
@@ -542,6 +548,15 @@ config redirect
         option dest_port '64640'
         option name 'vpn'
         option dest_ip '10.1.10.6'
+
+config redirect
+        option dest_port '32486'
+        option src 'wan'
+        option name 'Tim_Minecraft_Server'
+        option src_dport '32486'
+        option target 'DNAT'
+        option dest_ip '10.1.1.244'
+        option dest 'lan'
 
 config zone
         option output 'ACCEPT'
