@@ -550,10 +550,10 @@ config redirect
         option dest_ip '10.1.10.6'
 
 config redirect
-        option dest_port '32486'
+        option dest_port '25565'
         option src 'wan'
         option name 'Tim_Minecraft_Server'
-        option src_dport '32486'
+        option src_dport '25565'
         option target 'DNAT'
         option dest_ip '10.1.1.244'
         option dest 'lan'
