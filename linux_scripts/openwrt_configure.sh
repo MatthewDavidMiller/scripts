@@ -685,6 +685,13 @@ function configure_sysupgrade() {
 EOF
 }
 
+function remove_packages() {
+    # Updates package lists
+    opkg update
+    # Installs packages
+    opkg remove --autoremove python3
+}
+
 # Call functions
 create_user
 
@@ -708,3 +715,4 @@ configure_upnp
 configure_sysupgrade
 configure_dropbear
 configure_ssh
+remove_packages
