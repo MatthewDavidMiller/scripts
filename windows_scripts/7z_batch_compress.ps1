@@ -9,6 +9,7 @@ function CompressFolders {
     $Destination = Read-Host 'Specify destination directory '
     foreach ($item in (Get-ChildItem -Directory -Name $Source)) {
         $7zJob = Start-Job -ScriptBlock { & "c:\Program Files\7-Zip\7z.exe" "-mx=9" "-ms=on" a "$using:Destination\$using:item.7z" "$using:Source\$using:item" }
+        Start-Sleep -s 12
         $7zProcess = Get-Process -Name "7z"
         $7zProcess.PriorityClass = 'Idle'
         Get-Job | Wait-Job
@@ -20,6 +21,7 @@ function CompressFolders {
         $Destination = Read-Host 'Specify destination directory '
         foreach ($item in (Get-ChildItem -Directory -Name $Source)) {
             $7zJob = Start-Job -ScriptBlock { & "c:\Program Files\7-Zip\7z.exe" "-mx=9" "-ms=on" a "$using:Destination\$using:item.7z" "$using:Source\$using:item" }
+            Start-Sleep -s 12
             $7zProcess = Get-Process -Name "7z"
             $7zProcess.PriorityClass = 'Idle'
             Get-Job | Wait-Job
@@ -34,6 +36,7 @@ function CompressFiles {
     $Destination = Read-Host 'Specify destination directory '
     foreach ($item in (Get-ChildItem -File -Name $Source)) {
         $7zJob = Start-Job -ScriptBlock { & "c:\Program Files\7-Zip\7z.exe" "-mx=9" "-ms=on" a "$using:Destination\$using:item.7z" "$using:Source\$using:item" }
+        Start-Sleep -s 12
         $7zProcess = Get-Process -Name "7z"
         $7zProcess.PriorityClass = 'Idle'
         Get-Job | Wait-Job
@@ -45,6 +48,7 @@ function CompressFiles {
         $Destination = Read-Host 'Specify destination directory '
         foreach ($item in (Get-ChildItem -File -Name $Source)) {
             $7zJob = Start-Job -ScriptBlock { & "c:\Program Files\7-Zip\7z.exe" "-mx=9" "-ms=on" a "$using:Destination\$using:item.7z" "$using:Source\$using:item" }
+            Start-Sleep -s 12
             $7zProcess = Get-Process -Name "7z"
             $7zProcess.PriorityClass = 'Idle'
             Get-Job | Wait-Job
