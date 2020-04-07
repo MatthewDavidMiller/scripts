@@ -5,21 +5,19 @@
 
 # Install script for Arch Linux.
 
-# Start dhcpcd
-systemctl start "dhcpcd.service"
-
-if false ping -c2 "google.com"; then
-    echo 'No internet'
-    exit 1
-fi
-
-# Setup ntp client
-timedatectl set-ntp true
-
 # Lists partitions
 lsblk -f
 
 # Prompts and variables
+# Setup wifi
+read -r -p "Connect to a wireless network? [y/N] " wifi_response
+if [[ "${wifi_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+    systemctl start "iwd.service"
+    iw dev
+    read -r -p "Specify wireless interface name: " wifi_interface
+    iwctl station "${wifi_interface}" scan
+    read -r -p "Specify SSID name: " ssid
+fi
 # Specify if windows is installed
 read -r -p "Is windows installed? [y/N] " windows_response
 # Specify disk and partition numbers to use for install
@@ -38,6 +36,22 @@ read -r -p "Set the password for disk encryption: " disk_password
 read -r -p "Set the device hostname: " device_hostname
 # Specify user name
 read -r -p "Specify a username for a new user: " user_name
+
+# Setup wifi
+if [[ "${wifi_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+    iwctl station "${wifi_interface}" connect "${ssid}"
+fi
+
+# Start dhcpcd
+systemctl start "dhcpcd.service"
+
+if false ping -c2 "google.com"; then
+    echo 'No internet'
+    exit 1
+fi
+
+# Setup ntp client
+timedatectl set-ntp true
 
 # Delete all parititions on ${disk}
 if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
