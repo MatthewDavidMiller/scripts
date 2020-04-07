@@ -9,21 +9,21 @@
 # script_location="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 # Prompts
-read -r -p "Run arch_linux_packages script? [y/N] " arch_linux_packages
-read -r -p "Run configure_i3 script? [y/N] " configure_i3
-read -r -p "Run connect_smb script? [y/N] " connect_smb
+read -r -p "Run arch_linux_packages script? [y/N] " install_arch_packages_var
+read -r -p "Run configure_i3 script? [y/N] " configure_i3_var
+read -r -p "Run connect_smb script? [y/N] " connect_smb_var
 read -r -p "Set a timer to select OS or kernel? [y/N] " ostimer
-read -r -p "Run configure_gdm script? [y/N] " configure_gdm
-read -r -p "Run configure_hyper_v_guest script? [y/N] " configure_hyper_v_guest
-read -r -p "Run configure_kvm script? [y/N] " configure_kvm
-read -r -p "Run configure_sway script? [y/N] " configure_sway
-read -r -p "Run configure_termite script? [y/N] " configure_termite
-read -r -p "Run install_aur_packages script? [y/N] " install_aur_packages
-read -r -p "Run mount_drives script? [y/N] " mount_drives
-read -r -p "Run setup_aliases script? [y/N] " setup_aliases
-read -r -p "Run setup_fwupd script? [y/N] " setup_fwupd
-read -r -p "Run setup_git script? [y/N] " setup_git
-read -r -p "Run setup_serial script? [y/N] " setup_serial
+read -r -p "Run configure_gdm script? [y/N] " configure_gdm_var
+read -r -p "Run configure_hyper_v_guest script? [y/N] " configure_hyperv_var
+read -r -p "Run configure_kvm script? [y/N] " configure_kvm_var
+read -r -p "Run configure_sway script? [y/N] " configure_sway_var
+read -r -p "Run configure_termite script? [y/N] " configure_termite_var
+read -r -p "Run install_aur_packages script? [y/N] " install_aur_packages_var
+read -r -p "Run mount_drives script? [y/N] " mount_drives_var
+read -r -p "Run setup_aliases script? [y/N] " setup_aliases_var
+read -r -p "Run setup_fwupd script? [y/N] " configure_fwupd_var
+read -r -p "Run setup_git script? [y/N] " configure_git_var
+read -r -p "Run setup_serial script? [y/N] " setup_serial_var
 
 # Get username
 user_name=$(logname)
@@ -232,177 +232,177 @@ function configure_i3() {
     mkdir "/home/${user_name}/.config/i3"
     rm -r "/home/${user_name}/.i3"
     sudo bash -c "cat <<\EOF > \"/home/${user_name}/.config/i3/config\"
-    # i3 config file (v4)
+# i3 config file (v4)
+
+# Font for window titles. Will also be used by the bar unless a different font
+# is used in the bar {} block below.
+font pango:monospace 12
+
+# xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
+# screen before suspend. Use loginctl lock-session to lock your screen.
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork &
     
-    # Font for window titles. Will also be used by the bar unless a different font
-    # is used in the bar {} block below.
-    font pango:monospace 12
+# use these keys for focus, movement, and resize directions when reaching for
+# the arrows is not convenient
+set \$up l
+set \$down k
+set \$left j
+set \$right semicolon
     
-    # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
-    # screen before suspend. Use loginctl lock-session to lock your screen.
-    exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork &
+# use Mouse+Mod1 to drag floating windows to their wanted position
+floating_modifier Mod1
     
-    # use these keys for focus, movement, and resize directions when reaching for
-    # the arrows is not convenient
-    set \$up l
-    set \$down k
-    set \$left j
-    set \$right semicolon
+# start a terminal
+bindsym Mod1+Return exec i3-sensible-terminal
     
-    # use Mouse+Mod1 to drag floating windows to their wanted position
-    floating_modifier Mod1
+# kill focused window
+bindsym Mod1+Shift+q kill
     
-    # start a terminal
-    bindsym Mod1+Return exec i3-sensible-terminal
+# start dmenu (a program launcher)
+bindsym Mod1+d exec dmenu_run
     
-    # kill focused window
-    bindsym Mod1+Shift+q kill
+# change focus
+bindsym Mod1+\$left focus left
+bindsym Mod1+\$down focus down
+bindsym Mod1+\$up focus up
+bindsym Mod1+\$right focus right
+
+# alternatively, you can use the cursor keys:
+bindsym Mod1+Left focus left
+bindsym Mod1+Down focus down
+bindsym Mod1+Up focus up
+bindsym Mod1+Right focus right
     
-    # start dmenu (a program launcher)
-    bindsym Mod1+d exec dmenu_run
+# move focused window
+bindsym Mod1+Shift+\$left move left
+bindsym Mod1+Shift+\$down move down
+bindsym Mod1+Shift+\$up move up
+bindsym Mod1+Shift+\$right move right
+
+# alternatively, you can use the cursor keys:
+bindsym Mod1+Shift+Left move left
+bindsym Mod1+Shift+Down move down
+bindsym Mod1+Shift+Up move up
+bindsym Mod1+Shift+Right move right
     
-    # change focus
-    bindsym Mod1+\$left focus left
-    bindsym Mod1+\$down focus down
-    bindsym Mod1+\$up focus up
-    bindsym Mod1+\$right focus right
+# split in horizontal orientation
+bindsym Mod1+h split h
     
-    # alternatively, you can use the cursor keys:
-    bindsym Mod1+Left focus left
-    bindsym Mod1+Down focus down
-    bindsym Mod1+Up focus up
-    bindsym Mod1+Right focus right
+# split in vertical orientation
+bindsym Mod1+v split v
     
-    # move focused window
-    bindsym Mod1+Shift+\$left move left
-    bindsym Mod1+Shift+\$down move down
-    bindsym Mod1+Shift+\$up move up
-    bindsym Mod1+Shift+\$right move right
+# enter fullscreen mode for the focused container
+bindsym Mod1+f fullscreen toggle
     
-    # alternatively, you can use the cursor keys:
-    bindsym Mod1+Shift+Left move left
-    bindsym Mod1+Shift+Down move down
-    bindsym Mod1+Shift+Up move up
-    bindsym Mod1+Shift+Right move right
+# change container layout (stacked, tabbed, toggle split)
+bindsym Mod1+s layout stacking
+bindsym Mod1+w layout tabbed
+bindsym Mod1+e layout toggle split
     
-    # split in horizontal orientation
-    bindsym Mod1+h split h
+# toggle tiling / floating
+bindsym Mod1+Shift+space floating toggle
     
-    # split in vertical orientation
-    bindsym Mod1+v split v
+# change focus between tiling / floating windows
+bindsym Mod1+space focus mode_toggle
     
-    # enter fullscreen mode for the focused container
-    bindsym Mod1+f fullscreen toggle
+# focus the parent container
+bindsym Mod1+a focus parent
     
-    # change container layout (stacked, tabbed, toggle split)
-    bindsym Mod1+s layout stacking
-    bindsym Mod1+w layout tabbed
-    bindsym Mod1+e layout toggle split
+# focus the child container
+#bindsym Mod1+d focus child
     
-    # toggle tiling / floating
-    bindsym Mod1+Shift+space floating toggle
+# move the currently focused window to the scratchpad
+bindsym Mod1+Shift+minus move scratchpad
     
-    # change focus between tiling / floating windows
-    bindsym Mod1+space focus mode_toggle
+# Show the next scratchpad window or hide the focused scratchpad window.
+# If there are multiple scratchpad windows, this command cycles through them.
+bindsym Mod1+minus scratchpad show
     
-    # focus the parent container
-    bindsym Mod1+a focus parent
+# Define names for default workspaces for which we configure key bindings later on.
+# We use variables to avoid repeating the names in multiple places.
+set \$ws1 \"1\"
+set \$ws2 \"2\"
+set \$ws3 \"3\"
+set \$ws4 \"4\"
+set \$ws5 \"5\"
+set \$ws6 \"6\"
+set \$ws7 \"7\"
+set \$ws8 \"8\"
+set \$ws9 \"9\"
+set \$ws10 \"10\"
     
-    # focus the child container
-    #bindsym Mod1+d focus child
+# switch to workspace
+bindsym Mod1+1 workspace number \$ws1
+bindsym Mod1+2 workspace number \$ws2
+bindsym Mod1+3 workspace number \$ws3
+bindsym Mod1+4 workspace number \$ws4
+bindsym Mod1+5 workspace number \$ws5
+bindsym Mod1+6 workspace number \$ws6
+bindsym Mod1+7 workspace number \$ws7
+bindsym Mod1+8 workspace number \$ws8
+bindsym Mod1+9 workspace number \$ws9
+bindsym Mod1+0 workspace number \$ws10
+
+# move focused container to workspace
+bindsym Mod1+Shift+1 move container to workspace number \$ws1
+bindsym Mod1+Shift+2 move container to workspace number \$ws2
+bindsym Mod1+Shift+3 move container to workspace number \$ws3
+bindsym Mod1+Shift+4 move container to workspace number \$ws4
+bindsym Mod1+Shift+5 move container to workspace number \$ws5
+bindsym Mod1+Shift+6 move container to workspace number \$ws6
+bindsym Mod1+Shift+7 move container to workspace number \$ws7
+bindsym Mod1+Shift+8 move container to workspace number \$ws8
+bindsym Mod1+Shift+9 move container to workspace number \$ws9
+bindsym Mod1+Shift+0 move container to workspace number \$ws10
+
+# reload the configuration file
+bindsym Mod1+Shift+c reload
+
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym Mod1+Shift+r restart
     
-    # move the currently focused window to the scratchpad
-    bindsym Mod1+Shift+minus move scratchpad
+# exit i3 (logs you out of your X session)
+bindsym Mod1+Shift+e exec \"i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'\"
+
+# resize window (you can also use the mouse for that)
+mode \"resize\" {
+    # These bindings trigger as soon as you enter the resize mode
     
-    # Show the next scratchpad window or hide the focused scratchpad window.
-    # If there are multiple scratchpad windows, this command cycles through them.
-    bindsym Mod1+minus scratchpad show
+    # Pressing left will shrink the window’s width.
+    # Pressing right will grow the window’s width.
+    # Pressing up will shrink the window’s height.
+    # Pressing down will grow the window’s height.
+    bindsym \$left       resize shrink width 10 px or 10 ppt
+    bindsym \$down       resize grow height 10 px or 10 ppt
+    bindsym \$up         resize shrink height 10 px or 10 ppt
+    bindsym \$right      resize grow width 10 px or 10 ppt
     
-    # Define names for default workspaces for which we configure key bindings later on.
-    # We use variables to avoid repeating the names in multiple places.
-    set \$ws1 \"1\"
-    set \$ws2 \"2\"
-    set \$ws3 \"3\"
-    set \$ws4 \"4\"
-    set \$ws5 \"5\"
-    set \$ws6 \"6\"
-    set \$ws7 \"7\"
-    set \$ws8 \"8\"
-    set \$ws9 \"9\"
-    set \$ws10 \"10\"
+    # same bindings, but for the arrow keys
+    bindsym Left        resize shrink width 10 px or 10 ppt
+    bindsym Down        resize grow height 10 px or 10 ppt
+    bindsym Up          resize shrink height 10 px or 10 ppt
+    bindsym Right       resize grow width 10 px or 10 ppt
     
-    # switch to workspace
-    bindsym Mod1+1 workspace number \$ws1
-    bindsym Mod1+2 workspace number \$ws2
-    bindsym Mod1+3 workspace number \$ws3
-    bindsym Mod1+4 workspace number \$ws4
-    bindsym Mod1+5 workspace number \$ws5
-    bindsym Mod1+6 workspace number \$ws6
-    bindsym Mod1+7 workspace number \$ws7
-    bindsym Mod1+8 workspace number \$ws8
-    bindsym Mod1+9 workspace number \$ws9
-    bindsym Mod1+0 workspace number \$ws10
-    
-    # move focused container to workspace
-    bindsym Mod1+Shift+1 move container to workspace number \$ws1
-    bindsym Mod1+Shift+2 move container to workspace number \$ws2
-    bindsym Mod1+Shift+3 move container to workspace number \$ws3
-    bindsym Mod1+Shift+4 move container to workspace number \$ws4
-    bindsym Mod1+Shift+5 move container to workspace number \$ws5
-    bindsym Mod1+Shift+6 move container to workspace number \$ws6
-    bindsym Mod1+Shift+7 move container to workspace number \$ws7
-    bindsym Mod1+Shift+8 move container to workspace number \$ws8
-    bindsym Mod1+Shift+9 move container to workspace number \$ws9
-    bindsym Mod1+Shift+0 move container to workspace number \$ws10
-    
-    # reload the configuration file
-    bindsym Mod1+Shift+c reload
-    
-    # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-    bindsym Mod1+Shift+r restart
-    
-    # exit i3 (logs you out of your X session)
-    bindsym Mod1+Shift+e exec \"i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'\"
-    
-    # resize window (you can also use the mouse for that)
-    mode \"resize\" {
-        # These bindings trigger as soon as you enter the resize mode
-        
-        # Pressing left will shrink the window’s width.
-        # Pressing right will grow the window’s width.
-        # Pressing up will shrink the window’s height.
-        # Pressing down will grow the window’s height.
-        bindsym \$left       resize shrink width 10 px or 10 ppt
-        bindsym \$down       resize grow height 10 px or 10 ppt
-        bindsym \$up         resize shrink height 10 px or 10 ppt
-        bindsym \$right      resize grow width 10 px or 10 ppt
-        
-        # same bindings, but for the arrow keys
-        bindsym Left        resize shrink width 10 px or 10 ppt
-        bindsym Down        resize grow height 10 px or 10 ppt
-        bindsym Up          resize shrink height 10 px or 10 ppt
-        bindsym Right       resize grow width 10 px or 10 ppt
-        
-        # back to normal: Enter or Escape or Mod1+r
-        bindsym Return mode \"default\"
-        bindsym Escape mode \"default\"
-        bindsym Mod1+r mode \"default\"
-    }
-    
-    bindsym Mod1+r mode \"resize\"
-    
-    # Start i3bar to display a workspace bar (plus the system information i3status
-    # finds out, if available)
-    bar {
-        status_command i3status
-        mode hide
-        hidden_state hide
-        modifier Mod1
-    }
-    
-    exec --no-startup-id bash '/usr/local/bin/i3_autostart.sh'
-    
-    EOF"
+    # back to normal: Enter or Escape or Mod1+r
+    bindsym Return mode \"default\"
+    bindsym Escape mode \"default\"
+    bindsym Mod1+r mode \"default\"
+}
+
+bindsym Mod1+r mode \"resize\"
+
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
+bar {
+    status_command i3status
+    mode hide
+    hidden_state hide
+    modifier Mod1
+}
+
+exec --no-startup-id bash '/usr/local/bin/i3_autostart.sh'
+
+EOF"
 
     # Setup autostart applications
     sudo bash -c "cat <<EOF > '/usr/local/bin/i3_autostart.sh'
@@ -495,7 +495,7 @@ EOF"
     Session=${session}
     XSession=${session}
     
-    EOF"
+EOF"
 }
 
 function configure_hyperv() {
@@ -718,7 +718,7 @@ function configure_sway() {
     
     exec --no-startup-id bash '/usr/local/bin/sway_autostart.sh'
     
-    EOF"
+EOF"
 
     sudo bash -c "cat <<EOF >> \"/home/${user_name}/.config/sway/config\"
     input \"${touchpad_response}\" {
@@ -726,7 +726,7 @@ function configure_sway() {
         natural_scroll disabled
     }
     
-    EOF"
+EOF"
 
     # Setup autostart applications
     sudo bash -c "cat <<EOF > '/usr/local/bin/sway_autostart.sh'
@@ -784,7 +784,7 @@ function configure_termite() {
     
     [hints]
     
-    EOF"
+EOF"
 }
 
 function install_aur_packages() {
@@ -991,59 +991,59 @@ configure_xorg
 setup_touchpad
 rank_mirrors
 
-if [[ "${arch_linux_packages}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+if [[ "${install_arch_packages_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     install_arch_packages
 fi
 
-if [[ "${configure_i3}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+if [[ "${configure_i3_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     configure_i3
 fi
 
-if [[ "${connect_smb}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+if [[ "${connect_smb_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     connect_smb
 fi
 
-if [[ "${configure_gdm}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+if [[ "${configure_gdm_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     configure_gdm
 fi
 
-if [[ "${configure_hyper_v_guest}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+if [[ "${configure_hyperv_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     configure_hyperv
 fi
 
-if [[ "${configure_kvm}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+if [[ "${configure_kvm_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     configure_kvm
 fi
 
-if [[ "${configure_sway}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+if [[ "${configure_sway_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     configure_sway
 fi
 
-if [[ "${configure_termite}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+if [[ "${configure_termite_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     configure_termite
 fi
 
-if [[ "${install_aur_packages}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+if [[ "${install_aur_packages_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     install_aur_packages
 fi
 
-if [[ "${mount_drives}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+if [[ "${mount_drives_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     mount_drives
 fi
 
-if [[ "${setup_aliases}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+if [[ "${setup_aliases_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     setup_aliases
 fi
 
-if [[ "${setup_fwupd}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+if [[ "${configure_fwupd_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     configure_fwupd
 fi
 
-if [[ "${setup_git}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+if [[ "${configure_git_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     configure_git
 fi
 
-if [[ "${setup_serial}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+if [[ "${setup_serial_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     configure_serial
 fi
 
