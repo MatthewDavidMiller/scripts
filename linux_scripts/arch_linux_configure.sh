@@ -231,6 +231,7 @@ function configure_i3() {
     mkdir "/home/${user_name}/.config"
     mkdir "/home/${user_name}/.config/i3"
     rm -r "/home/${user_name}/.i3"
+    rm -rf "/home/${user_name}/.config/i3/config"
     cat <<\EOF >"/home/${user_name}/.config/i3/config"
 # i3 config file (v4)
 
@@ -405,6 +406,7 @@ exec --no-startup-id bash '/usr/local/bin/i3_autostart.sh'
 EOF
 
     # Setup autostart applications
+    rm -rf '/usr/local/bin/i3_autostart.sh'
     cat <<EOF >'/usr/local/bin/i3_autostart.sh'
 #!/bin/bash
 
@@ -480,6 +482,7 @@ function configure_gdm() {
     systemctl enable gdm.service
 
     # Enable autologin
+    rm -rf '/etc/gdm/custom.conf'
     cat <<EOF >'/etc/gdm/custom.conf'
 # Enable automatic login for user
 [daemon]
@@ -489,6 +492,7 @@ AutomaticLoginEnable=True
 EOF
 
     # Setup default session
+    rm -rf "/var/lib/AccountsService/users/$user_name"
     cat <<EOF >"/var/lib/AccountsService/users/$user_name"
     [User]
     Language=
@@ -515,6 +519,7 @@ function configure_kvm() {
     pacman -S --noconfirm --needed libvirt gnome-boxes ebtables dnsmasq bridge-utils
 
     # Enable nested virtualization
+    rm -rf '/etc/modprobe.d/kvm_intel.conf'
     cat <<EOF >'/etc/modprobe.d/kvm_intel.conf'
 
 options kvm_intel nested=1
@@ -547,6 +552,7 @@ function configure_sway() {
     # Setup i3 config
     mkdir "/home/${user_name}/.config"
     mkdir "/home/${user_name}/.config/sway"
+    rm -rf "/home/${user_name}/.config/sway/config"
     cat <<\EOF >"/home/${user_name}/.config/sway/config"
     # i3 config file (v4)
     
@@ -720,6 +726,7 @@ function configure_sway() {
     
 EOF
 
+    rm -rf "/home/${user_name}/.config/sway/config"
     cat <<EOF >>"/home/${user_name}/.config/sway/config"
     input "${touchpad_response}" {
         tap enabled
@@ -729,6 +736,7 @@ EOF
 EOF
 
     # Setup autostart applications
+    rm -rf '/usr/local/bin/sway_autostart.sh'
     cat <<EOF >'/usr/local/bin/sway_autostart.sh'
 #!/bin/bash
 
@@ -768,6 +776,7 @@ function configure_termite() {
     # Setup termite config
     mkdir "/home/${user_name}/.config"
     mkdir "/home/${user_name}/.config/termite"
+    rm -rf "/home/${user_name}/.config/termite/config"
     cat <<EOF >"/home/${user_name}/.config/termite/config"
     
     [options]
@@ -898,6 +907,7 @@ function setup_aliases() {
     }
 
     function configure_bashrc() {
+        rm -rf "/home/${user_name}/.bashrc"
         cat <<\EOF >>"/home/${user_name}/.bashrc"
 
 # Aliases
@@ -927,6 +937,7 @@ function configure_fwupd() {
     mkdir -p '/etc/pacman.d'
     mkdir -p '/etc/pacman.d/hooks'
     touch '/etc/pacman.d/hooks/fwupd-to-esp.hook'
+    rm -rf '/etc/pacman.d/hooks/fwupd-to-esp.hook'
     cat <<EOF >'/etc/pacman.d/hooks/fwupd-to-esp.hook'
 [Trigger]
 Operation = Install
@@ -977,10 +988,7 @@ function configure_serial() {
 }
 
 function configure_ostimer() {
-    {
-        printf '%s\n' 'timeout 60'
-        printf '%s\n' ''
-    } >>'/boot/loader/loader.conf'
+    grep -q ".*timeout" '/boot/loader/loader.conf' && sed -i "s,.*timeout.*,timeout 60," '/boot/loader/loader.conf' || printf '%s\n' 'timeout 60' >>'/boot/loader/loader.conf'
 }
 
 # Call functions
