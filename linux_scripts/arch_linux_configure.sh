@@ -49,13 +49,13 @@ function setup_touchpad() {
     rm -f '/etc/X11/xorg.conf.d/20-touchpad.conf'
     cat <<\EOF >'/etc/X11/xorg.conf.d/20-touchpad.conf'
 
-Section \"InputClass\"
- Identifier \"libinput touchpad catchall\"
- Driver \"libinput\"
- MatchIsTouchpad \"on\"
- MatchDevicePath \"/dev/input/event*\"
- Option \"Tapping\" \"on\"
- Option \"NaturalScrolling\" \"false\"
+Section "InputClass"
+ Identifier "libinput touchpad catchall"
+ Driver "libinput"
+ MatchIsTouchpad "on"
+ MatchDevicePath "/dev/input/event*"
+ Option "Tapping" "on"
+ Option "NaturalScrolling" "false"
 EndSection
 
 EOF
@@ -232,7 +232,7 @@ function configure_i3() {
     mkdir "/home/${user_name}/.config/i3"
     rm -r "/home/${user_name}/.i3"
     rm -rf "/home/${user_name}/.config/i3/config"
-    cat <<\EOF >"/home/${user_name}/.config/i3/config"
+    cat <<EOF >"/home/${user_name}/.config/i3/config"
 # i3 config file (v4)
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -553,7 +553,7 @@ function configure_sway() {
     mkdir "/home/${user_name}/.config"
     mkdir "/home/${user_name}/.config/sway"
     rm -rf "/home/${user_name}/.config/sway/config"
-    cat <<\EOF >"/home/${user_name}/.config/sway/config"
+    cat <<EOF >"/home/${user_name}/.config/sway/config"
     # i3 config file (v4)
     
     # Font for window titles. Will also be used by the bar unless a different font
