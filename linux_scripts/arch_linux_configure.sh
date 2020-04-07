@@ -3,7 +3,7 @@
 # Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 # Licensed under the MIT License.
 
-# Configuration script for Arch Linux.  Run after installing. Do not run as root.
+# Configuration script for Arch Linux.  Run after installing. Run as root.
 
 # Get script location
 # script_location="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
@@ -29,16 +29,16 @@ read -r -p "Run setup_serial script? [y/N] " setup_serial_var
 user_name=$(logname)
 
 function enable_bluetooth() {
-    sudo systemctl enable bluetooth.service
+    systemctl enable bluetooth.service
 }
 
 function enable_ufw() {
-    sudo systemctl enable ufw.service
-    sudo ufw enable
+    systemctl enable ufw.service
+    ufw enable
 }
 
 function enable_gdm() {
-    sudo systemctl enable gdm.service
+    systemctl enable gdm.service
 }
 
 function configure_xorg() {
@@ -46,8 +46,8 @@ function configure_xorg() {
 }
 
 function setup_touchpad() {
-    sudo rm -f '/etc/X11/xorg.conf.d/20-touchpad.conf'
-    sudo bash -c "cat <<\EOF > '/etc/X11/xorg.conf.d/20-touchpad.conf'
+    rm -f '/etc/X11/xorg.conf.d/20-touchpad.conf'
+    cat <<\EOF >'/etc/X11/xorg.conf.d/20-touchpad.conf'
 
 Section \"InputClass\"
  Identifier \"libinput touchpad catchall\"
@@ -58,7 +58,7 @@ Section \"InputClass\"
  Option \"NaturalScrolling\" \"false\"
 EndSection
 
-EOF"
+EOF
 }
 
 function rank_mirrors() {
@@ -95,117 +95,117 @@ function install_arch_packages() {
 
     # Install gnome desktop environment
     if [[ "${gnome_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo pacman -S --noconfirm --needed gnome
+        pacman -S --noconfirm --needed gnome
     fi
 
     # Install i3 windows manager
     if [[ "${i3_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo pacman -S --noconfirm --needed i3-wm i3blocks i3lock i3status dmenu
+        pacman -S --noconfirm --needed i3-wm i3blocks i3lock i3status dmenu
     fi
 
     # Install blender
     if [[ "${blender_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo pacman -S --noconfirm --needed blender
+        pacman -S --noconfirm --needed blender
     fi
 
     # Install gimp
     if [[ "${gimp_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo pacman -S --noconfirm --needed gimp
+        pacman -S --noconfirm --needed gimp
     fi
 
     # Install libreoffice
     if [[ "${libreoffice_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo pacman -S --noconfirm --needed libreoffice-fresh
+        pacman -S --noconfirm --needed libreoffice-fresh
     fi
 
     # Install vscode
     if [[ "${vscode_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo pacman -S --noconfirm --needed code
+        pacman -S --noconfirm --needed code
     fi
 
     # Install git
     if [[ "${git_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo pacman -S --noconfirm --needed git
+        pacman -S --noconfirm --needed git
     fi
 
     # Install putty
     if [[ "${putty_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo pacman -S --noconfirm --needed putty
+        pacman -S --noconfirm --needed putty
     fi
 
     # Install Nvidia LTS driver
     if [[ "${nvidia_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo pacman -S --noconfirm --needed nvidia-lts
+        pacman -S --noconfirm --needed nvidia-lts
     fi
 
     # Install dolphin file manager
     if [[ "${dolphin_fm_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo pacman -S --noconfirm --needed dolphin
+        pacman -S --noconfirm --needed dolphin
     fi
 
     # Install audacity
     if [[ "${audacity_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo pacman -S --noconfirm --needed audacity
+        pacman -S --noconfirm --needed audacity
     fi
 
     # Install nmap
     if [[ "${nmap_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo pacman -S --noconfirm --needed nmap
+        pacman -S --noconfirm --needed nmap
     fi
 
     # Install wireshark
     if [[ "${wireshark_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo pacman -S --noconfirm --needed wireshark-cli wireshark-qt
+        pacman -S --noconfirm --needed wireshark-cli wireshark-qt
     fi
 
     # Install ntop
     if [[ "${ntop_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo pacman -S --noconfirm --needed ntop
+        pacman -S --noconfirm --needed ntop
     fi
 
     # Install jnettop
     if [[ "${jnettop_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo pacman -S --noconfirm --needed jnettop
+        pacman -S --noconfirm --needed jnettop
     fi
 
     # Install nethogs
     if [[ "${nethogs_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo pacman -S --noconfirm --needed nethogs
+        pacman -S --noconfirm --needed nethogs
     fi
 
     # Install clamav
     if [[ "${clamav_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo pacman -S --noconfirm --needed clamav clamtk
+        pacman -S --noconfirm --needed clamav clamtk
     fi
 
     # Install vim
     if [[ "${vim_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo pacman -S --noconfirm --needed vim
+        pacman -S --noconfirm --needed vim
     fi
 
     # Install shellcheck
     if [[ "${shellcheck_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo pacman -S --noconfirm --needed shellcheck
+        pacman -S --noconfirm --needed shellcheck
     fi
 
     # Install tftpd
     if [[ "${tftpd_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo pacman -S --noconfirm --needed tftp-hpa
+        pacman -S --noconfirm --needed tftp-hpa
     fi
 
     # Install cmake
     if [[ "${cmake_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo pacman -S --noconfirm --needed cmake
+        pacman -S --noconfirm --needed cmake
     fi
 
     # Install pylint
     if [[ "${pylint_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo pacman -S --noconfirm --needed python-pylint
+        pacman -S --noconfirm --needed python-pylint
     fi
 
     # Install light
     if [[ "${light_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo pacman -S --noconfirm --needed light
+        pacman -S --noconfirm --needed light
     fi
 }
 
@@ -225,13 +225,13 @@ function configure_i3() {
     fi
 
     # Install packages
-    sudo pacman -S --noconfirm --needed i3-wm i3blocks i3lock i3status perl perl-anyevent-i3 perl-json-xs dmenu network-manager-applet blueman pasystray paprefs picom xorg-xrandr
+    pacman -S --noconfirm --needed i3-wm i3blocks i3lock i3status perl perl-anyevent-i3 perl-json-xs dmenu network-manager-applet blueman pasystray paprefs picom xorg-xrandr
 
     # Setup i3 config
     mkdir "/home/${user_name}/.config"
     mkdir "/home/${user_name}/.config/i3"
     rm -r "/home/${user_name}/.i3"
-    sudo bash -c "cat <<\EOF > \"/home/${user_name}/.config/i3/config\"
+    cat <<\EOF >"/home/${user_name}/.config/i3/config"
 # i3 config file (v4)
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -320,16 +320,16 @@ bindsym Mod1+minus scratchpad show
     
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
-set \$ws1 \"1\"
-set \$ws2 \"2\"
-set \$ws3 \"3\"
-set \$ws4 \"4\"
-set \$ws5 \"5\"
-set \$ws6 \"6\"
-set \$ws7 \"7\"
-set \$ws8 \"8\"
-set \$ws9 \"9\"
-set \$ws10 \"10\"
+set \$ws1 "1"
+set \$ws2 "2"
+set \$ws3 "3"
+set \$ws4 "4"
+set \$ws5 "5"
+set \$ws6 "6"
+set \$ws7 "7"
+set \$ws8 "8"
+set \$ws9 "9"
+set \$ws10 "10"
     
 # switch to workspace
 bindsym Mod1+1 workspace number \$ws1
@@ -362,10 +362,10 @@ bindsym Mod1+Shift+c reload
 bindsym Mod1+Shift+r restart
     
 # exit i3 (logs you out of your X session)
-bindsym Mod1+Shift+e exec \"i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'\"
+bindsym Mod1+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
 # resize window (you can also use the mouse for that)
-mode \"resize\" {
+mode "resize" {
     # These bindings trigger as soon as you enter the resize mode
     
     # Pressing left will shrink the window’s width.
@@ -384,12 +384,12 @@ mode \"resize\" {
     bindsym Right       resize grow width 10 px or 10 ppt
     
     # back to normal: Enter or Escape or Mod1+r
-    bindsym Return mode \"default\"
-    bindsym Escape mode \"default\"
-    bindsym Mod1+r mode \"default\"
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym Mod1+r mode "default"
 }
 
-bindsym Mod1+r mode \"resize\"
+bindsym Mod1+r mode "resize"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
@@ -402,47 +402,47 @@ bar {
 
 exec --no-startup-id bash '/usr/local/bin/i3_autostart.sh'
 
-EOF"
+EOF
 
     # Setup autostart applications
-    sudo bash -c "cat <<EOF > '/usr/local/bin/i3_autostart.sh'
+    cat <<EOF >'/usr/local/bin/i3_autostart.sh'
 #!/bin/bash
 
 # Define path to commands.
-PATH=\"/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin\"
+PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
 
 termite &
 nm-applet &
 blueman-applet &
 pasystray &
 picom &
-xsetroot -solid \"#000000\"
+xsetroot -solid "#000000"
 
-EOF"
+EOF
 
     # Have the wifi autoconnect
     if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo cp '/usr/local/bin/i3_autostart.sh' '/tmp/i3_autostart.sh'
-        sudo bash -c "awk '/xsetroot -solid \"#000000\"/ { print; print \"nmcli connect up '\"'${wifi}'\"'\"; next }1' '/tmp/i3_autostart.sh' > '/usr/local/bin/i3_autostart.sh'"
+        cp '/usr/local/bin/i3_autostart.sh' '/tmp/i3_autostart.sh'
+        bash -c "awk '/xsetroot -solid \"#000000\"/ { print; print \"nmcli connect up '\"'${wifi}'\"'\"; next }1' '/tmp/i3_autostart.sh' > '/usr/local/bin/i3_autostart.sh'"
     fi
 
     # Setup duel monitors
     if [[ "${monitor_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo cp '/usr/local/bin/i3_autostart.sh' '/tmp/i3_autostart.sh'
-        sudo bash -c "awk '/xsetroot -solid \"#000000\"/ { print; print \"xrandr --output ${display2} --auto --right-of ${display1}\"; next }1' '/tmp/i3_autostart.sh' > '/usr/local/bin/i3_autostart.sh'"
+        cp '/usr/local/bin/i3_autostart.sh' '/tmp/i3_autostart.sh'
+        bash -c "awk '/xsetroot -solid \"#000000\"/ { print; print \"xrandr --output ${display2} --auto --right-of ${display1}\"; next }1' '/tmp/i3_autostart.sh' > '/usr/local/bin/i3_autostart.sh'"
 
     fi
 
     # Allow script to be executable.
-    sudo chmod +x '/usr/local/bin/i3_autostart.sh'
+    chmod +x '/usr/local/bin/i3_autostart.sh'
 }
 
 function connect_smb() {
     # Install samba
-    sudo pacman -S --noconfirm --needed samba
+    pacman -S --noconfirm --needed samba
 
     # Make /mnt directory
-    sudo mkdir '/mnt'
+    mkdir '/mnt'
 
     # Script to connect and mount a smb share
     read -r -p "Mount a samba share? [y/N] " response
@@ -458,15 +458,15 @@ function connect_smb() {
         read -r -p "Specify Password. Example'password': " password
 
         # Make directory to mount the share at
-        sudo mkdir "${mount_location}"
+        mkdir "${mount_location}"
 
         # Automount smb share
-        sudo bash -c "printf '%s\n' \"${share} ${mount_location} cifs rw,noauto,x-systemd.automount,_netdev,user,username=${username},password=${password} 0 0\" >> '/etc/fstab'"
+        printf '%s\n' "${share} ${mount_location} cifs rw,noauto,x-systemd.automount,_netdev,user,username=${username},password=${password} 0 0" >>'/etc/fstab'
 
         # Mount another disk
         read -r -p "Do you want to mount another samba share? [y/N] " response
         if [[ "${response}" =~ ^([nN][oO]|[nN])+$ ]]; then
-            sudo bash -c "printf '%s\n' '' >> '/etc/fstab'"
+            printf '%s\n' '' >>'/etc/fstab'
             exit
         fi
     done
@@ -477,49 +477,49 @@ function configure_gdm() {
     read -r -p "Specify session to use. Example: i3 " session
 
     # Enable gdm
-    sudo systemctl enable gdm.service
+    systemctl enable gdm.service
 
     # Enable autologin
-    sudo bash -c "cat <<EOF > '/etc/gdm/custom.conf'
+    cat <<EOF >'/etc/gdm/custom.conf'
 # Enable automatic login for user
 [daemon]
 AutomaticLogin=${user_name}
 AutomaticLoginEnable=True
 
-EOF"
+EOF
 
     # Setup default session
-    sudo bash -c "cat <<EOF > \"/var/lib/AccountsService/users/$user_name\"
+    cat <<EOF >"/var/lib/AccountsService/users/$user_name"
     [User]
     Language=
     Session=${session}
     XSession=${session}
     
-EOF"
+EOF
 }
 
 function configure_hyperv() {
     # Install hyperv tools
-    sudo pacman -S --noconfirm --needed hyperv
+    pacman -S --noconfirm --needed hyperv
 
-    sudo systemctl enable hv_fcopy_daemon.service
-    sudo systemctl start hv_fcopy_daemon.service
-    sudo systemctl enable hv_kvp_daemon.service
-    sudo systemctl start hv_kvp_daemon.service
-    sudo systemctl enable hv_vss_daemon.service
-    sudo systemctl start hv_vss_daemon.service
+    systemctl enable hv_fcopy_daemon.service
+    systemctl start hv_fcopy_daemon.service
+    systemctl enable hv_kvp_daemon.service
+    systemctl start hv_kvp_daemon.service
+    systemctl enable hv_vss_daemon.service
+    systemctl start hv_vss_daemon.service
 }
 
 function configure_kvm() {
     # Install packages
-    sudo pacman -S --noconfirm --needed libvirt gnome-boxes ebtables dnsmasq bridge-utils
+    pacman -S --noconfirm --needed libvirt gnome-boxes ebtables dnsmasq bridge-utils
 
     # Enable nested virtualization
-    sudo bash -c "cat <<EOF > '/etc/modprobe.d/kvm_intel.conf'
+    cat <<EOF >'/etc/modprobe.d/kvm_intel.conf'
 
 options kvm_intel nested=1
 
-EOF"
+EOF
 }
 
 function configure_sway() {
@@ -542,12 +542,12 @@ function configure_sway() {
     fi
 
     # Install packages
-    sudo pacman -S --noconfirm --needed sway swayidle swaylock i3status dmenu network-manager-applet blueman pasystray paprefs xorg-server-xwayland polkit-gnome xorg-xrandr
+    pacman -S --noconfirm --needed sway swayidle swaylock i3status dmenu network-manager-applet blueman pasystray paprefs xorg-server-xwayland polkit-gnome xorg-xrandr
 
     # Setup i3 config
-    sudo mkdir "/home/${user_name}/.config"
-    sudo mkdir "/home/${user_name}/.config/sway"
-    sudo bash -c "cat <<\EOF > \"/home/${user_name}/.config/sway/config\"
+    mkdir "/home/${user_name}/.config"
+    mkdir "/home/${user_name}/.config/sway"
+    cat <<\EOF >"/home/${user_name}/.config/sway/config"
     # i3 config file (v4)
     
     # Font for window titles. Will also be used by the bar unless a different font
@@ -636,16 +636,16 @@ function configure_sway() {
     
     # Define names for default workspaces for which we configure key bindings later on.
     # We use variables to avoid repeating the names in multiple places.
-    set \$ws1 \"1\"
-    set \$ws2 \"2\"
-    set \$ws3 \"3\"
-    set \$ws4 \"4\"
-    set \$ws5 \"5\"
-    set \$ws6 \"6\"
-    set \$ws7 \"7\"
-    set \$ws8 \"8\"
-    set \$ws9 \"9\"
-    set \$ws10 \"10\"
+    set \$ws1 "1"
+    set \$ws2 "2"
+    set \$ws3 "3"
+    set \$ws4 "4"
+    set \$ws5 "5"
+    set \$ws6 "6"
+    set \$ws7 "7"
+    set \$ws8 "8"
+    set \$ws9 "9"
+    set \$ws10 "10"
     
     # switch to workspace
     bindsym Mod1+1 workspace number \$ws1
@@ -678,10 +678,10 @@ function configure_sway() {
     bindsym Mod1+Shift+r restart
     
     # exit i3 (logs you out of your X session)
-    bindsym Mod1+Shift+e exec \"i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'\"
+    bindsym Mod1+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
     
     # resize window (you can also use the mouse for that)
-    mode \"resize\" {
+    mode "resize" {
         # These bindings trigger as soon as you enter the resize mode
         
         # Pressing left will shrink the window’s width.
@@ -700,12 +700,12 @@ function configure_sway() {
         bindsym Right       resize grow width 10 px or 10 ppt
         
         # back to normal: Enter or Escape or Mod1+r
-        bindsym Return mode \"default\"
-        bindsym Escape mode \"default\"
-        bindsym Mod1+r mode \"default\"
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        bindsym Mod1+r mode "default"
     }
     
-    bindsym Mod1+r mode \"resize\"
+    bindsym Mod1+r mode "resize"
     
     # Start i3bar to display a workspace bar (plus the system information i3status
     # finds out, if available)
@@ -718,57 +718,57 @@ function configure_sway() {
     
     exec --no-startup-id bash '/usr/local/bin/sway_autostart.sh'
     
-EOF"
+EOF
 
-    sudo bash -c "cat <<EOF >> \"/home/${user_name}/.config/sway/config\"
-    input \"${touchpad_response}\" {
+    cat <<EOF >>"/home/${user_name}/.config/sway/config"
+    input "${touchpad_response}" {
         tap enabled
         natural_scroll disabled
     }
     
-EOF"
+EOF
 
     # Setup autostart applications
-    sudo bash -c "cat <<EOF > '/usr/local/bin/sway_autostart.sh'
+    cat <<EOF >'/usr/local/bin/sway_autostart.sh'
 #!/bin/bash
 
 # Define path to commands.
-PATH=\"/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin\"
+PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
 
 termite &
 nm-applet &
 blueman-applet &
 pasystray &
 picom &
-xsetroot -solid \"#000000\"
+xsetroot -solid "#000000"
 
-EOF"
+EOF
 
     # Have the wifi autoconnect
     if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo cp '/usr/local/bin/i3_autostart.sh' '/tmp/sway_autostart.sh'
+        cp '/usr/local/bin/i3_autostart.sh' '/tmp/sway_autostart.sh'
         sudo bash -c "awk '/xsetroot -solid \"#000000\"/ { print; print \"nmcli connect up '\"'${wifi}'\"'\"; next }1' '/tmp/sway_autostart.sh' > '/usr/local/bin/sway_autostart.sh'"
     fi
 
     # Setup duel monitors
     if [[ "${monitor_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo cp '/usr/local/bin/i3_autostart.sh' '/tmp/sway_autostart.sh'
+        cp '/usr/local/bin/i3_autostart.sh' '/tmp/sway_autostart.sh'
         sudo bash -c "awk '/xsetroot -solid \"#000000\"/ { print; print \"xrandr --output ${display2} --auto --right-of ${display1}\"; next }1' '/tmp/sway_autostart.sh' > '/usr/local/bin/sway_autostart.sh'"
 
     fi
 
     # Allow script to be executable.
-    sudo chmod +x '/usr/local/bin/sway_autostart.sh'
+    chmod +x '/usr/local/bin/sway_autostart.sh'
 }
 
 function configure_termite() {
     # Install packages
-    sudo pacman -S --noconfirm --needed termite
+    pacman -S --noconfirm --needed termite
 
     # Setup termite config
-    sudo mkdir "/home/${user_name}/.config"
-    sudo mkdir "/home/${user_name}/.config/termite"
-    sudo bash -c "cat <<EOF > \"/home/${user_name}/.config/termite/config\"
+    mkdir "/home/${user_name}/.config"
+    mkdir "/home/${user_name}/.config/termite"
+    cat <<EOF >"/home/${user_name}/.config/termite/config"
     
     [options]
     font = Monospace 16
@@ -784,7 +784,7 @@ function configure_termite() {
     
     [hints]
     
-EOF"
+EOF
 }
 
 function install_aur_packages() {
@@ -794,67 +794,67 @@ function install_aur_packages() {
     read -r -p "Install vscode? [y/N] " response5
 
     # Install packages
-    sudo pacman -S --noconfirm --needed base-devel
+    pacman -S --noconfirm --needed base-devel
 
     # Create a directory to use for compiling aur packages
-    sudo mkdir "/home/${user_name}/aur"
-    sudo chown "${user_name}" "/home/${user_name}/aur"
-    sudo chmod 744 "/home/${user_name}/aur"
+    mkdir "/home/${user_name}/aur"
+    chown "${user_name}" "/home/${user_name}/aur"
+    chmod 744 "/home/${user_name}/aur"
 
     # Install freefilesync
     if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo mkdir "/home/${user_name}/aur/freefilesync"
-        sudo git clone 'https://aur.archlinux.org/freefilesync.git' "/home/${user_name}/aur/freefilesync"
-        sudo chown -R "${user_name}" "/home/${user_name}/aur/freefilesync"
-        sudo chmod -R 744 "/home/${user_name}/aur/freefilesync"
+        mkdir "/home/${user_name}/aur/freefilesync"
+        git clone 'https://aur.archlinux.org/freefilesync.git' "/home/${user_name}/aur/freefilesync"
+        chown -R "${user_name}" "/home/${user_name}/aur/freefilesync"
+        chmod -R 744 "/home/${user_name}/aur/freefilesync"
         cd "/home/${user_name}/aur/freefilesync" || exit
         read -r -p "Check the contents of the files before installing. Press enter to continue: "
         less PKGBUILD
         read -r -p "Ready to install? [y/N] " response2
         if [[ "${response2}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-            makepkg -sirc
+            sudo -i -u "${user_name}" makepkg -sirc
         fi
     fi
 
     # Install spotify
     if [[ "${response3}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo mkdir "/home/${user_name}/aur/spotify"
-        sudo git clone 'https://aur.archlinux.org/spotify.git' "/home/${user_name}/aur/spotify"
-        sudo chown -R "${user_name}" "/home/${user_name}/aur/spotify"
-        sudo chmod -R 744 "/home/${user_name}/aur/spotify"
+        mkdir "/home/${user_name}/aur/spotify"
+        git clone 'https://aur.archlinux.org/spotify.git' "/home/${user_name}/aur/spotify"
+        chown -R "${user_name}" "/home/${user_name}/aur/spotify"
+        chmod -R 744 "/home/${user_name}/aur/spotify"
         read -r -p "Choose the latest key. Press enter to continue: "
-        gpg --keyserver 'hkp://keyserver.ubuntu.com' --search-key 'Spotify Public Repository Signing Key'
+        sudo -i -u "${user_name}" gpg --keyserver 'hkp://keyserver.ubuntu.com' --search-key 'Spotify Public Repository Signing Key'
         cd "/home/${user_name}/aur/spotify" || exit
         read -r -p "Check the contents of the files before installing. Press enter to continue: "
         less PKGBUILD
         read -r -p "Ready to install? [y/N] " response4
         if [[ "${response4}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-            makepkg -sirc
+            sudo -i -u "${user_name}" makepkg -sirc
         fi
     fi
 
     # Install vscode
     if [[ "${response5}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        sudo mkdir "/home/${user_name}/aur/vscode"
-        sudo git clone 'https://aur.archlinux.org/visual-studio-code-bin.git' "/home/${user_name}/aur/vscode"
-        sudo chown -R "${user_name}" "/home/${user_name}/aur/vscode"
-        sudo chmod -R 744 "/home/${user_name}/aur/vscode"
+        mkdir "/home/${user_name}/aur/vscode"
+        git clone 'https://aur.archlinux.org/visual-studio-code-bin.git' "/home/${user_name}/aur/vscode"
+        chown -R "${user_name}" "/home/${user_name}/aur/vscode"
+        chmod -R 744 "/home/${user_name}/aur/vscode"
         cd "/home/${user_name}/aur/vscode" || exit
         read -r -p "Check the contents of the files before installing. Press enter to continue: "
         less PKGBUILD
         read -r -p "Ready to install? [y/N] " response6
         if [[ "${response6}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-            makepkg -sirc
+            sudo -i -u "${user_name}" makepkg -sirc
         fi
     fi
 }
 
 function mount_drives() {
     # Instal linux-utils
-    sudo pacman -S --noconfirm --needed util-linux
+    pacman -S --noconfirm --needed util-linux
 
     # Make /mnt directory
-    sudo mkdir '/mnt'
+    mkdir '/mnt'
 
     read -r -p "Mount a disk? [y/N] " response
     while [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; do
@@ -871,18 +871,18 @@ function mount_drives() {
         read -r -p "Specify disk type. Example'ntfs': " disk_type
 
         # Get uuid
-        uuid="$(sudo blkid -o value -s UUID "${disk1}")"
+        uuid="$(blkid -o value -s UUID "${disk1}")"
 
         # Make directory to mount the disk at
-        sudo mkdir "${mount_location}"
+        mkdir "${mount_location}"
 
         # Automount smb share
-        sudo bash -c "printf '%s\n' \"UUID=${uuid} ${mount_location} ${disk_type} rw,noauto,x-systemd.automount 0 0\" >> '/etc/fstab'"
+        printf '%s\n' "UUID=${uuid} ${mount_location} ${disk_type} rw,noauto,x-systemd.automount 0 0" >>'/etc/fstab'
 
         # Mount another disk
         read -r -p "Do you want to mount another disk? [y/N] " response
         if [[ "${response}" =~ ^([nN][oO]|[nN])+$ ]]; then
-            sudo bash -c "printf '%s\n' '' >> '/etc/fstab'"
+            printf '%s\n' '' >>'/etc/fstab'
             exit
         fi
     done
@@ -890,11 +890,11 @@ function mount_drives() {
 
 function setup_aliases() {
     function copy_ssh_keys() {
-        sudo cp '/mnt/matt_files/SSHConfigs/matt_homelab/nas_key' '.ssh/nas_key'
-        sudo cp '/mnt/matt_files/SSHConfigs/matt_homelab/openwrt_key' '.ssh/openwrt_key'
-        sudo cp '/mnt/matt_files/SSHConfigs/matt_homelab/proxmox_key' '.ssh/proxmox_key'
-        sudo cp '/mnt/matt_files/SSHConfigs/matt_homelab/vpn_key' '.ssh/vpn_key'
-        sudo cp '/mnt/matt_files/SSHConfigs/matt_homelab/pihole_key' '.ssh/pihole_key'
+        cp '/mnt/matt_files/SSHConfigs/matt_homelab/nas_key' '.ssh/nas_key'
+        cp '/mnt/matt_files/SSHConfigs/matt_homelab/openwrt_key' '.ssh/openwrt_key'
+        cp '/mnt/matt_files/SSHConfigs/matt_homelab/proxmox_key' '.ssh/proxmox_key'
+        cp '/mnt/matt_files/SSHConfigs/matt_homelab/vpn_key' '.ssh/vpn_key'
+        cp '/mnt/matt_files/SSHConfigs/matt_homelab/pihole_key' '.ssh/pihole_key'
     }
 
     function configure_bashrc() {
@@ -918,16 +918,16 @@ EOF
 
 function configure_fwupd() {
     # Install fwupd
-    sudo pacman -S --noconfirm --needed fwupd
+    pacman -S --noconfirm --needed fwupd
 
     # Copy efi file
-    sudo cp -a /usr/lib/fwupd/efi/fwupdx64.efi /boot/EFI/
+    cp -a /usr/lib/fwupd/efi/fwupdx64.efi /boot/EFI/
 
     # Setup hook
-    sudo mkdir -p '/etc/pacman.d'
-    sudo mkdir -p '/etc/pacman.d/hooks'
-    sudo touch '/etc/pacman.d/hooks/fwupd-to-esp.hook'
-    sudo bash -c "cat <<EOF > '/etc/pacman.d/hooks/fwupd-to-esp.hook'
+    mkdir -p '/etc/pacman.d'
+    mkdir -p '/etc/pacman.d/hooks'
+    touch '/etc/pacman.d/hooks/fwupd-to-esp.hook'
+    cat <<EOF >'/etc/pacman.d/hooks/fwupd-to-esp.hook'
 [Trigger]
 Operation = Install
 Operation = Upgrade
@@ -938,7 +938,7 @@ Target = usr/lib/fwupd/efi/fwupdx64.efi
 When = PostTransaction
 Exec = /usr/bin/cp -a /usr/lib/fwupd/efi/fwupdx64.efi /boot/EFI/
 
-EOF"
+EOF
 }
 
 function configure_git() {
@@ -953,27 +953,27 @@ function configure_git() {
     key='github_ssh'
 
     # Install git
-    sudo pacman -S --noconfirm --needed git
+    pacman -S --noconfirm --needed git
 
     # Setup username
-    sudo git config --global user.name "${git_name}"
+    git config --global user.name "${git_name}"
 
     # Setup email
-    sudo git config --global user.email "${email}"
+    git config --global user.email "${email}"
 
     # Setup ssh key
     mkdir "/home/${user_name}/ssh_keys"
-    sudo cp "${key_location}" "/home/${user_name}/ssh_keys/${key}"
-    sudo git config --global core.sshCommand "ssh -i ""/home/${user_name}/ssh_keys/${key}"" -F /dev/null"
-    sudo chmod 400 -R "/home/${user_name}/ssh_keys"
+    cp "${key_location}" "/home/${user_name}/ssh_keys/${key}"
+    git config --global core.sshCommand "ssh -i ""/home/${user_name}/ssh_keys/${key}"" -F /dev/null"
+    chmod 400 -R "/home/${user_name}/ssh_keys"
 }
 
 function configure_serial() {
     # Install putty
-    sudo pacman -S --noconfirm --needed putty
+    pacman -S --noconfirm --needed putty
 
     # Add user to uucp group
-    sudo gpasswd -a "${user_name}" uucp
+    gpasswd -a "${user_name}" uucp
 }
 
 function configure_ostimer() {
