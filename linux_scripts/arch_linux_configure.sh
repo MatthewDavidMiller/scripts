@@ -42,7 +42,7 @@ function enable_gdm() {
 }
 
 function configure_xorg() {
-    Xorg :0 -configure
+    sudo -i -u "${user_name}" Xorg :0 -configure
 }
 
 function setup_touchpad() {
