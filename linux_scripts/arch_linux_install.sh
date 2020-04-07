@@ -44,6 +44,7 @@ fi
 
 # Start dhcpcd
 systemctl start "dhcpcd.service"
+sleep 12
 
 if false ping -c2 "google.com"; then
     echo 'No internet'
