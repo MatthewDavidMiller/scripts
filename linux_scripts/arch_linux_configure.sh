@@ -42,7 +42,7 @@ function enable_gdm() {
 }
 
 function configure_xorg() {
-    sudo -i -u "${user_name}" Xorg :0 -configure
+    sudo -u "${user_name}" Xorg :0 -configure
 }
 
 function setup_touchpad() {
@@ -821,7 +821,7 @@ function install_aur_packages() {
         less PKGBUILD
         read -r -p "Ready to install? [y/N] " response2
         if [[ "${response2}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-            sudo -i -u "${user_name}" makepkg -sirc
+            sudo -u "${user_name}" makepkg -sirc
         fi
     fi
 
@@ -832,13 +832,13 @@ function install_aur_packages() {
         chown -R "${user_name}" "/home/${user_name}/aur/spotify"
         chmod -R 744 "/home/${user_name}/aur/spotify"
         read -r -p "Choose the latest key. Press enter to continue: "
-        sudo -i -u "${user_name}" gpg --keyserver 'hkp://keyserver.ubuntu.com' --search-key 'Spotify Public Repository Signing Key'
+        sudo -u "${user_name}" gpg --keyserver 'hkp://keyserver.ubuntu.com' --search-key 'Spotify Public Repository Signing Key'
         cd "/home/${user_name}/aur/spotify" || exit
         read -r -p "Check the contents of the files before installing. Press enter to continue: "
         less PKGBUILD
         read -r -p "Ready to install? [y/N] " response4
         if [[ "${response4}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-            sudo -i -u "${user_name}" makepkg -sirc
+            sudo -u "${user_name}" makepkg -sirc
         fi
     fi
 
@@ -853,7 +853,7 @@ function install_aur_packages() {
         less PKGBUILD
         read -r -p "Ready to install? [y/N] " response6
         if [[ "${response6}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-            sudo -i -u "${user_name}" makepkg -sirc
+            sudo -u "${user_name}" makepkg -sirc
         fi
     fi
 }
