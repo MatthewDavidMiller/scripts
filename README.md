@@ -43,9 +43,13 @@ Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 
 [arch_linux_configure.sh](linux_scripts/arch_linux_configure.sh) - Bash script to automate my configuration of Arch Linux.
 
+[arch_linux_scripts.sh](linux_scripts/arch_linux_scripts.sh) - A lot of smaller scripts configured as functions for use on Arch Linux.
+
 [configure_omada_controller.sh](linux_scripts/configure_omada_controller.sh) - A bash script to configure TP Link Omada Controller.
 
 [debian_server_install.sh](linux_scripts/debian_server_install.sh) - Bash script to automate the install of debian servers.
+
+[linux_scripts.sh](linux_scripts/linux_scripts.sh) - A lot of smaller scripts configured as functions for use on majority of the Linux distros.
 
 [nas_server_configure.sh](linux_scripts/nas_server_configure.sh) - Bash script to automate the configuration of my nas.
 
@@ -61,23 +65,7 @@ Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 
 [apt_package_updates.sh](linux_scripts/apt_package_updates.sh) - A bash script to update the packages on Debian based distros.
 
-[arch_linux_packages.sh](linux_scripts/arch_linux_packages.sh) - Simple script to install some packages I use.
-
 [backup_configs.sh](linux_scripts/backup_configs.sh) - A bash script I wrote to tar the /etc and /home directory.  Used to automate backing up config files.
-
-[configure_gdm.sh](linux_scripts/configure_gdm.sh) - A bash script to configure gdm.
-
-[configure_hyper_v_guest.sh](linux_scripts/configure_hyper_v_guest.sh) - Bash script to configure the hyper-v guest.
-
-[configure_i3.sh](linux_scripts/configure_i3.sh) - A bash script to configure the i3 window manager.
-
-[configure_kvm.sh](linux_scripts/configure_kvm.sh) - A bash script to configure kvm.
-
-[configure_sway.sh](linux_scripts/configure_sway.sh) - A bash script to configure the sway window manager.
-
-[configure_termite.sh](linux_scripts/configure_termite.sh) - A bash script to configure the termite terminal emulator.
-
-[connect_smb.sh](linux_scripts/connect_smb.sh) - A bash script to connect a samba share and automount it.
 
 [delete_logs.py](linux_scripts/delete_logs.py) - Simple python script to delete some logs files after going over a certain size.
 
@@ -86,12 +74,6 @@ Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 [email_on_vpn_connections.py](linux_scripts/email_on_vpn_connections.py) - A python script that it paired with my bash script to send an email when there is a connection on my openvpn server.
 
 [email_on_vpn_connections.sh](linux_scripts/email_on_vpn_connections.sh) - A bash script that checks the openvpn log file for a certain keyword so I know if a vpn connection was established on my server.
-
-[generate_ssh_keys.sh](linux_scripts/generate_ssh_key.sh) - A bash script that generates keys as well as authorizes the key for ssh use.
-
-[install_aur_packages.sh](linux_scripts/install_aur_packages.sh) - Bash script to install aur packages from Arch Linux.
-
-[mount_drives.sh](linux_scripts/mount_drives.sh) - Bash script to mount drives.  Adds an entry to the fstab.
 
 [network_reconnect_buster.sh](linux_scripts/network_reconnect_buster.sh) - A bash script that restarts a network interface if it can't ping the gateway.  Utilizes iplink command.
 
@@ -103,15 +85,7 @@ Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 
 [openwrt_restrict_luci_access.sh](linux_scripts/openwrt_restrict_luci_access.sh) - Simple script to limit access to luci gui as well as redirect http to https.
 
-[secure_ssh_access.sh](linux_scripts/secure_ssh_access.sh) - A bash script that changes the configuration for ssh to not allow password authentication and enables key based authentication. Also disables root login over ssh.
-
-[setup_git.sh](linux_scripts/setup_git.sh) - Bash script to configure git.
-
-[setup_aliases.sh](linux_scripts/setup_aliases.sh) - Bash script to configure aliases.
-
-[setup_fwupd.sh](linux_scripts/setup_fwupd.sh) - Bash script to setup fwupd in Arch Linux.
-
-[update_aur_packages.sh](linux_scripts/update_aur_packages.sh) - Bash script to update aur packages from Arch Linux.
+[rsync_backups.sh](linux_scripts/rsync_backups.sh) - Bash script to backup files with rsync.
 
 [update_openwrt.sh](linux_scripts/update_openwrt.sh) - A simple script to update packages in OpenWrt.
 
