@@ -3,43 +3,7 @@
 # Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 # Licensed under the MIT License.
 
-# Compilation of scripts for Arch Linux that can be called as functions.
-
-function enable_bluetooth() {
-    systemctl enable bluetooth.service
-}
-
-function enable_ufw() {
-    systemctl enable ufw.service
-    ufw enable
-}
-
-function enable_gdm() {
-    systemctl enable gdm.service
-}
-
-function configure_xorg() {
-    # Get username
-    user_name=$(logname)
-
-    sudo -u "${user_name}" Xorg :0 -configure
-}
-
-function setup_touchpad() {
-    rm -f '/etc/X11/xorg.conf.d/20-touchpad.conf'
-    cat <<\EOF >'/etc/X11/xorg.conf.d/20-touchpad.conf'
-
-Section "InputClass"
- Identifier "libinput touchpad catchall"
- Driver "libinput"
- MatchIsTouchpad "on"
- MatchDevicePath "/dev/input/event*"
- Option "Tapping" "on"
- Option "NaturalScrolling" "false"
-EndSection
-
-EOF
-}
+# Compilation of functions that can be called for Arch Linux.
 
 function rank_mirrors() {
     cp '/etc/pacman.d/mirrorlist' '/etc/pacman.d/mirrorlist.backup'
@@ -461,36 +425,6 @@ function connect_smb() {
             exit
         fi
     done
-}
-
-function configure_gdm() {
-    # Get username
-    user_name=$(logname)
-    # Specify session for gdm to use
-    read -r -p "Specify session to use. Example: i3 " session
-
-    # Enable gdm
-    systemctl enable gdm.service
-
-    # Enable autologin
-    rm -rf '/etc/gdm/custom.conf'
-    cat <<EOF >'/etc/gdm/custom.conf'
-# Enable automatic login for user
-[daemon]
-AutomaticLogin=${user_name}
-AutomaticLoginEnable=True
-
-EOF
-
-    # Setup default session
-    rm -rf "/var/lib/AccountsService/users/$user_name"
-    cat <<EOF >"/var/lib/AccountsService/users/$user_name"
-    [User]
-    Language=
-    Session=${session}
-    XSession=${session}
-    
-EOF
 }
 
 function configure_hyperv() {
@@ -998,4 +932,64 @@ function configure_serial() {
 
 function configure_ostimer() {
     grep -q ".*timeout" '/boot/loader/loader.conf' && sed -i "s,.*timeout.*,timeout 60," '/boot/loader/loader.conf' || printf '%s\n' 'timeout 60' >>'/boot/loader/loader.conf'
+}
+
+function update_aur_packages() {
+    # Prompts
+    read -r -p "Update freefilesync? [y/N] " response1
+    read -r -p "Update spotify? [y/N] " response3
+    read -r -p "Update vscode? [y/N] " response5
+
+    # Get username
+    user_name=$(logname)
+
+    # Install packages
+    pacman -S --noconfirm --needed base-devel
+
+    # Update freefilesync
+    if [[ "${response1}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+        cd "/home/${user_name}/aur/freefilesync" || exit
+        git clean -df
+        git checkout -- .
+        git fetch
+        read -r -p "Check the contents of the files before installing. Press enter to continue: "
+        git diff master...origin/master
+        read -r -p "Ready to update? [y/N] " response2
+        if [[ "${response2}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+            git pull
+            sudo -u "${user_name}" makepkg -sirc
+        fi
+    fi
+
+    # Update spotify
+    if [[ "${response3}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+        read -r -p "Choose the latest key. Press enter to continue: "
+        sudo -u "${user_name}" gpg --keyserver 'hkp://keyserver.ubuntu.com' --search-key 'Spotify Public Repository Signing Key'
+        cd "/home/${user_name}/aur/spotify" || exit
+        git clean -df
+        git checkout -- .
+        git fetch
+        read -r -p "Check the contents of the files before installing. Press enter to continue: "
+        git diff master...origin/master
+        read -r -p "Ready to update? [y/N] " response4
+        if [[ "${response4}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+            git pull
+            sudo -u "${user_name}" makepkg -sirc
+        fi
+    fi
+
+    # Update vscode
+    if [[ "${response5}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+        cd "/home/${user_name}/aur/vscode" || exit
+        git clean -df
+        git checkout -- .
+        git fetch
+        read -r -p "Check the contents of the files before installing. Press enter to continue: "
+        git diff master...origin/master
+        read -r -p "Ready to update? [y/N] " response6
+        if [[ "${response6}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+            git pull
+            sudo -u "${user_name}" makepkg -sirc
+        fi
+    fi
 }

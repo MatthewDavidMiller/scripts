@@ -26,12 +26,12 @@ read -r -p "Run setup_git script? [y/N] " configure_git_var
 read -r -p "Run setup_serial script? [y/N] " setup_serial_var
 
 # Source functions
+source linux_scripts.sh
 source arch_linux_scripts.sh
 
 # Call functions
 enable_bluetooth
 enable_ufw
-enable_gdm
 configure_xorg
 setup_touchpad
 rank_mirrors
