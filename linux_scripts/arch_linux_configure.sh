@@ -41,10 +41,14 @@ if [[ "${install_arch_packages_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
 fi
 
 if [[ "${configure_i3_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+    # Install packages
+    pacman -S --noconfirm --needed i3-wm i3blocks i3lock i3status perl perl-anyevent-i3 perl-json-xs dmenu network-manager-applet blueman pasystray paprefs picom xorg-xrandr || echo 'Script error, exiting.' && exit
     configure_i3
 fi
 
 if [[ "${connect_smb_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+    # Install samba
+    pacman -S --noconfirm --needed samba || echo 'Script error, exiting.' && exit
     connect_smb
 fi
 
@@ -53,18 +57,26 @@ if [[ "${configure_gdm_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
 fi
 
 if [[ "${configure_hyperv_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+    # Install hyperv tools
+    pacman -S --noconfirm --needed hyperv || echo 'Script error, exiting.' && exit
     configure_hyperv
 fi
 
 if [[ "${configure_kvm_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+    # Install packages
+    pacman -S --noconfirm --needed libvirt gnome-boxes ebtables dnsmasq bridge-utils || echo 'Script error, exiting.' && exit
     configure_kvm
 fi
 
 if [[ "${configure_sway_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+    # Install packages
+    pacman -S --noconfirm --needed sway swayidle swaylock i3status dmenu network-manager-applet blueman pasystray paprefs xorg-server-xwayland polkit-gnome xorg-xrandr || echo 'Script error, exiting.' && exit
     configure_sway
 fi
 
 if [[ "${configure_termite_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+    # Install packages
+    pacman -S --noconfirm --needed termite || echo 'Script error, exiting.' && exit
     configure_termite
 fi
 
@@ -73,6 +85,8 @@ if [[ "${install_aur_packages_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
 fi
 
 if [[ "${mount_drives_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+    # Install linux-utils
+    pacman -S --noconfirm --needed util-linux || echo 'Script error, exiting.' && exit
     mount_drives
 fi
 
@@ -81,14 +95,20 @@ if [[ "${setup_aliases_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
 fi
 
 if [[ "${configure_fwupd_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+    # Install fwupd
+    pacman -S --noconfirm --needed fwupd || echo 'Script error, exiting.' && exit
     configure_fwupd
 fi
 
 if [[ "${configure_git_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+    # Install git
+    pacman -S --noconfirm --needed git || echo 'Script error, exiting.' && exit
     configure_git
 fi
 
 if [[ "${setup_serial_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+    # Install putty
+    pacman -S --noconfirm --needed putty || echo 'Script error, exiting.' && exit
     configure_serial
 fi
 
