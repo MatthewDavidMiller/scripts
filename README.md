@@ -45,8 +45,6 @@ Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 
 [arch_linux_scripts.sh](linux_scripts/arch_linux_scripts.sh) - A lot of smaller scripts configured as functions for use on Arch Linux.
 
-[configure_omada_controller.sh](linux_scripts/configure_omada_controller.sh) - A bash script to configure TP Link Omada Controller.
-
 [debian_server_install.sh](linux_scripts/debian_server_install.sh) - Bash script to automate the install of debian servers.
 
 [linux_scripts.sh](linux_scripts/linux_scripts.sh) - A lot of smaller scripts configured as functions for use on majority of the Linux distros.
@@ -54,6 +52,10 @@ Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 [nas_server_configure.sh](linux_scripts/nas_server_configure.sh) - Bash script to automate the configuration of my nas.
 
 [nas_server_scripts.sh](linux_scripts/nas_server_scripts.sh) - A lot of smaller scripts configured as functions for use on a nas.
+
+[omada_controller_configure.sh](linux_scripts/omada_controller_configure.sh) - A bash script to configure TP Link Omada Controller.
+
+[omada_controller_scripts.sh](linux_scripts/omada_controller_scripts.sh) - A lot of smaller scripts configured as functions for use with the Omada Controller.
 
 [openwrt_configure.sh](linux_scripts/openwrt_configure.sh) - Bash script to automate the configuration of my router.
 
