@@ -53,15 +53,23 @@ Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 
 [nas_server_configure.sh](linux_scripts/nas_server_configure.sh) - Bash script to automate the configuration of my nas.
 
+[nas_server_scripts.sh](linux_scripts/nas_server_scripts.sh) - A lot of smaller scripts configured as functions for use on a nas.
+
 [openwrt_configure.sh](linux_scripts/openwrt_configure.sh) - Bash script to automate the configuration of my router.
 
 [openwrt_scripts.sh](linux_scripts/openwrt_scripts.sh) - A lot of smaller scripts configured as functions for use on OpenWrt.
 
 [pihole_server_configure.sh](linux_scripts/pihole_server_configure.sh) - Bash script to automate the configuration of my pihole server.
 
+[pihole_server_scripts.sh](linux_scripts/pihole_server_scripts.sh) - A lot of smaller scripts configured as functions for use on a Pihole server.
+
 [proxmox_configure.sh](linux_scripts/proxmox_configure.sh) - Bash script to automate the configuration of my proxmox setup.
 
+[proxmox_scripts.sh](linux_scripts/proxmox_scripts.sh) - A lot of smaller scripts configured as functions for use on a Proxmox server.
+
 [vpn_server_configure.sh](linux_scripts/vpn_server_configure.sh) - Bash script to automate the configuration of my vpn server.
+
+[vpn_server_scripts.sh](linux_scripts/vpn_server_scripts.sh) - A lot of smaller scripts configured as functions for use on a VPN server.
 
 ### Small Scripts:
 
@@ -77,9 +85,7 @@ Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 
 [email_on_vpn_connections.sh](linux_scripts/email_on_vpn_connections.sh) - A bash script that checks the openvpn log file for a certain keyword so I know if a vpn connection was established on my server.
 
-[network_reconnect_buster.sh](linux_scripts/network_reconnect_buster.sh) - A bash script that restarts a network interface if it can't ping the gateway.  Utilizes iplink command.
-
-[network_reconnect.sh](linux_scripts/network_reconnect.sh) - A bash script that restarts a network interface if it can't ping the gateway.  Utilizes ifdown and ifup commands.
+[network_reconnect.sh](linux_scripts/network_reconnect.sh) - A bash script that restarts a network interface if it can't ping the gateway.
 
 [rsync_backups.sh](linux_scripts/rsync_backups.sh) - Bash script to backup files with rsync.
 
