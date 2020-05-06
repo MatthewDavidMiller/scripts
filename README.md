@@ -15,21 +15,19 @@ Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 
 [windows_server_configuration.ps1](windows_scripts/windows_server_configuration.ps1) - Powershell script to configure Windows Server.
 
+[windows_scripts.ps1](windows_scripts/windows_scripts.ps1) - A lot of smaller scripts configured as functions for use with Windows.
+
 ### Small Scripts:
 
 [7z_batch_compress.ps1](windows_scripts/7z_batch_compress.ps1) - Powershell script to batch compress files and folders to a 7z archive.
 
 [batch_process_hard_links.bat](windows_scripts/batch_process_hard_links.bat) - Simple script to make hard links of all files from where the script is run from.
 
-[get_file_hash.ps1](windows_scripts/get_file_hash.ps1) - Powershell script to get the file hashes of all files in a directory.
-
 [printer_restart.bat](windows_scripts/printer_restart.bat) - Script to restart print spooler and clear temporary files from the spooler.
 
 [robocopy_backup.bat](windows_scripts/robocopy_backup.bat) - Script to copy a directory to another location.
 
 [tar_batch_process_files.bat](windows_scripts/tar_batch_process_files.bat) - Places all folders in a tar archive from where the script is run from.
-
-[uninstall_default_applications.ps1](windows_scripts/uninstall_default_applications.ps1) - Simple powershell script to remove some of the default apps installed in Windows 10.
 
 [view_hard_links.bat](windows_scripts/view_hard_links.bat) - Simple script to see all the hard links of files from where the script is run from.
 
