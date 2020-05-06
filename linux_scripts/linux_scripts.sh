@@ -814,3 +814,126 @@ function configure_serial() {
 function configure_ostimer() {
     grep -q ".*timeout" '/boot/loader/loader.conf' && sed -i "s,.*timeout.*,timeout 60," '/boot/loader/loader.conf' || printf '%s\n' 'timeout 60' >>'/boot/loader/loader.conf'
 }
+
+function get_username() {
+    user_name=$(logname)
+}
+
+function configure_network() {
+    # Set server ip
+    read -r -p "Enter server ip address. Example '10.1.10.5': " ip_address
+    # Set network
+    read -r -p "Enter network ip address. Example '10.1.10.0': " network_address
+    # Set subnet mask
+    read -r -p "Enter netmask. Example '255.255.255.0': " subnet_mask
+    # Set gateway
+    read -r -p "Enter gateway ip. Example '10.1.10.1': " gateway_address
+    # Set dns server
+    read -r -p "Enter dns server ip. Example '1.1.1.1': " dns_address
+
+    # Get the interface name
+    interface="$(ip route get 8.8.8.8 | sed -nr 's/.*dev ([^\ ]+).*/\1/p')"
+    echo "Interface name is ${interface}"
+
+    # Configure network
+    rm -f '/etc/network/interfaces'
+    cat <<EOF >'/etc/network/interfaces'
+auto lo
+iface lo inet loopback
+auto ${interface}
+iface ${interface} inet static
+    address ${ip_address}
+    network ${network_address}
+    netmask ${subnet_mask}
+    gateway ${gateway_address}
+    dns-nameservers ${dns_address}
+
+EOF
+
+    # Restart network interface
+    ifdown "${interface}" && ifup "${interface}"
+}
+
+function fix_apt_packages() {
+    dpkg --configure -a
+}
+
+function configure_ufw_base() {
+    # Set default inbound to deny
+    ufw default deny incoming
+
+    # Set default outbound to allow
+    ufw default allow outgoing
+}
+
+function enable_ufw() {
+    systemctl enable ufw.service
+    ufw enable
+}
+
+function configure_auto_updates_stable() {
+    rm -f '/etc/apt/apt.conf.d/50unattended-upgrades'
+
+    cat <<\EOF >'/etc/apt/apt.conf.d/50unattended-upgrades'
+Unattended-Upgrade::Origins-Pattern {
+        "origin=Debian,n=buster,l=Debian";
+        "origin=Debian,n=buster,l=Debian-Security";
+        "origin=Debian,n=buster-updates";
+};
+
+Unattended-Upgrade::Package-Blacklist {
+
+};
+
+// Automatically reboot *WITHOUT CONFIRMATION* if
+//  the file /var/run/reboot-required is found after the upgrade
+Unattended-Upgrade::Automatic-Reboot "true";
+
+// If automatic reboot is enabled and needed, reboot at the specific
+// time instead of immediately
+//  Default: "now"
+Unattended-Upgrade::Automatic-Reboot-Time "04:00";
+
+EOF
+}
+
+function configure_auto_updates_old_stable() {
+    rm -f '/etc/apt/apt.conf.d/50unattended-upgrades'
+
+    cat <<\EOF >'/etc/apt/apt.conf.d/50unattended-upgrades'
+Unattended-Upgrade::Origins-Pattern {
+        "origin=Debian,n=stretch,l=Debian";
+        "origin=Debian,n=stretch,l=Debian-Security";
+        "origin=Debian,n=stretch-updates";
+};
+
+Unattended-Upgrade::Package-Blacklist {
+
+};
+
+// Automatically reboot *WITHOUT CONFIRMATION* if
+//  the file /var/run/reboot-required is found after the upgrade
+Unattended-Upgrade::Automatic-Reboot "true";
+
+// If automatic reboot is enabled and needed, reboot at the specific
+// time instead of immediately
+//  Default: "now"
+Unattended-Upgrade::Automatic-Reboot-Time "04:00";
+
+EOF
+}
+
+function create_users() {
+    read -r -p "Add a user? [y/N] " create_users
+    while [[ "${create_users}" =~ ^([yY][eE][sS]|[yY])+$ ]]; do
+        read -r -p "Set username. " new_user_name
+        # Add a user
+        useradd -m "${new_user_name}"
+        echo "Set the password for ${new_user_name}"
+        passwd "${new_user_name}"
+        read -r -p "Do you want to add another user? [y/N] " continue_create_users
+        if [[ "${continue_create_users}" =~ ^([nN][oO]|[nN])+$ ]]; then
+            break
+        fi
+    done
+}
