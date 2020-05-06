@@ -81,7 +81,7 @@ Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 
 [email_ip_address.py](linux_scripts/email_ip_address.py) - A simple python script to send an email with the ip address of the device that ran the script.
 
-[email_on_vpn_connections.py](linux_scripts/email_on_vpn_connections.py) - A python script that it paired with my bash script to send an email when there is a connection on my openvpn server.
+[email_on_vpn_connections.py](linux_scripts/email_on_vpn_connections.py) - A python script that is paired with my bash script to send an email when there is a connection on my openvpn server.
 
 [email_on_vpn_connections.sh](linux_scripts/email_on_vpn_connections.sh) - A bash script that checks the openvpn log file for a certain keyword so I know if a vpn connection was established on my server.
 
