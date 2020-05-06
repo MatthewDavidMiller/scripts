@@ -55,6 +55,8 @@ Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 
 [openwrt_configure.sh](linux_scripts/openwrt_configure.sh) - Bash script to automate the configuration of my router.
 
+[openwrt_scripts.sh](linux_scripts/openwrt_scripts.sh) - A lot of smaller scripts configured as functions for use on OpenWrt.
+
 [pihole_server_configure.sh](linux_scripts/pihole_server_configure.sh) - Bash script to automate the configuration of my pihole server.
 
 [proxmox_configure.sh](linux_scripts/proxmox_configure.sh) - Bash script to automate the configuration of my proxmox setup.
@@ -79,14 +81,6 @@ Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 
 [network_reconnect.sh](linux_scripts/network_reconnect.sh) - A bash script that restarts a network interface if it can't ping the gateway.  Utilizes ifdown and ifup commands.
 
-[openwrt_create_user.sh](linux_scripts/openwrt_create_user.sh) - Simple script to create an user in OpenWrt.
-
-[openwrt_install_packages.sh](linux_scripts/openwrt_install_packages.sh) - Simple script to install some packages in OpenWrt.
-
-[openwrt_restrict_luci_access.sh](linux_scripts/openwrt_restrict_luci_access.sh) - Simple script to limit access to luci gui as well as redirect http to https.
-
 [rsync_backups.sh](linux_scripts/rsync_backups.sh) - Bash script to backup files with rsync.
-
-[update_openwrt.sh](linux_scripts/update_openwrt.sh) - A simple script to update packages in OpenWrt.
 
 [updates.py](linux_scripts/updates.py) - Python script to update packages with the apt-get package manager.
