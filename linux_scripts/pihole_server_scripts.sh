@@ -8,7 +8,7 @@
 function install_pihole_packages() {
     apt-get update
     apt-get upgrade -y
-    apt-get install -y wget vim git ufw ntp ssh openssh-server unbound unattended-upgrades
+    apt-get install -y wget vim git ufw ntp ssh openssh-server unbound unattended-upgrades sqlite3
 }
 
 function configure_pihole_ufw_rules() {
@@ -139,32 +139,21 @@ function configure_pihole() {
     cd || exit
 
     # Setup whitelisted sites
-    rm -f '/etc/pihole/whitelist.txt'
-    cat <<\EOF >'/etc/pihole/whitelist.txt'
-
-EOF
+    # Use command pihole -w 'example.com'
 
     # Configure blocklists
-    rm -f '/etc/pihole/adlists.list'
-    cat <<\EOF >'/etc/pihole/adlists.list'
-https://mirror1.malwaredomains.com/files/justdomains
-
+    # Possible values: id, address, enabled, date_added, date_modified, comment
+    sqlite3 /etc/pihole/gravity.db <<EOF
+INSERT INTO adlist (id, address, enabled) VALUES (1,'https://mirror1.malwaredomains.com/files/justdomains',1);
 EOF
 
     # Configure blacklist
-    rm -f '/etc/pihole/blacklist.txt'
-    cat <<\EOF >'/etc/pihole/blacklist.txt'
-
-EOF
+    # Use command pihole -b 'example.com'
 
     # Configure regex
-    rm -f '/etc/pihole/regex.list'
-    cat <<\EOF >'/etc/pihole/regex.list'
-^.+\.(ru|cn|ro|ml|ga|gq|cf|tk|pw|ua|ug|ve|)$
-porn
-sex
-
-EOF
+    pihole -b --regex '^.+\.(ru|cn|ro|ml|ga|gq|cf|tk|pw|ua|ug|ve|)$'
+    pihole -b --regex 'porn'
+    pihole -b --regex 'sex'
 
     # Configure pihole settings
     grep -q 'DNSSEC=' '/etc/pihole/setupVars.conf' && sed -i "s/DNSSEC=.*/DNSSEC=true/g" '/etc/pihole/setupVars.conf' || printf '%s\n' 'DNSSEC=true' >>'/etc/pihole/setupVars.conf'
