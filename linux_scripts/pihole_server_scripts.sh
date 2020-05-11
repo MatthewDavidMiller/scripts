@@ -47,9 +47,19 @@ function configure_pihole_scripts() {
     mv 'backup_configs.sh' '/usr/local/bin/backup_configs.sh'
     chmod +x '/usr/local/bin/backup_configs.sh'
 
+    # Script to update root.hints file
+    cat <<EOF >'/usr/local/bin/update_root_hints.sh'
+#!/bin/bash
+wget -O root.hints 'https://www.internic.net/domain/named.root'
+mv -f root.hints /var/lib/unbound/
+
+EOF
+    chmod +x '/usr/local/bin/update_root_hints.sh'
+
     # Configure cron jobs
     cat <<EOF >jobs.cron
 * 0 * * 1 bash /usr/local/bin/backup_configs.sh &
+* 0 * * 1 bash /usr/local/bin/update_root_hints.sh &
 
 EOF
     crontab jobs.cron
@@ -75,7 +85,7 @@ function configure_pihole_ssh_key() {
 }
 
 function configure_unbound() {
-    wget -O root.hints https://www.internic.net/domain/named.root
+    wget -O root.hints 'https://www.internic.net/domain/named.root'
     mv root.hints /var/lib/unbound/
     systemctl enable unbound
     systemctl start unbound
