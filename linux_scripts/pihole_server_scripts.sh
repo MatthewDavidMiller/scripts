@@ -145,7 +145,8 @@ function configure_pihole() {
     # Possible values: id, address, enabled, date_added, date_modified, comment
     sqlite3 /etc/pihole/gravity.db <<EOF
 DELETE FROM adlist;
-INSERT INTO adlist (id, address, enabled) VALUES (1,'https://mirror1.malwaredomains.com/files/justdomains',1);
+INSERT INTO adlist (id, address, enabled, comment) VALUES (1,'https://mirror1.malwaredomains.com/files/justdomains',1,'A malware blocklist.');
+INSERT INTO adlist (id, address, enabled, comment) VALUES (2,'https://raw.githubusercontent.com/chadmayfield/my-pihole-blocklists/master/lists/pi_blocklist_porn_all.list',1,'A porn blocklist.');
 EOF
 
     # Configure blacklist
