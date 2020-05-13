@@ -924,16 +924,210 @@ EOF
 }
 
 function create_users() {
+    # Local variables
+    local create_users
+    local user_name
+    local continue_create_users
+
     read -r -p "Add a user? [y/N] " create_users
     while [[ "${create_users}" =~ ^([yY][eE][sS]|[yY])+$ ]]; do
-        read -r -p "Set username. " new_user_name
+        read -r -p "Set username. " user_name
         # Add a user
-        useradd -m "${new_user_name}"
-        echo "Set the password for ${new_user_name}"
-        passwd "${new_user_name}"
+        useradd -m "${user_name}"
+        echo "Set the password for ${user_name}"
+        passwd "${user_name}"
         read -r -p "Do you want to add another user? [y/N] " continue_create_users
         if [[ "${continue_create_users}" =~ ^([nN][oO]|[nN])+$ ]]; then
             break
         fi
     done
+}
+
+function list_partitiions() {
+    lsblk -f
+}
+
+function check_for_internet_access() {
+    if false ping -c2 "google.com"; then
+        echo 'No internet'
+        exit 1
+    fi
+}
+
+function start_dhcpcd() {
+    systemctl start "dhcpcd.service"
+    sleep 12
+}
+
+function enable_ntp_timedatectl() {
+    timedatectl set-ntp true
+}
+
+function delete_all_partitions_on_a_disk() {
+    # Parameters
+    local disk=${1}
+
+    local response
+    read -r -p "Are you sure you want to delete everything on ${disk}? [y/N] " response
+    if [[ "${response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+        # Deletes all partitions on disk
+        sgdisk -Z "${disk}"
+        sgdisk -og "${disk}"
+    fi
+}
+
+function create_luks_partition() {
+    # Parameters
+    local disk_password=${1}
+    local partition=${2}
+
+    printf '%s\n' "${disk_password}" >'/tmp/disk_password'
+    cryptsetup -q luksFormat "${partition}" <'/tmp/disk_password'
+}
+
+function create_basic_lvm() {
+    # Parameters
+    local partition=${1}
+    local disk_password=${2}
+    local lvm_name=${3}
+    local root_partition_size=${4}
+    local home_partition_size=${5}
+
+    cryptsetup open "${partition}" cryptlvm <"${disk_password}"
+    pvcreate '/dev/mapper/cryptlvm'
+    vgcreate "${lvm_name}" '/dev/mapper/cryptlvm'
+    lvcreate -L "${root_partition_size}" "${lvm_name}" -n root
+    lvcreate -l "${home_partition_size}" "${lvm_name}" -n home
+    rm -f "${disk_password}"
+}
+
+function create_basic_filesystems() {
+    # Parameters
+    local lvm_name=${1}
+    local duel_boot=${2}
+    local partition=${3}
+
+    mkfs.ext4 "/dev/${lvm_name}/root"
+    mkfs.ext4 "/dev/${lvm_name}/home"
+    if [[ ! "${duel_boot}" =~ ^([d][b])+$ ]]; then
+        mkfs.fat -F32 "${partition}"
+    fi
+}
+
+function mount_basic_filesystems() {
+    # Parameters
+    local lvm_name=${1}
+    local partition=${2}
+
+    mount "/dev/${lvm_name}/root" /mnt
+    mkdir '/mnt/home'
+    mount "/dev/${lvm_name}/home" '/mnt/home'
+    mkdir '/mnt/boot'
+    mount "${partition}" '/mnt/boot'
+}
+
+function get_lvm_uuids() {
+    boot_uuid=uuid="$(blkid -o value -s UUID "${partition1}")"
+    luks_partition_uuid="$(blkid -o value -s UUID "${partition2}")"
+    root_uuid="$(blkid -o value -s UUID /dev/Archlvm/root)"
+    home_uuid="$(blkid -o value -s UUID /dev/Archlvm/home)"
+}
+
+function create_basic_lvm_fstab() {
+    rm -f '/etc/fstab'
+    {
+        printf '%s\n' "UUID=${boot_uuid} /boot/EFI vfat defaults 0 0"
+        printf '%s\n' '/swapfile none swap defaults 0 0'
+        printf '%s\n' "UUID=${root_uuid} / ext4 defaults 0 0"
+        printf '%s\n' "UUID=${home_uuid} / ext4 defaults 0 0"
+    } >>'/etc/fstab'
+}
+
+function create_swap_file() {
+    # Create swapfile
+    dd if=/dev/zero of=/swapfile bs=1M count=2048 status=progress
+    # Set file permissions
+    chmod 600 /swapfile
+    # Format file to swap
+    mkswap /swapfile
+    # Activate the swap file
+    swapon /swapfile
+}
+
+function set_timezone() {
+    ln -sf '/usr/share/zoneinfo/America/New_York' '/etc/localtime'
+}
+
+function set_hardware_clock() {
+    hwclock --systohc
+}
+
+function enable_ntpd_client() {
+    systemctl enable ntpd.service
+}
+
+function arch_setup_locales() {
+    sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
+    # Generate locale
+    locale-gen
+}
+
+function set_language() {
+    rm -f '/etc/locale.conf'
+    {
+        printf '%s\n' '# language config'
+        printf '%s\n' '# file location is /etc/locale.conf'
+        printf '%s\n' ''
+        printf '%s\n' 'LANG=en_US.UTF-8'
+        printf '%s\n' ''
+    } >>'/etc/locale.conf'
+}
+
+function set_hostname() {
+    # Parameters
+    local device_hostname=${1}
+
+    rm -f '/etc/hostname'
+    {
+        printf '%s\n' '# hostname file'
+        printf '%s\n' '# File location is /etc/hostname'
+        printf '%s\n' "${device_hostname}"
+        printf '%s\n' ''
+    } >>'/etc/hostname'
+}
+
+function setup_hosts_file() {
+    # Parameters
+    local device_hostname=${1}
+
+    rm -f '/etc/hosts'
+    {
+        printf '%s\n' '# host file'
+        printf '%s\n' '# file location is /etc/hosts'
+        printf '%s\n' ''
+        printf '%s\n' '127.0.0.1 localhost'
+        printf '%s\n' '::1 localhost'
+        printf '%s\n' "127.0.1.1 ${device_hostname}.localdomain ${device_hostname}"
+        printf '%s\n' ''
+    } >>'/etc/hosts'
+}
+
+function set_root_password() {
+    echo 'Set root password'
+    passwd root
+}
+
+function set_systemd_boot_install_path() {
+    bootctl --path=/boot install
+}
+
+function add_user_to_sudo() {
+    # Parameters
+    local user_name=${1}
+
+    printf '%s\n' "${user_name} ALL=(ALL) ALL" >>'/etc/sudoers'
+}
+
+function enable_network_manager() {
+    systemctl enable NetworkManager.service
 }

@@ -39,6 +39,8 @@ Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 
 [arch_linux_install.sh](linux_scripts/arch_linux_install.sh) - Bash script to automate my install of Arch Linux.
 
+[arch_linux_install_part_2.sh](linux_scripts/arch_linux_install_part_2.sh) - Bash script to automate my install of Arch Linux. Second script.
+
 [arch_linux_configure.sh](linux_scripts/arch_linux_configure.sh) - Bash script to automate my configuration of Arch Linux.
 
 [arch_linux_scripts.sh](linux_scripts/arch_linux_scripts.sh) - A lot of smaller scripts configured as functions for use on Arch Linux.
