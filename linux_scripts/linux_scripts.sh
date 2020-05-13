@@ -341,7 +341,6 @@ PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
 
 termite &
 nm-applet &
-blueman-applet &
 pasystray &
 picom &
 xsetroot -solid "#000000"
@@ -634,7 +633,6 @@ PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
 
 termite &
 nm-applet &
-blueman-applet &
 pasystray &
 picom &
 xsetroot -solid "#000000"
