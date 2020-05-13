@@ -12,11 +12,9 @@ lsblk -f
 # Specify disk and partition numbers to use for install
 read -r -p "Specify disk to use for install. Example '/dev/sda': " disk
 read -r -p "Specify partition number for /boot/EFI. Example '1': " partition_number1
-read -r -p "Specify partition number for swap. Example '2': " partition_number2
-read -r -p "Specify partition number for root /. Example '3': " partition_number3
+read -r -p "Specify partition number for root /. Example '2': " partition_number2
 partition1="${disk}${partition_number1}"
 partition2="${disk}${partition_number2}"
-partition3="${disk}${partition_number3}"
 # Specify whether to delete all partitions
 read -r -p "Do you want to delete all parititions on ${disk}? [y/N] " response1
 # Specify if cpu is intel
@@ -59,15 +57,13 @@ else
     ucode='amd64-microcode'
 fi
 
-# Creates three partitions.  First one is a 512 MB EFI partition, second is a 2GB Linux filesystem partition partition, and third is a 10 GB Linux filesystem partition.
+# Creates two partitions.  First one is a 512 MB EFI partition, and second is a 14 GB Linux filesystem partition.
 sgdisk -n 0:0:+512MiB -c "${partition_number1}":"EFI System Partition" -t "${partition_number1}":ef00 "${disk}"
-sgdisk -n 0:0:+2GiB -c "${partition_number2}":"Linux Filesystem" -t "${partition_number2}":8300 "${disk}"
-sgdisk -n 0:0:+10GiB -c "${partition_number3}":"Linux Filesystem" -t "${partition_number3}":8300 "${disk}"
+sgdisk -n 0:0:+14GiB -c "${partition_number2}":"Linux Filesystem" -t "${partition_number2}":8300 "${disk}"
 
 # Setup and mount filesystems
-mkfs.ext4 "${partition3}"
-mount "${partition3}" /mnt
-mkswap "${partition2}"
+mkfs.ext4 "${partition2}"
+mount "${partition2}" /mnt
 mkfs.fat -F32 "${partition1}"
 
 # Install base packages
@@ -84,7 +80,6 @@ mount sysfs /mnt/sys -t sysfs
 # Get the uuids
 uuid="$(blkid -o value -s UUID "${partition1}")"
 uuid2="$(blkid -o value -s UUID "${partition2}")"
-uuid3="$(blkid -o value -s UUID "${partition3}")"
 
 # Get the interface name
 interface="$(ip route get 8.8.8.8 | sed -nr 's/.*dev ([^\ ]+).*/\1/p')"
@@ -106,9 +101,19 @@ cd /
 # Setup fstab
 {
     printf '%s\n' "UUID=${uuid} /boot/EFI vfat defaults 0 0"
-    printf '%s\n' "UUID=${uuid2} none swap sw 0 0"
-    printf '%s\n' "UUID=${uuid3} / ext4 defaults 0 0"
+    printf '%s\n' '/swapfile none swap defaults 0 0'
+    printf '%s\n' "UUID=${uuid2} / ext4 defaults 0 0"
 } >> '/etc/fstab'
+
+# Configure swap
+# Create swapfile
+dd if=/dev/zero of=/swapfile bs=1M count=2048 status=progress
+# Set file permissions
+chmod 600 /swapfile
+# Format file to swap
+mkswap /swapfile
+# Activate the swap file
+swapon /swapfile
 
 # Make directories
 mkdir '/boot'

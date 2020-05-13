@@ -89,7 +89,6 @@ cryptsetup -q luksFormat "${partition2}" <'/tmp/disk_password'
 cryptsetup open "${partition2}" cryptlvm <'/tmp/disk_password'
 pvcreate '/dev/mapper/cryptlvm'
 vgcreate Archlvm '/dev/mapper/cryptlvm'
-lvcreate -L 2G Archlvm -n swap
 lvcreate -L 32G Archlvm -n root
 lvcreate -l 100%FREE Archlvm -n home
 rm -f '/tmp/disk_password'
@@ -99,22 +98,18 @@ if [[ "${windows_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     # Setup and mount filesystems
     mkfs.ext4 '/dev/Archlvm/root'
     mkfs.ext4 '/dev/Archlvm/home'
-    mkswap '/dev/Archlvm/swap'
     mount '/dev/Archlvm/root' /mnt
     mkdir '/mnt/home'
     mount '/dev/Archlvm/home' '/mnt/home'
-    swapon '/dev/Archlvm/swap'
     mkdir '/mnt/boot'
     mount "${partition1}" '/mnt/boot'
 else
     # Setup and mount filesystems
     mkfs.ext4 '/dev/Archlvm/root'
     mkfs.ext4 '/dev/Archlvm/home'
-    mkswap '/dev/Archlvm/swap'
     mount '/dev/Archlvm/root' /mnt
     mkdir '/mnt/home'
     mount '/dev/Archlvm/home' '/mnt/home'
-    swapon '/dev/Archlvm/swap'
     mkfs.fat -F32 "${partition1}"
     mkdir '/mnt/boot'
     mount "${partition1}" '/mnt/boot'
@@ -160,6 +155,7 @@ pacstrap /mnt --noconfirm ${ucode} efibootmgr pacman-contrib sudo networkmanager
 
 # Setup fstab
 genfstab -U /mnt >>'/mnt/etc/fstab'
+printf '%s\n' '/swapfile none swap defaults 0 0' >>'/etc/fstab'
 
 # Setup part 2 script
 touch '/mnt/arch_linux_install_part_2.sh'
@@ -171,6 +167,16 @@ uuid2="$(blkid -o value -s UUID /dev/Archlvm/root)"
 
 cat <<EOF >/mnt/arch_linux_install_part_2.sh
 #!/bin/bash
+
+# Configure swap
+# Create swapfile
+dd if=/dev/zero of=/swapfile bs=1M count=2048 status=progress
+# Set file permissions
+chmod 600 /swapfile
+# Format file to swap
+mkswap /swapfile
+# Activate the swap file
+swapon /swapfile
 
 # Set the timezone
 ln -sf '/usr/share/zoneinfo/America/New_York' '/etc/localtime'
