@@ -37,6 +37,3 @@ set_systemd_boot_install_path
 create_users
 add_user_to_sudo "${user_name}"
 enable_network_manager
-
-# Exit chroot
-exit
