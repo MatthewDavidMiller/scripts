@@ -351,8 +351,8 @@ function arch_install_base_packages_pacstrap() {
     pacstrap /mnt --noconfirm base base-devel linux linux-lts linux-firmware systemd e2fsprogs ntfs-3g exfat-utils vi man-db man-pages texinfo lvm2 xf86-video-intel xf86-video-amdgpu xf86-video-nouveau bash bash-completion ntp util-linux iwd || echo 'Script error, exiting.' && exit
 }
 
-function arch_install_extra_packages_pacstrap() {
-    pacstrap /mnt --noconfirm ${ucode} efibootmgr pacman-contrib sudo networkmanager nm-connection-editor networkmanager-openvpn ufw wget gdm xorg xorg-xinit xorg-drivers xorg-server xorg-apps bluez bluez-utils blueman pulseaudio pulseaudio-bluetooth pavucontrol libinput xf86-input-libinput i3-wm i3blocks i3status i3lock dmenu firefox gnome-keyring seahorse termite htop dolphin cron kdenetwork-filesharing || echo 'Script error, exiting.' && exit
+function arch_install_extra_packages() {
+    pacman -S --noconfirm --needed ${ucode} efibootmgr pacman-contrib sudo networkmanager nm-connection-editor networkmanager-openvpn ufw wget gdm xorg xorg-xinit xorg-drivers xorg-server xorg-apps bluez bluez-utils blueman pulseaudio pulseaudio-bluetooth pavucontrol libinput xf86-input-libinput i3-wm i3blocks i3status i3lock dmenu firefox gnome-keyring seahorse termite htop dolphin cron kdenetwork-filesharing || echo 'Script error, exiting.' && exit
 }
 
 function arch_install_move_to_script_part_2() {
