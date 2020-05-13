@@ -356,8 +356,8 @@ function arch_install_extra_packages_pacstrap() {
 }
 
 function arch_install_move_to_script_part_2() {
-    mv linux_scripts.sh '/mnt/linux_scripts.sh'
-    mv arch_linux_scripts.sh '/mnt/arch_linux_scripts.sh'
+    cp linux_scripts.sh '/mnt/linux_scripts.sh'
+    cp arch_linux_scripts.sh '/mnt/arch_linux_scripts.sh'
     wget -O '/mnt/arch_linux_install_part_2.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/arch_linux_install_part_2.sh'
     chmod +x '/mnt/arch_linux_install_part_2.sh'
     arch-chroot /mnt "./arch_linux_install_part_2.sh"

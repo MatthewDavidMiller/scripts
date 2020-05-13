@@ -956,7 +956,6 @@ function check_for_internet_access() {
 
 function start_dhcpcd() {
     systemctl start "dhcpcd.service"
-    sleep 12
 }
 
 function enable_ntp_timedatectl() {
