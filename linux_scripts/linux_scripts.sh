@@ -943,7 +943,7 @@ function create_users() {
     done
 }
 
-function list_partitiions() {
+function list_partitions() {
     lsblk -f
 }
 
