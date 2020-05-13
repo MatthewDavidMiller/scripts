@@ -6,7 +6,7 @@
 # Install script for Arch Linux. Needs linux_scripts.sh and arch_linux_scripts.sh files.
 
 # Log errors
-exec 2>arch_linux_install.sh_errors.txt
+# exec 2>arch_linux_install.sh_errors.txt
 
 # Get needed scripts
 wget -O 'linux_scripts.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/linux_scripts.sh'

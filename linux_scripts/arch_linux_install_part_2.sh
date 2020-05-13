@@ -6,7 +6,7 @@
 # Part 2 of install script for Arch Linux.
 
 # Log errors
-exec 2>arch_linux_install_part_2.sh_errors.txt
+# exec 2>arch_linux_install_part_2.sh_errors.txt
 
 # Source functions
 source linux_scripts.sh
