@@ -50,7 +50,7 @@ fi
 arch_get_ucode_type
 arch_install_configure_partitions
 create_luks_partition "${disk_password}" "${partition2}"
-create_basic_lvm "${partition2}" '/tmp/disk_password' 'Archlvm' '32G' '100%FREE'
+create_basic_lvm "${partition2}" '/tmp/disk_password' 'Archlvm' '8G' '100%FREE'
 
 if [[ "${windows_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     create_basic_filesystems "Archlvm" "db" "${partition1}"
