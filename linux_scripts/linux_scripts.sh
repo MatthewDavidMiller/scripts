@@ -1130,3 +1130,23 @@ function add_user_to_sudo() {
 function enable_network_manager() {
     systemctl enable NetworkManager.service
 }
+
+function configure_xinit() {
+    # Parameters
+    local user_name=${1}
+
+    # Copy default config
+    cp '/etc/X11/xinit/xinitrc' "/home/${user_name}/.xinitrc"
+
+}
+
+function configure_xinit_i3() {
+    # Parameters
+    local user_name=${1}
+
+    grep -q ".*i3" "/home/${user_name}/.xinitrc" && sed -i "s,.*i3.*,exec i3," "/home/${user_name}/.xinitrc" || printf '%s\n' 'exec i3' >>"/home/${user_name}/.xinitrc"
+}
+
+function configure_i3_blueman_applet_autostart() {
+    grep -q ".*blueman-applet" '/usr/local/bin/i3_autostart.sh' && sed -i "s,.*blueman-applet.*,blueman-applet &," '/usr/local/bin/i3_autostart.sh' || printf '%s\n' 'blueman-applet &' >>'/usr/local/bin/i3_autostart.sh'
+}

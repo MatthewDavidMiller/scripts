@@ -37,126 +37,113 @@ function install_arch_packages() {
     read -r -p "Install pylint? [y/N] " pylint_response
     read -r -p "Install light? [y/N] " light_response
     read -r -p "Install rsync? [y/N] " rsync_response
+    read -r -p "Install seahorse? [y/N] " seahorse_response
+    read -r -p "Install blueman? [y/N] " blueman_response
 
-    # Install gnome desktop environment
     if [[ "${gnome_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         pacman -S --noconfirm --needed gnome
     fi
 
-    # Install i3 windows manager
     if [[ "${i3_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         pacman -S --noconfirm --needed i3-wm i3blocks i3lock i3status dmenu
     fi
 
-    # Install blender
     if [[ "${blender_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         pacman -S --noconfirm --needed blender
     fi
 
-    # Install gimp
     if [[ "${gimp_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         pacman -S --noconfirm --needed gimp
     fi
 
-    # Install libreoffice
     if [[ "${libreoffice_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         pacman -S --noconfirm --needed libreoffice-fresh
     fi
 
-    # Install vscode
     if [[ "${vscode_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         pacman -S --noconfirm --needed code
     fi
 
-    # Install git
     if [[ "${git_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         pacman -S --noconfirm --needed git
     fi
 
-    # Install putty
     if [[ "${putty_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         pacman -S --noconfirm --needed putty
     fi
 
-    # Install Nvidia LTS driver
     if [[ "${nvidia_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         pacman -S --noconfirm --needed nvidia-lts
     fi
 
-    # Install dolphin file manager
     if [[ "${dolphin_fm_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         pacman -S --noconfirm --needed dolphin
     fi
 
-    # Install audacity
     if [[ "${audacity_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         pacman -S --noconfirm --needed audacity
     fi
 
-    # Install nmap
     if [[ "${nmap_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         pacman -S --noconfirm --needed nmap
     fi
 
-    # Install wireshark
     if [[ "${wireshark_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         pacman -S --noconfirm --needed wireshark-cli wireshark-qt
     fi
 
-    # Install ntop
     if [[ "${ntop_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         pacman -S --noconfirm --needed ntop
     fi
 
-    # Install jnettop
     if [[ "${jnettop_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         pacman -S --noconfirm --needed jnettop
     fi
 
-    # Install nethogs
     if [[ "${nethogs_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         pacman -S --noconfirm --needed nethogs
     fi
 
-    # Install clamav
     if [[ "${clamav_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         pacman -S --noconfirm --needed clamav clamtk
     fi
 
-    # Install vim
     if [[ "${vim_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         pacman -S --noconfirm --needed vim
     fi
 
-    # Install shellcheck
     if [[ "${shellcheck_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         pacman -S --noconfirm --needed shellcheck
     fi
 
-    # Install tftpd
     if [[ "${tftpd_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         pacman -S --noconfirm --needed tftp-hpa
     fi
 
-    # Install cmake
     if [[ "${cmake_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         pacman -S --noconfirm --needed cmake
     fi
 
-    # Install pylint
     if [[ "${pylint_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         pacman -S --noconfirm --needed python-pylint
     fi
 
-    # Install light
     if [[ "${light_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         pacman -S --noconfirm --needed light
     fi
 
-    # Install rsync
     if [[ "${rsync_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         pacman -S --noconfirm --needed rsync
     fi
+
+    if [[ "${seahorse_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+        pacman -S --noconfirm --needed seahorse
+    fi
+
+    if [[ "${blueman_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+        pacman -S --noconfirm --needed blueman
+    fi
+
 }
 
 function install_aur_packages() {
@@ -352,7 +339,7 @@ function arch_install_base_packages_pacstrap() {
 }
 
 function arch_install_extra_packages() {
-    pacman -S --noconfirm --needed ${ucode} efibootmgr pacman-contrib sudo networkmanager nm-connection-editor networkmanager-openvpn ufw wget gdm xorg xorg-xinit xorg-drivers xorg-server xorg-apps bluez bluez-utils blueman pulseaudio pulseaudio-bluetooth pavucontrol libinput xf86-input-libinput i3-wm i3blocks i3status i3lock dmenu firefox gnome-keyring seahorse termite htop dolphin cron kdenetwork-filesharing || echo 'Error installing packages.'
+    pacman -S --noconfirm --needed ${ucode} efibootmgr pacman-contrib sudo networkmanager nm-connection-editor networkmanager-openvpn ufw wget xorg xorg-xinit xorg-drivers xorg-server xorg-apps bluez bluez-utils pulseaudio pulseaudio-bluetooth pavucontrol libinput xf86-input-libinput firefox gnome-keyring termite htop cron || echo 'Error installing packages.'
 }
 
 function arch_install_move_to_script_part_2() {

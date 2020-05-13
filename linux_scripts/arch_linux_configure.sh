@@ -24,6 +24,7 @@ read -r -p "Run setup_aliases script? [y/N] " setup_aliases_var
 read -r -p "Run setup_fwupd script? [y/N] " configure_fwupd_var
 read -r -p "Run setup_git script? [y/N] " configure_git_var
 read -r -p "Run setup_serial script? [y/N] " setup_serial_var
+read -r -p "Configure blueman? [y/N] " configure_blueman_var
 
 # Source functions
 source linux_scripts.sh
@@ -44,6 +45,8 @@ if [[ "${configure_i3_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     # Install packages
     pacman -S --noconfirm --needed i3-wm i3blocks i3lock i3status perl perl-anyevent-i3 perl-json-xs dmenu network-manager-applet blueman pasystray paprefs picom xorg-xrandr || echo 'Error installing packages.'
     configure_i3
+    configure_xinit
+    configure_xinit_i3
 fi
 
 if [[ "${connect_smb_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
@@ -114,4 +117,8 @@ fi
 
 if [[ "${ostimer}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     configure_ostimer
+fi
+
+if [[ "${configure_blueman_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+    configure_i3_blueman_applet_autostart
 fi
