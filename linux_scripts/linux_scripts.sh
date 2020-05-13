@@ -341,7 +341,6 @@ PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
 
 termite &
 nm-applet &
-pasystray &
 picom &
 xsetroot -solid "#000000"
 
@@ -633,7 +632,6 @@ PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
 
 termite &
 nm-applet &
-pasystray &
 picom &
 xsetroot -solid "#000000"
 
@@ -1142,9 +1140,14 @@ function configure_xinit_i3() {
     # Parameters
     local user_name=${1}
 
+    sed -i '/.*exec xterm.*/d' "/home/${user_name}/.xinitrc"
     grep -q ".*i3" "/home/${user_name}/.xinitrc" && sed -i "s,.*i3.*,exec i3," "/home/${user_name}/.xinitrc" || printf '%s\n' 'exec i3' >>"/home/${user_name}/.xinitrc"
 }
 
 function configure_i3_blueman_applet_autostart() {
     grep -q ".*blueman-applet" '/usr/local/bin/i3_autostart.sh' && sed -i "s,.*blueman-applet.*,blueman-applet &," '/usr/local/bin/i3_autostart.sh' || printf '%s\n' 'blueman-applet &' >>'/usr/local/bin/i3_autostart.sh'
+}
+
+function configure_i3_pasystray_autostart() {
+    grep -q ".*pasystray" '/usr/local/bin/i3_autostart.sh' && sed -i "s,.*pasystray.*,pasystray &," '/usr/local/bin/i3_autostart.sh' || printf '%s\n' 'pasystray &' >>'/usr/local/bin/i3_autostart.sh'
 }

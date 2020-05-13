@@ -25,6 +25,7 @@ read -r -p "Run setup_fwupd script? [y/N] " configure_fwupd_var
 read -r -p "Run setup_git script? [y/N] " configure_git_var
 read -r -p "Run setup_serial script? [y/N] " setup_serial_var
 read -r -p "Configure blueman? [y/N] " configure_blueman_var
+read -r -p "Configure pasystray? [y/N] " configure_pasystray_var
 
 # Source functions
 source linux_scripts.sh
@@ -121,4 +122,8 @@ fi
 
 if [[ "${configure_blueman_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     configure_i3_blueman_applet_autostart
+fi
+
+if [[ "${configure_pasystray_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+    configure_i3_pasystray_autostart
 fi
