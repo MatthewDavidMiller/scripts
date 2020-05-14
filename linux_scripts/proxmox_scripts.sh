@@ -11,16 +11,6 @@ function install_proxmox_packages() {
     apt-get install -y wget vim git ufw ntp ssh apt-transport-https openssh-server unattended-upgrades
 }
 
-function configure_proxmox_ufw_rules() {
-    # Limit max connections to ssh server and allow it only on private networks
-    ufw limit proto tcp from 10.0.0.0/8 to any port 22
-    ufw limit proto tcp from fe80::/10 to any port 22
-
-    # Allow proxmox web interface
-    ufw allow proto tcp from 10.0.0.0/8 to any port 8006
-    ufw allow proto tcp from fe80::/10 to any port 8006
-}
-
 function configure_proxmox_scripts() {
     # Script to archive config files for backup
     wget 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/backup_configs.sh'
@@ -47,24 +37,6 @@ EOF
     rm -f jobs.cron
 }
 
-function configure_proxmox_ssh_key() {
-    # Generate an ecdsa 521 bit key
-    ssh-keygen -f "/home/${user_name}/proxmox_key" -t ecdsa -b 521
-
-    # Authorize the key for use with ssh
-    mkdir "/home/${user_name}/.ssh"
-    chmod 700 "/home/${user_name}/.ssh"
-    touch "/home/${user_name}/.ssh/authorized_keys"
-    chmod 600 "/home/${user_name}/.ssh/authorized_keys"
-    cat "/home/${user_name}/proxmox_key.pub" >>"/home/${user_name}/.ssh/authorized_keys"
-    printf '%s\n' '' >>"/home/${user_name}/.ssh/authorized_keys"
-    chown -R "${user_name}" "/home/${user_name}"
-    python -m SimpleHTTPServer 40080 &
-    server_pid=$!
-    read -r -p "Copy the key from the webserver on port 40080 before continuing: " >>'/dev/null'
-    kill "${server_pid}"
-}
-
 function configure_proxmox_hosts() {
     cat <<EOF >'/etc/hosts'
 ${ip_address} matt-prox.local matt-prox
@@ -87,21 +59,13 @@ function configure_proxmox() {
 }
 
 function configure_proxmox_network() {
-    #Prompts
-    # Set server ip
-    read -r -p "Enter server ip address. Example '10.1.10.3': " ip_address
-    # Set network
-    read -r -p "Enter network ip address. Example '10.1.10.0': " network_address
-    # Set subnet mask
-    read -r -p "Enter netmask. Example '255.255.255.0': " subnet_mask
-    # Set gateway
-    read -r -p "Enter gateway ip. Example '10.1.10.1': " gateway_address
-    # Set dns server
-    read -r -p "Enter dns server ip. Example '10.1.10.5': " dns_address
-
-    # Get the interface name
-    interface="$(ip route get 8.8.8.8 | sed -nr 's/.*dev ([^\ ]+).*/\1/p')"
-    echo "Interface name is ${interface}"
+    # Parameters
+    local ip_address=${1}
+    local network_address=${2}
+    local subnet_mask=${3}
+    local gateway_address=${4}
+    local dns_address=${5}
+    local interface=${6}
 
     # Configure network
     rm -f '/etc/network/interfaces'

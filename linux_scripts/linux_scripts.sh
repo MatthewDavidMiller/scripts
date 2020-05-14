@@ -71,27 +71,21 @@ EOF
 function generate_ssh_key() {
     # Parameters
     local user_name=${1}
-
-    # Local variables
-    local ecdsa_response
-    local rsa_response
-    local dropbear_response
-
-    # Prompts
-    read -r -p "Generate ecdsa key? [y/N] " ecdsa_response
-    read -r -p "Generate rsa key? [y/N] " rsa_response
-    read -r -p "Dropbear used? [y/N] " dropbear_response
+    local ecdsa_response=${2}
+    local rsa_response=${3}
+    local dropbear_response=${4}
+    local key_name=${5}
 
     # Generate ecdsa key
     if [[ "${ecdsa_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         # Generate an ecdsa 521 bit key
-        ssh-keygen -f "/home/$user_name/ssh_key" -t ecdsa -b 521
+        ssh-keygen -f "/home/$user_name/${key_name}" -t ecdsa -b 521
     fi
 
     # Generate rsa key
     if [[ "${rsa_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
         # Generate an rsa 4096 bit key
-        ssh-keygen -f "/home/$user_name/ssh_key" -t rsa -b 4096
+        ssh-keygen -f "/home/$user_name/${key_name}" -t rsa -b 4096
     fi
 
     # Authorize the key for use with ssh
@@ -99,7 +93,7 @@ function generate_ssh_key() {
     chmod 700 "/home/$user_name/.ssh"
     touch "/home/$user_name/.ssh/authorized_keys"
     chmod 600 "/home/$user_name/.ssh/authorized_keys"
-    cat "/home/$user_name/ssh_key.pub" >>"/home/$user_name/.ssh/authorized_keys"
+    cat "/home/$user_name/${key_name}.pub" >>"/home/$user_name/.ssh/authorized_keys"
     printf '%s\n' '' >>"/home/$user_name/.ssh/authorized_keys"
     chown -R "$user_name" "/home/$user_name"
     python -m SimpleHTTPServer 40080 &
@@ -109,7 +103,7 @@ function generate_ssh_key() {
 
     # Dropbear setup
     if [[ "${dropbear_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        cat "/home/$user_name/ssh_key.pub" >>'/etc/dropbear/authorized_keys'
+        cat "/home/$user_name/${key_name}.pub" >>'/etc/dropbear/authorized_keys'
         printf '%s\n' '' >>'/etc/dropbear/authorized_keys'
         chmod 0700 /etc/dropbear
         chmod 0600 /etc/dropbear/authorized_keys
@@ -601,21 +595,19 @@ function get_username() {
     user_name=$(logname)
 }
 
-function configure_network() {
-    # Set server ip
-    read -r -p "Enter server ip address. Example '10.1.10.5': " ip_address
-    # Set network
-    read -r -p "Enter network ip address. Example '10.1.10.0': " network_address
-    # Set subnet mask
-    read -r -p "Enter netmask. Example '255.255.255.0': " subnet_mask
-    # Set gateway
-    read -r -p "Enter gateway ip. Example '10.1.10.1': " gateway_address
-    # Set dns server
-    read -r -p "Enter dns server ip. Example '1.1.1.1': " dns_address
-
-    # Get the interface name
+function get_interface_name() {
     interface="$(ip route get 8.8.8.8 | sed -nr 's/.*dev ([^\ ]+).*/\1/p')"
     echo "Interface name is ${interface}"
+}
+
+function configure_network() {
+    # Parameters
+    local ip_address=${1}
+    local network_address=${2}
+    local subnet_mask=${3}
+    local gateway_address=${4}
+    local dns_address=${5}
+    local interface=${6}
 
     # Configure network
     rm -f '/etc/network/interfaces'
@@ -653,76 +645,38 @@ function enable_ufw() {
     ufw enable
 }
 
-function configure_auto_updates_stable() {
+function apt_configure_auto_updates() {
+    # Parameters
+    local release_name=${1}
+
     rm -f '/etc/apt/apt.conf.d/50unattended-upgrades'
 
-    cat <<\EOF >'/etc/apt/apt.conf.d/50unattended-upgrades'
+    cat <<EOF >'/etc/apt/apt.conf.d/50unattended-upgrades'
 Unattended-Upgrade::Origins-Pattern {
-        "origin=Debian,n=buster,l=Debian";
-        "origin=Debian,n=buster,l=Debian-Security";
-        "origin=Debian,n=buster-updates";
+        "origin=Debian,n=${release_name},l=Debian";
+        "origin=Debian,n=${release_name},l=Debian-Security";
+        "origin=Debian,n=${release_name}-updates";
 };
 
 Unattended-Upgrade::Package-Blacklist {
 
 };
 
-// Automatically reboot *WITHOUT CONFIRMATION* if
-//  the file /var/run/reboot-required is found after the upgrade
 Unattended-Upgrade::Automatic-Reboot "true";
-
-// If automatic reboot is enabled and needed, reboot at the specific
-// time instead of immediately
-//  Default: "now"
 Unattended-Upgrade::Automatic-Reboot-Time "04:00";
 
 EOF
 }
 
-function configure_auto_updates_old_stable() {
-    rm -f '/etc/apt/apt.conf.d/50unattended-upgrades'
+function create_user() {
+    # Parameters
+    local user_name=${1}
 
-    cat <<\EOF >'/etc/apt/apt.conf.d/50unattended-upgrades'
-Unattended-Upgrade::Origins-Pattern {
-        "origin=Debian,n=stretch,l=Debian";
-        "origin=Debian,n=stretch,l=Debian-Security";
-        "origin=Debian,n=stretch-updates";
-};
-
-Unattended-Upgrade::Package-Blacklist {
-
-};
-
-// Automatically reboot *WITHOUT CONFIRMATION* if
-//  the file /var/run/reboot-required is found after the upgrade
-Unattended-Upgrade::Automatic-Reboot "true";
-
-// If automatic reboot is enabled and needed, reboot at the specific
-// time instead of immediately
-//  Default: "now"
-Unattended-Upgrade::Automatic-Reboot-Time "04:00";
-
-EOF
-}
-
-function create_users() {
-    # Local variables
-    local create_users
-    local user_name
-    local continue_create_users
-
-    read -r -p "Add a user? [y/N] " create_users
-    while [[ "${create_users}" =~ ^([yY][eE][sS]|[yY])+$ ]]; do
-        read -r -p "Set username. " user_name
-        # Add a user
-        useradd -m "${user_name}"
-        echo "Set the password for ${user_name}"
-        passwd "${user_name}"
-        read -r -p "Do you want to add another user? [y/N] " continue_create_users
-        if [[ "${continue_create_users}" =~ ^([nN][oO]|[nN])+$ ]]; then
-            break
-        fi
-    done
+    useradd -m "${user_name}"
+    echo "Set the password for ${user_name}"
+    passwd "${user_name}"
+    mkdir -p "/home/${user_name}"
+    chown "${user_name}" "/home/${user_name}"
 }
 
 function list_partitions() {
@@ -1126,4 +1080,100 @@ function cli_autologin() {
 ExecStart=
 ExecStart=-/usr/bin/agetty --autologin ${user_name} --noclear %I \$TERM
 EOF
+}
+
+function set_shell_bash() {
+    # Parameters
+    local user_name=${1}
+
+    chsh -s /bin/bash
+    chsh -s /bin/bash "${user_name}"
+}
+
+function ufw_configure_rules() {
+    # Parameters
+    local limit_ssh=${1}
+    local allow_dns=${2}
+    local allow_unbound=${3}
+    local allow_http=${4}
+    local allow_https=${5}
+    local allow_port_4711_tcp=${6}
+    local allow_smb=${7}
+    local allow_netbios=${8}
+    local limit_port_64640=${9}
+    local allow_port_8006=${10}
+    local allow_omada_controller=${11}
+
+    if [[ "${limit_ssh}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+        ufw limit proto tcp from 10.0.0.0/8 to any port 22
+        ufw limit proto tcp from fe80::/10 to any port 22
+    fi
+
+    if [[ "${allow_dns}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+        ufw allow proto tcp from 10.0.0.0/8 to any port 53
+        ufw allow proto tcp from fe80::/10 to any port 53
+        ufw allow proto udp from 10.0.0.0/8 to any port 53
+        ufw allow proto udp from fe80::/10 to any port 53
+    fi
+
+    if [[ "${allow_unbound}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+        ufw allow proto udp from 127.0.0.1 to any port 5353
+        ufw allow proto udp from ::1 to any port 5353
+        ufw allow proto tcp from 127.0.0.1 to any port 5353
+        ufw allow proto tcp from ::1 to any port 5353
+    fi
+
+    if [[ "${allow_http}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+        ufw allow proto tcp from 10.0.0.0/8 to any port 80
+        ufw allow proto tcp from fe80::/10 to any port 80
+    fi
+
+    if [[ "${allow_https}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+        ufw allow proto tcp from 10.0.0.0/8 to any port 443
+        ufw allow proto tcp from fe80::/10 to any port 443
+    fi
+
+    if [[ "${allow_port_4711_tcp}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+        ufw allow proto tcp from 10.0.0.0/8 to any port 4711
+        ufw allow proto tcp from fe80::/10 to any port 4711
+    fi
+
+    if [[ "${allow_smb}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+        ufw allow proto tcp from 10.0.0.0/8 to any port 445
+        ufw allow proto tcp from fe80::/10 to any port 445
+    fi
+
+    if [[ "${allow_netbios}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+        ufw allow proto tcp from 10.0.0.0/8 to any port 137
+        ufw allow proto tcp from fe80::/10 to any port 137
+        ufw allow proto tcp from 10.0.0.0/8 to any port 138
+        ufw allow proto tcp from fe80::/10 to any port 138
+        ufw allow proto tcp from 10.0.0.0/8 to any port 139
+        ufw allow proto tcp from fe80::/10 to any port 139
+    fi
+
+    if [[ "${limit_port_64640}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+        ufw limit proto udp from any to any port 64640
+    fi
+
+    if [[ "${allow_port_8006}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+        ufw allow proto tcp from 10.0.0.0/8 to any port 8006
+        ufw allow proto tcp from fe80::/10 to any port 8006
+    fi
+
+    if [[ "${allow_omada_controller}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+        ufw allow proto tcp from 10.0.0.0/8 to any port 8043
+        ufw allow proto tcp from fe80::/10 to any port 8043
+        ufw allow proto tcp from 10.0.0.0/8 to any port 8088
+        ufw allow proto tcp from fe80::/10 to any port 8088
+        ufw allow proto udp from 10.0.0.0/8 to any port 29810
+        ufw allow proto udp from fe80::/10 to any port 29810
+        ufw allow proto tcp from 10.0.0.0/8 to any port 29811
+        ufw allow proto tcp from fe80::/10 to any port 29811
+        ufw allow proto tcp from 10.0.0.0/8 to any port 29812
+        ufw allow proto tcp from fe80::/10 to any port 29812
+        ufw allow proto tcp from 10.0.0.0/8 to any port 29813
+        ufw allow proto tcp from fe80::/10 to any port 29813
+    fi
+
 }

@@ -8,15 +8,20 @@
 # Log errors
 # exec 2>arch_linux_install_part_2.sh_errors.txt
 
+# Default variables
+user_name='matthew'
+device_hostname='MatthewLaptop'
+
 # Source functions
 source linux_scripts.sh
 source arch_linux_scripts.sh
 
-# Prompts and variables
+# Prompts, uncomment to use
+
 # Specify device hostname
-read -r -p "Set the device hostname: " device_hostname
+#read -r -p "Set the device hostname: " device_hostname
 # Specify user name
-read -r -p "Specify a username for a new user: " user_name
+#read -r -p "Specify a username for a new user: " user_name
 
 # Call functions
 arch_install_extra_packages
@@ -34,6 +39,6 @@ set_root_password
 arch_configure_kernel
 arch_setup_systemd_boot_luks_lvm
 set_systemd_boot_install_path
-create_users
+create_user "${user_name}"
 add_user_to_sudo "${user_name}"
 enable_network_manager

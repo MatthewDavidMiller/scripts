@@ -11,32 +11,6 @@ function install_nas_packages() {
     apt-get install -y wget vim git ufw ntp ssh apt-transport-https openssh-server unattended-upgrades
 }
 
-function configure_nas_ufw_rules() {
-    # Limit max connections to ssh server and allow it only on private networks
-    ufw limit proto tcp from 10.0.0.0/8 to any port 22
-    ufw limit proto tcp from fe80::/10 to any port 22
-
-    # Allow https on private networks
-    ufw allow proto tcp from 10.0.0.0/8 to any port 443
-    ufw allow proto tcp from fe80::/10 to any port 443
-
-    # Allow smb on private networks
-    ufw allow proto tcp from 10.0.0.0/8 to any port 445
-    ufw allow proto tcp from fe80::/10 to any port 445
-
-    # Allow netbios on private networks
-    ufw allow proto tcp from 10.0.0.0/8 to any port 137
-    ufw allow proto tcp from fe80::/10 to any port 137
-
-    # Allow netbios on private networks
-    ufw allow proto tcp from 10.0.0.0/8 to any port 138
-    ufw allow proto tcp from fe80::/10 to any port 138
-
-    # Allow netbios on private networks
-    ufw allow proto tcp from 10.0.0.0/8 to any port 139
-    ufw allow proto tcp from fe80::/10 to any port 139
-}
-
 function configure_nas_scripts() {
     # Script to archive config files for backup
     wget 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/backup_configs.sh'
@@ -50,24 +24,6 @@ function configure_nas_scripts() {
 EOF
     crontab jobs.cron
     rm -f jobs.cron
-}
-
-function configure_nas_ssh_key() {
-    # Generate an ecdsa 521 bit key
-    ssh-keygen -f "/home/${user_name}/nas_key" -t ecdsa -b 521
-
-    # Authorize the key for use with ssh
-    mkdir "/home/${user_name}/.ssh"
-    chmod 700 "/home/${user_name}/.ssh"
-    touch "/home/${user_name}/.ssh/authorized_keys"
-    chmod 600 "/home/${user_name}/.ssh/authorized_keys"
-    cat "/home/${user_name}/nas_key.pub" >>"/home/${user_name}/.ssh/authorized_keys"
-    printf '%s\n' '' >>"/home/${user_name}/.ssh/authorized_keys"
-    chown -R "${user_name}" "/home/${user_name}"
-    python -m SimpleHTTPServer 40080 &
-    server_pid=$!
-    read -r -p "Copy the key from the webserver on port 40080 before continuing: " >>'/dev/null'
-    kill "${server_pid}"
 }
 
 function configure_openmediavault() {

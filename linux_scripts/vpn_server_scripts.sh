@@ -11,15 +11,6 @@ function install_vpn_server_packages() {
     apt-get install -y wget vim git ufw ntp ssh apt-transport-https openssh-server unattended-upgrades
 }
 
-function configure_vpn_ufw_rules() {
-    # Limit max connections to vpn server
-    ufw limit proto udp from any to any port 64640
-
-    # Limit max connections to ssh server and allow it only on private networks
-    ufw limit proto tcp from 10.0.0.0/8 to any port 22
-    ufw limit proto tcp from fe80::/10 to any port 22
-}
-
 function configure_vpn_scripts() {
     # Enter code for dynamic dns
     read -r -p "Enter code for dynamic dns: " dynamic_dns
@@ -62,22 +53,4 @@ function configure_vpn() {
         pivpn add
         read -r -p "Add another vpn user? [y/N] " vpn_user_response
     done
-}
-
-function configure_vpn_ssh_key() {
-    # Generate an ecdsa 521 bit key
-    ssh-keygen -f "/home/${user_name}/vpn_key" -t ecdsa -b 521
-
-    # Authorize the key for use with ssh
-    mkdir "/home/${user_name}/.ssh"
-    chmod 700 "/home/${user_name}/.ssh"
-    touch "/home/${user_name}/.ssh/authorized_keys"
-    chmod 600 "/home/${user_name}/.ssh/authorized_keys"
-    cat "/home/${user_name}/vpn_key.pub" >>"/home/${user_name}/.ssh/authorized_keys"
-    printf '%s\n' '' >>"/home/${user_name}/.ssh/authorized_keys"
-    chown -R "${user_name}" "/home/${user_name}"
-    python -m SimpleHTTPServer 40080 &
-    server_pid=$!
-    read -r -p "Copy the key from the webserver on port 40080 before continuing: " >>'/dev/null'
-    kill "${server_pid}"
 }

@@ -5,25 +5,7 @@
 
 # Compilation of functions that can be called for OpenWrt.
 
-function create_user() {
-    read -r -p "Set username " user_name
-    useradd "${user_name}"
-    mkdir '/home'
-    mkdir "/home/${user_name}"
-    passwd "${user_name}"
-    chown "${user_name}" "/home/${user_name}"
-}
-
-function configure_sudo() {
-    bash -c "printf '%s\n' \"${user_name} ALL=(ALL) ALL\" >> '/etc/sudoers'"
-}
-
-function configure_shell() {
-    chsh -s /bin/bash
-    chsh -s /bin/bash "${user_name}"
-}
-
-function install_packages() {
+function install_openwrt_packages() {
     # Updates package lists
     opkg update
     # Installs packages
@@ -48,31 +30,7 @@ function update_openwrt_packages() {
     opkg list-upgradable | cut -f 1 -d ' ' | xargs opkg upgrade
 }
 
-function generate_ssh_key() {
-    # Generate an ecdsa 521 bit key
-    ssh-keygen -f "/home/$user_name/openwrt_key" -t ecdsa -b 521
-
-    # Authorize the key for use with ssh
-    sudo mkdir "/home/$user_name/.ssh"
-    sudo chmod 700 "/home/$user_name/.ssh"
-    sudo touch "/home/$user_name/.ssh/authorized_keys"
-    sudo chmod 600 "/home/$user_name/.ssh/authorized_keys"
-    sudo bash -c "cat \"/home/$user_name/openwrt_key.pub\" >> \"/home/$user_name/.ssh/authorized_keys\""
-    sudo bash -c "printf '%s\n' '' >> \"/home/$user_name/.ssh/authorized_keys\""
-    sudo chown -R "$user_name" "/home/$user_name"
-    python3 -m SimpleHTTPServer 40080 &
-    server_pid=$!
-    read -r -p "Copy the key from the webserver on port 40080 before continuing: " >>'/dev/null'
-    kill "${server_pid}"
-
-    # Dropbear setup
-    bash -c "cat \"/home/$user_name/openwrt_key.pub\" >> '/etc/dropbear/authorized_keys'"
-    bash -c "printf '%s\n' '' >> '/etc/dropbear/authorized_keys'"
-    chmod 0700 /etc/dropbear
-    chmod 0600 /etc/dropbear/authorized_keys
-}
-
-function configure_dropbear() {
+function configure_dropbear_openwrt() {
     rm -f '/etc/config/dropbear'
     cat <<EOF >'/etc/config/dropbear'
 config dropbear
@@ -87,25 +45,7 @@ EOF
     uci commit dropbear
 }
 
-function configure_ssh() {
-    # Turn off password authentication
-    grep -q ".*PasswordAuthentication" '/etc/ssh/sshd_config' && sed -i "s,.*PasswordAuthentication.*,PasswordAuthentication no," '/etc/ssh/sshd_config' || printf '%s\n' 'PasswordAuthentication no' >>'/etc/ssh/sshd_config'
-
-    # Do not allow empty passwords
-    grep -q ".*PermitEmptyPasswords" '/etc/ssh/sshd_config' && sed -i "s,.*PermitEmptyPasswords.*,PermitEmptyPasswords no," '/etc/ssh/sshd_config' || printf '%s\n' 'PermitEmptyPasswords no' >>'/etc/ssh/sshd_config'
-
-    # Turn off PAM
-    grep -q ".*UsePAM" '/etc/ssh/sshd_config' && sed -i "s,.*UsePAM.*,UsePAM no," '/etc/ssh/sshd_config' || printf '%s\n' 'UsePAM no' >>'/etc/ssh/sshd_config'
-
-    # Turn off root ssh access
-    grep -q ".*PermitRootLogin" '/etc/ssh/sshd_config' && sed -i "s,.*PermitRootLogin.*,PermitRootLogin no," '/etc/ssh/sshd_config' || printf '%s\n' 'PermitRootLogin no' >>'/etc/ssh/sshd_config'
-
-    # Enable public key authentication
-    grep -q ".*AuthorizedKeysFile" '/etc/ssh/sshd_config' && sed -i "s,.*AuthorizedKeysFile\s*.ssh/authorized_keys\s*.ssh/authorized_keys2,AuthorizedKeysFile .ssh/authorized_keys," '/etc/ssh/sshd_config' || printf '%s\n' 'AuthorizedKeysFile .ssh/authorized_keys' >>'/etc/ssh/sshd_config'
-    grep -q ".*PubkeyAuthentication" '/etc/ssh/sshd_config' && sed -i "s,.*PubkeyAuthentication.*,PubkeyAuthentication yes," '/etc/ssh/sshd_config' || printf '%s\n' 'PubkeyAuthentication yes' >>'/etc/ssh/sshd_config'
-}
-
-function configure_interfaces() {
+function openwrt_configure_interfaces() {
     rm -f '/etc/config/network'
     cat <<EOF >'/etc/config/network'
 config interface 'loopback'
@@ -219,7 +159,7 @@ config switch_vlan
 EOF
 }
 
-function configure_dhcp() {
+function openwrt_configure_dhcp() {
     rm -f '/etc/config/dhcp'
     cat <<EOF >'/etc/config/dhcp'
 config dnsmasq
@@ -340,7 +280,7 @@ config domain
 EOF
 }
 
-function configure_wifi() {
+function openwrt_configure_wifi() {
     # Prompts
     # SSID 1 setup for LAN
     read -r -p "Set SSID 1 name " ssid1_name
@@ -463,7 +403,7 @@ config wifi-iface 'wifinet5'
 EOF
 }
 
-function configure_firewall() {
+function openwrt_configure_firewall() {
     rm -f '/etc/config/firewall'
     cat <<EOF >'/etc/config/firewall'
 config rule
@@ -613,7 +553,7 @@ config include 'miniupnpd'
 EOF
 }
 
-function configure_upnp() {
+function openwrt_configure_upnp() {
     # Prompts
     read -r -p "Enter Device UUID " device_uuid
 
@@ -674,7 +614,7 @@ EOF
 }
 
 # Configure directories to be backed up
-function configure_sysupgrade() {
+function openwrt_configure_sysupgrade() {
     rm -f '/etc/sysupgrade.conf'
     cat <<EOF >'/etc/sysupgrade.conf'
 /home
@@ -682,7 +622,7 @@ function configure_sysupgrade() {
 EOF
 }
 
-function remove_packages() {
+function remove_openwrt_packages() {
     # Updates package lists
     opkg update
     # Installs packages
