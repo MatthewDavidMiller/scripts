@@ -32,9 +32,10 @@ source linux_scripts.sh
 source arch_linux_scripts.sh
 
 # Call functions
+get_username
 enable_bluetooth
 enable_ufw
-configure_xorg
+configure_xorg "${user_name}"
 setup_touchpad
 rank_mirrors
 
@@ -44,8 +45,9 @@ fi
 
 if [[ "${configure_i3_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     # Install packages
-    pacman -S --noconfirm --needed i3-wm i3blocks i3lock i3status perl perl-anyevent-i3 perl-json-xs dmenu network-manager-applet blueman pasystray paprefs picom xorg-xrandr || echo 'Error installing packages.'
-    configure_i3
+    pacman -S --noconfirm --needed i3-wm i3blocks i3lock i3status perl perl-anyevent-i3 perl-json-xs dmenu network-manager-applet paprefs picom xorg-xrandr || echo 'Error installing packages.'
+    configure_i3_sway_base "${user_name}"
+    configure_i3_config_file "${user_name}"
     configure_xinit
     configure_xinit_i3
 fi
@@ -57,7 +59,7 @@ if [[ "${connect_smb_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
 fi
 
 if [[ "${configure_gdm_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-    configure_gdm
+    configure_gdm "${user_name}"
 fi
 
 if [[ "${configure_hyperv_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
@@ -74,14 +76,15 @@ fi
 
 if [[ "${configure_sway_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     # Install packages
-    pacman -S --noconfirm --needed sway swayidle swaylock i3status dmenu network-manager-applet blueman pasystray paprefs xorg-server-xwayland polkit-gnome xorg-xrandr || echo 'Error installing packages.'
-    configure_sway
+    pacman -S --noconfirm --needed sway swayidle swaylock i3status dmenu network-manager-applet paprefs xorg-server-xwayland polkit-gnome xorg-xrandr || echo 'Error installing packages.'
+    configure_i3_sway_base "${user_name}"
+    configure_sway_config_file "${user_name}"
 fi
 
 if [[ "${configure_termite_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     # Install packages
     pacman -S --noconfirm --needed termite || echo 'Error installing packages.'
-    configure_termite
+    configure_termite "${user_name}"
 fi
 
 if [[ "${install_aur_packages_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
@@ -95,7 +98,7 @@ if [[ "${mount_drives_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
 fi
 
 if [[ "${setup_aliases_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-    setup_aliases
+    setup_aliases "${user_name}"
 fi
 
 if [[ "${configure_fwupd_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
@@ -107,13 +110,13 @@ fi
 if [[ "${configure_git_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     # Install git
     pacman -S --noconfirm --needed git || echo 'Error installing packages.'
-    configure_git
+    configure_git "${user_name}"
 fi
 
 if [[ "${setup_serial_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     # Install putty
     pacman -S --noconfirm --needed putty || echo 'Error installing packages.'
-    configure_serial
+    configure_serial "${user_name}"
 fi
 
 if [[ "${ostimer}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
