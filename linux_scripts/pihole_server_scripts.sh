@@ -100,8 +100,15 @@ function configure_pihole() {
     bash basic-install.sh
     cd || exit
 
-    # Setup whitelisted sites
-    # Use command pihole -w 'example.com'
+    # Configure whitelist, blacklist, and regex
+    # Possible values: id, type, domain, enabled, date_added, date_modified, comment
+    sqlite3 /etc/pihole/gravity.db <<EOF
+DELETE FROM domainlist;
+INSERT INTO domainlist (id, type, domain, enabled, comment) VALUES (1,3,'^.+\.(ru|cn|ro|ml|ga|gq|cf|tk|pw|ua|ug|ve|)$',1,'Block some country TLDs.');
+INSERT INTO domainlist (id, type, domain, enabled, comment) VALUES (2,3,'porn',1,'Block domains with the word pron in them.');
+INSERT INTO domainlist (id, type, domain, enabled, comment) VALUES (3,3,'sex',1,'Block domains with the word sex in them.');
+INSERT INTO domainlist (id, type, domain, enabled, comment) VALUES (4,0,'ntscorp.ru',1,'Openiv mod download domain.');
+EOF
 
     # Configure blocklists
     # Possible values: id, address, enabled, date_added, date_modified, comment
@@ -113,14 +120,6 @@ INSERT INTO adlist (id, address, enabled, comment) VALUES (3,'https://raw.github
 INSERT INTO adlist (id, address, enabled, comment) VALUES (4,'https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt',0,'Default Tracker blocklist.');
 INSERT INTO adlist (id, address, enabled, comment) VALUES (5,'https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt',0,'Default Ad blocklist.');
 EOF
-
-    # Configure blacklist
-    # Use command pihole -b 'example.com'
-
-    # Configure regex
-    pihole -b --regex '^.+\.(ru|cn|ro|ml|ga|gq|cf|tk|pw|ua|ug|ve|)$'
-    pihole -b --regex 'porn'
-    pihole -b --regex 'sex'
 
     # Configure pihole settings
     grep -q 'DNSSEC=' '/etc/pihole/setupVars.conf' && sed -i "s/DNSSEC=.*/DNSSEC=true/g" '/etc/pihole/setupVars.conf' || printf '%s\n' 'DNSSEC=true' >>'/etc/pihole/setupVars.conf'
