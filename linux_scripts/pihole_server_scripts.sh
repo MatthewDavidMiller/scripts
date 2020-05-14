@@ -105,7 +105,7 @@ function configure_pihole() {
     sqlite3 /etc/pihole/gravity.db <<EOF
 DELETE FROM domainlist;
 INSERT INTO domainlist (id, type, domain, enabled, comment) VALUES (1,3,'^.+\.(ru|cn|ro|ml|ga|gq|cf|tk|pw|ua|ug|ve|)$',1,'Block some country TLDs.');
-INSERT INTO domainlist (id, type, domain, enabled, comment) VALUES (2,3,'porn',1,'Block domains with the word pron in them.');
+INSERT INTO domainlist (id, type, domain, enabled, comment) VALUES (2,3,'porn',1,'Block domains with the word porn in them.');
 INSERT INTO domainlist (id, type, domain, enabled, comment) VALUES (3,3,'sex',1,'Block domains with the word sex in them.');
 INSERT INTO domainlist (id, type, domain, enabled, comment) VALUES (4,0,'ntscorp.ru',1,'Openiv mod download domain.');
 EOF
