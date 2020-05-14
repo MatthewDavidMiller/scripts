@@ -17,6 +17,7 @@ network_address='10.1.10.0'
 subnet_mask='255.255.255.0'
 gateway_address='10.1.10.1'
 dns_address='1.1.1.1'
+network_prefix='10.0.0.0/8'
 limit_ssh='y'
 allow_dns='n'
 allow_unbound='n'
@@ -38,7 +39,7 @@ install_omada_controller_packages
 configure_ssh
 generate_ssh_key "${user_name}" "y" "n" "n" "${key_name}"
 configure_ufw_base
-ufw_configure_rules "${limit_ssh}" "${allow_dns}" "${allow_unbound}" "${allow_http}" "${allow_https}" "${allow_port_4711_tcp}" "${allow_smb}" "${allow_netbios}" "${limit_port_64640}" "${allow_port_8006}" "${allow_omada_controller}"
+ufw_configure_rules "${network_prefix}" "${limit_ssh}" "${allow_dns}" "${allow_unbound}" "${allow_http}" "${allow_https}" "${allow_port_4711_tcp}" "${allow_smb}" "${allow_netbios}" "${limit_port_64640}" "${allow_port_8006}" "${allow_omada_controller}"
 enable_ufw
 apt_configure_auto_updates "${release_name}"
 configure_omada_controller
