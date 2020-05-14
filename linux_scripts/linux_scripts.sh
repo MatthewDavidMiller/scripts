@@ -1115,3 +1115,15 @@ exec --no-startup-id bash "/usr/local/bin/i3_autostart.sh"
 
 EOF
 }
+
+function cli_autologin() {
+    # Parameters
+    local user_name=${1}
+
+    mkdir -p '/etc/systemd/system//getty@tty1.service.d'
+    cat <<EOF >'/etc/systemd/system/getty@tty1.service.d/override.conf'
+[Service]
+ExecStart=
+ExecStart=-/usr/bin/agetty --autologin ${user_name} --noclear %I \$TERM
+EOF
+}
