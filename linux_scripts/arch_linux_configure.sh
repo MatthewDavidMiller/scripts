@@ -38,6 +38,7 @@ enable_ufw
 configure_xorg "${user_name}"
 setup_touchpad
 rank_mirrors
+pacman_auto_clear_cache
 
 if [[ "${install_arch_packages_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     install_arch_packages

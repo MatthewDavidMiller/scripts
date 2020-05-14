@@ -405,3 +405,8 @@ function arch_setup_systemd_boot_luks_lvm() {
         printf '%s\n' ''
     } >>'/boot/loader/loader.conf'
 }
+
+function pacman_auto_clear_cache() {
+    systemctl start paccache.timer
+    systemctl enable paccache.timer
+}
