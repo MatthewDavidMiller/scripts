@@ -352,9 +352,7 @@ home_partition_size="${home_partition_size}"
 lvm_name="${lvm_name}"
 disk_password="${disk_password}"
 EOF
-    cat <<EOF | arch-chroot /mnt
-source 'arch_linux_install_part_2.sh'
-EOF
+    arch-chroot /mnt "./arch_linux_install_part_2.sh"
 }
 
 function arch_configure_kernel() {

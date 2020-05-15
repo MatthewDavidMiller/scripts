@@ -55,9 +55,7 @@ interface="${interface}"
 uuid="${uuid}"
 uuid2="${uuid2}"
 EOF
-    cat <<EOF | LANG=C.UTF-8 chroot /mnt
-source 'debian_server_install_part_2.sh'
-EOF
+    LANG=C.UTF-8 chroot /mnt "./debian_server_install_part_2.sh"
 }
 
 function debian_create_device_files() {
@@ -76,7 +74,8 @@ function debian_setup_locale_package() {
     apt-get install -y locales
 
     # Setup locales
-    dpkg-reconfigure locales
+    update-locale "LANG=en_US.UTF-8"
+    dpkg-reconfigure --frontend noninteractive locales
 }
 
 function debian_setup_mirrors() {
