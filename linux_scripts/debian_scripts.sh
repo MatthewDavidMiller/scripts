@@ -29,7 +29,7 @@ function debootstrap_install_base_packages() {
     # Parameters
     local version=${1}
 
-    debootstrap --arch amd64 --components=main,contrib,non-free ${version} /mnt 'http://ftp.us.debian.org/debian'
+    debootstrap --arch amd64 --components=main,contrib,non-free ${version} /mnt 'http://mirrors.advancedhosters.com/debian/'
 }
 
 function debian_install_move_to_script_part_2() {
