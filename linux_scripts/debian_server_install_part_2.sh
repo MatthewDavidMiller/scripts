@@ -10,6 +10,7 @@ source linux_scripts.sh
 source debian_scripts.sh
 
 # Call functions
+debian_create_boot_directories
 debian_create_device_files
 create_basic_partition_fstab
 create_swap_file
