@@ -132,6 +132,15 @@ EOF
     grep -q 'DNS_FQDN_REQUIRED=' '/etc/pihole/setupVars.conf' && sed -i "s/DNS_FQDN_REQUIRED=.*/DNS_FQDN_REQUIRED=false/g" '/etc/pihole/setupVars.conf' || printf '%s\n' 'DNS_FQDN_REQUIRED=false' >>'/etc/pihole/setupVars.conf'
     grep -q 'DNS_BOGUS_PRIV=' '/etc/pihole/setupVars.conf' && sed -i "s/DNS_BOGUS_PRIV=.*/DNS_BOGUS_PRIV=false/g" '/etc/pihole/setupVars.conf' || printf '%s\n' 'DNS_BOGUS_PRIV=false' >>'/etc/pihole/setupVars.conf'
 
+    # Set custom domains
+    cat <<EOF >'/etc/pihole/custom.list'
+10.1.10.1 mattopenwrt.miller.lan
+10.1.10.3 matt-prox.miller.lan
+10.1.10.4 matt-nas.miller.lan
+10.1.10.5 matt-pihole.miller.lan
+10.1.10.6 matt-vpn.miller.lan
+EOF
+
     echo 'Set pihole password'
     pihole -a -p
 
