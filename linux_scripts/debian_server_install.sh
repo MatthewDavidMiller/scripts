@@ -46,7 +46,11 @@ read -r -p "Use stretch [1] or buster [2]? [1/2]: " specify_version
 list_partitions
 specify_debian_version "${specify_version}"
 debian_installer_needed_packages
-delete_all_partitions_on_a_disk
+
+if [[ "${delete_partitions_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+    delete_all_partitions_on_a_disk "${disk}"
+fi
+
 get_ucode_type "${distro}"
 create_basic_partitions
 create_basic_filesystems "${partition1}" "${partition2}"
