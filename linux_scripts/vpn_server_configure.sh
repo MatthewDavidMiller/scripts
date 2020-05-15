@@ -44,7 +44,7 @@ configure_ssh
 generate_ssh_key "${user_name}" "y" "n" "n" "${key_name}"
 configure_ufw_base
 ufw_configure_rules "${network_prefix}" "${limit_ssh}" "${allow_dns}" "${allow_unbound}" "${allow_http}" "${allow_https}" "${allow_port_4711_tcp}" "${allow_smb}" "${allow_netbios}" "${limit_port_64640}" "${allow_port_8006}" "${allow_omada_controller}"
-enable_ufw
 configure_vpn_scripts
-apt_configure_auto_updates "${release_name}"
 configure_vpn
+apt_configure_auto_updates "${release_name}"
+enable_ufw
