@@ -43,6 +43,7 @@ configure_xorg "${user_name}"
 setup_touchpad
 rank_mirrors
 pacman_auto_clear_cache
+lock_root
 
 if [[ "${install_arch_packages_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     install_arch_packages

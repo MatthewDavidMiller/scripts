@@ -35,6 +35,7 @@ allow_port_8006='n'
 allow_omada_controller='n'
 
 # Call functions
+lock_root
 get_username
 get_interface_name
 configure_network "${ip_address}" "${network_address}" "${subnet_mask}" "${gateway_address}" "${dns_address}" "${interface}"

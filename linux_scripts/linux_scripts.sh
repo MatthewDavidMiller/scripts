@@ -1281,3 +1281,7 @@ function enable_base_network_connectivity() {
 function apt_clear_cache() {
     apt-get clean
 }
+
+function lock_root() {
+    passwd --lock root
+}
