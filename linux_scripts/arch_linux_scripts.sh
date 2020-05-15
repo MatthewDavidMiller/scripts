@@ -282,25 +282,6 @@ function arch_connect_to_wifi() {
     iwctl station "${wifi_interface}" connect "${ssid}"
 }
 
-function arch_get_ucode_type() {
-    if [[ "${ucode_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        ucode='intel-ucode'
-    else
-        ucode='amd-ucode'
-    fi
-}
-
-function arch_install_configure_partitions() {
-    if [[ "${windows_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        # Creates one partition.  Partition uses the rest of the free space avalailable to create a Linux filesystem partition.
-        sgdisk -n 0:0:0 -c "${partition_number2}":"Linux Filesystem" -t "${partition_number2}":8300 "${disk}"
-    else
-        # Creates two partitions.  First one is a 512 MB EFI partition while the second uses the rest of the free space avalailable to create a Linux filesystem partition.
-        sgdisk -n 0:0:+512MiB -c "${partition_number1}":"EFI System Partition" -t "${partition_number1}":ef00 "${disk}"
-        sgdisk -n 0:0:0 -c "${partition_number2}":"Linux Filesystem" -t "${partition_number2}":8300 "${disk}"
-    fi
-}
-
 function arch_configure_mirrors() {
     rm -f '/etc/pacman.d/mirrorlist'
     cat <<\EOF >'/etc/pacman.d/mirrorlist'

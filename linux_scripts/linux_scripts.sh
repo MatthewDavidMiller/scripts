@@ -736,7 +736,7 @@ function create_basic_lvm() {
     rm -f "${disk_password}"
 }
 
-function create_basic_filesystems() {
+function create_basic_filesystems_lvm() {
     # Parameters
     local lvm_name=${1}
     local duel_boot=${2}
@@ -749,7 +749,7 @@ function create_basic_filesystems() {
     fi
 }
 
-function mount_basic_filesystems() {
+function mount_basic_filesystems_lvm() {
     # Parameters
     local lvm_name=${1}
     local partition=${2}
@@ -1177,4 +1177,104 @@ function ufw_configure_rules() {
         ufw allow proto tcp from fe80::/10 to any port 29813
     fi
 
+}
+
+function get_ucode_type() {
+    # Parameters
+    local distro=${1}
+
+    if [[ "${ucode_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+        if [[ "${distro}" =~ ^([dD][eE][bB][iI][aA][nN])+$ ]]; then
+            ucode='intel-microcode'
+        fi
+        if [[ "${distro}" =~ ^([aA][rR][cC][hH])+$ ]]; then
+            ucode='intel-ucode'
+        fi
+    else
+        if [[ "${distro}" =~ ^([dD][eE][bB][iI][aA][nN])+$ ]]; then
+            ucode='amd-microcode'
+        fi
+        if [[ "${distro}" =~ ^([aA][rR][cC][hH])+$ ]]; then
+            ucode='amd-ucode'
+        fi
+    fi
+}
+
+function create_basic_partitions() {
+    if [[ "${windows_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+        # Creates one partition.  Partition uses the rest of the free space avalailable to create a Linux filesystem partition.
+        sgdisk -n 0:0:0 -c "${partition_number2}":"Linux Filesystem" -t "${partition_number2}":8300 "${disk}"
+    else
+        # Creates two partitions.  First one is a 512 MB EFI partition while the second uses the rest of the free space avalailable to create a Linux filesystem partition.
+        sgdisk -n 0:0:+512MiB -c "${partition_number1}":"EFI System Partition" -t "${partition_number1}":ef00 "${disk}"
+        sgdisk -n 0:0:0 -c "${partition_number2}":"Linux Filesystem" -t "${partition_number2}":8300 "${disk}"
+    fi
+}
+
+function create_basic_filesystems() {
+    # Parameters
+    local partition1=${1}
+    local partition2=${2}
+    local duel_boot=${3}
+
+    mkfs.ext4 "${partition2}"
+    if [[ ! "${duel_boot}" =~ ^([d][b])+$ ]]; then
+        mkfs.fat -F32 "${partition1}"
+    fi
+}
+
+function mount_basic_filesystems() {
+    # Parameters
+    local boot_partition=${1}
+    local root_partition=${2}
+
+    mount "${root_partition}" /mnt
+    mkdir '/mnt/boot'
+    mount "${boot_partition}" '/mnt/boot'
+}
+
+function mount_proc_and_sysfs() {
+    {
+        printf '%s\n' 'proc /mnt/proc proc defaults 0 0'
+        printf '%s\n' 'sysfs /mnt/sys sysfs defaults 0 0'
+    } >>'/etc/fstab'
+    mount proc /mnt/proc -t proc
+    mount sysfs /mnt/sys -t sysfs
+}
+
+function get_base_partition_uuids() {
+    # Parameters
+    local partition1=${1}
+    local partition2=${2}
+
+    uuid="$(blkid -o value -s UUID "${partition1}")"
+    uuid2="$(blkid -o value -s UUID "${partition2}")"
+}
+
+function create_basic_partition_fstab() {
+    {
+        printf '%s\n' "UUID=${uuid} /boot/EFI vfat defaults 0 0"
+        printf '%s\n' '/swapfile none swap defaults 0 0'
+        printf '%s\n' "UUID=${uuid2} / ext4 defaults 0 0"
+    } >>'/etc/fstab'
+}
+
+function mount_all_drives() {
+    mount -a
+}
+
+function enable_base_network_connectivity() {
+    # Parameters
+    local interface=${1}
+
+    {
+        printf '%s\n' 'auto lo'
+        printf '%s\n' 'iface lo inet loopback'
+        printf '%s\n' "auto ${interface}"
+        printf '%s\n' "iface ${interface} inet dhcp"
+    } >>'/etc/network/interfaces'
+}
+
+function apt_clear_cache() {
+    apt-get clean
 }

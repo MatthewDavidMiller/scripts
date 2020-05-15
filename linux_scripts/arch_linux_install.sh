@@ -29,6 +29,7 @@ ssid='Miller Homelab'
 root_partition_size='8G'
 home_partition_size='100%FREE'
 lvm_name='Archlvm'
+distro='arch'
 
 # Prompts, uncomment to use
 
@@ -66,17 +67,17 @@ if [[ "${delete_partitions_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     delete_all_partitions_on_a_disk "${disk}"
 fi
 
-arch_get_ucode_type
-arch_install_configure_partitions
+get_ucode_type "${distro}"
+create_basic_partitions
 create_luks_partition "${disk_password}" "${partition2}"
 create_basic_lvm "${partition2}" '/tmp/disk_password' "${lvm_name}" "${root_partition_size}" "${home_partition_size}"
 
 if [[ "${windows_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-    create_basic_filesystems "${lvm_name}" "db" "${partition1}"
-    mount_basic_filesystems "${lvm_name}" "${partition1}"
+    create_basic_filesystems_lvm "${lvm_name}" "db" "${partition1}"
+    mount_basic_filesystems_lvm "${lvm_name}" "${partition1}"
 else
-    create_basic_filesystems "${lvm_name}" "" "${partition1}"
-    mount_basic_filesystems "${lvm_name}" "${partition1}"
+    create_basic_filesystems_lvm "${lvm_name}" "" "${partition1}"
+    mount_basic_filesystems_lvm "${lvm_name}" "${partition1}"
 fi
 
 arch_configure_mirrors
