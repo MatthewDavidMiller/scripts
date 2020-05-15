@@ -5,6 +5,10 @@
 # Run with sudo. Do not run while logged into root.
 # Configuration script for the TP Link Omada Controller.
 
+# Get needed scripts
+wget -O 'linux_scripts.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/linux_scripts.sh'
+wget -O 'omada_controller_scripts.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/omada_controller_scripts.sh'
+
 # Source functions
 source linux_scripts.sh
 source omada_controller_scripts.sh

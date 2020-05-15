@@ -27,6 +27,10 @@ read -r -p "Run setup_serial script? [y/N] " setup_serial_var
 read -r -p "Configure blueman? [y/N] " configure_blueman_var
 read -r -p "Configure pasystray? [y/N] " configure_pasystray_var
 
+# Get needed scripts
+wget -O 'linux_scripts.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/linux_scripts.sh'
+wget -O 'arch_linux_scripts.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/arch_linux_scripts.sh'
+
 # Source functions
 source linux_scripts.sh
 source arch_linux_scripts.sh

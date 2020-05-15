@@ -5,6 +5,10 @@
 # Run with sudo. Do not run while logged into root.
 # Configuration script for the pihole server.
 
+# Get needed scripts
+wget -O 'linux_scripts.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/linux_scripts.sh'
+wget -O 'pihole_server_scripts.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/pihole_server_scripts.sh'
+
 # Source functions
 source linux_scripts.sh
 source pihole_server_scripts.sh
