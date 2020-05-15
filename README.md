@@ -45,7 +45,11 @@ Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 
 [arch_linux_scripts.sh](linux_scripts/arch_linux_scripts.sh) - A lot of smaller scripts configured as functions for use on Arch Linux.
 
+[debian_scripts.sh](linux_scripts/debian_scripts.sh) - A lot of smaller scripts configured as functions for use on Debian.
+
 [debian_server_install.sh](linux_scripts/debian_server_install.sh) - Bash script to automate the install of debian servers.
+
+[debian_server_install_part_2.sh](linux_scripts/debian_server_install_part_2.sh) - Bash script to automate the install of debian servers. Second script.
 
 [linux_scripts.sh](linux_scripts/linux_scripts.sh) - A lot of smaller scripts configured as functions for use on majority of the Linux distros.
 
