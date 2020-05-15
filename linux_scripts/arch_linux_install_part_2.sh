@@ -11,6 +11,7 @@
 # Default variables
 user_name='matthew'
 device_hostname='MatthewLaptop'
+swap_file_size='8192'
 
 # Source functions
 source linux_scripts.sh
@@ -28,7 +29,7 @@ source /tmp/temp_variables.sh
 arch_install_extra_packages
 get_lvm_uuids
 create_basic_lvm_fstab
-create_swap_file
+create_swap_file "${swap_file_size}"
 set_timezone
 set_hardware_clock
 enable_ntpd_client

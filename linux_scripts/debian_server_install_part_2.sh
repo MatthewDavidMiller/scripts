@@ -5,6 +5,9 @@
 
 # Part 2 of install script for Debian.
 
+# Default variables
+swap_file_size='512'
+
 # Source functions
 source linux_scripts.sh
 source debian_scripts.sh
@@ -14,7 +17,7 @@ source /tmp/temp_variables.sh
 debian_create_boot_directories
 debian_create_device_files
 create_basic_partition_fstab
-create_swap_file
+create_swap_file "${swap_file_size}"
 mount_all_drives
 set_timezone
 debian_setup_locale_package

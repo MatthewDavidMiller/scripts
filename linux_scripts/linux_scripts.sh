@@ -779,8 +779,11 @@ function create_basic_lvm_fstab() {
 }
 
 function create_swap_file() {
+    # Parameters
+    local swap_file_size=${1}
+
     # Create swapfile
-    dd if=/dev/zero of=/swapfile bs=1M count=2048 status=progress
+    dd if=/dev/zero of=/swapfile bs=1M count="${swap_file_size}" status=progress
     # Set file permissions
     chmod 600 /swapfile
     # Format file to swap
