@@ -16,7 +16,7 @@ source pihole_server_scripts.sh
 # Default variables
 release_name='buster'
 key_name='pihole_key'
-ip_address='10.1.10.4'
+ip_address='10.1.10.5'
 network_address='10.1.10.0'
 subnet_mask='255.255.255.0'
 gateway_address='10.1.10.1'
