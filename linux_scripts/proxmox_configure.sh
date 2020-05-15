@@ -5,6 +5,9 @@
 # Run with sudo. Do not run while logged into root.
 # Configuration script for the Proxmox server.
 
+# Notes to self
+# Pihole, vpn, and Nas vms fit on a 4GB virtual disk.
+
 # Get needed scripts
 wget -O 'linux_scripts.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/linux_scripts.sh'
 wget -O 'proxmox_scripts.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/proxmox_scripts.sh'
