@@ -37,7 +37,7 @@ function debian_install_move_to_script_part_2() {
     cp debian_scripts.sh '/mnt/debian_scripts.sh'
     wget -O '/mnt/debian_server_install_part_2.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/debian_server_install_part_2.sh'
     chmod +x '/mnt/debian_server_install_part_2.sh'
-    cat <<EOF >'/mnt/temp_variables.sh'
+    cat <<EOF >'/mnt/tmp/temp_variables.sh'
 disk="${disk}"
 partition_number1="${partition_number1}"
 partition_number2="${partition_number2}"

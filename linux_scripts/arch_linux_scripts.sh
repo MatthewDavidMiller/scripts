@@ -328,7 +328,7 @@ function arch_install_move_to_script_part_2() {
     cp arch_linux_scripts.sh '/mnt/arch_linux_scripts.sh'
     wget -O '/mnt/arch_linux_install_part_2.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/arch_linux_install_part_2.sh'
     chmod +x '/mnt/arch_linux_install_part_2.sh'
-    cat <<EOF >'/mnt/temp_variables.sh'
+    cat <<EOF >'/mnt/tmp/temp_variables.sh'
 disk="${disk}"
 partition_number1="${partition_number1}"
 partition_number2="${partition_number2}"

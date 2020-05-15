@@ -8,7 +8,7 @@
 # Source functions
 source linux_scripts.sh
 source debian_scripts.sh
-source temp_variables.sh
+source /tmp/temp_variables.sh
 
 # Call functions
 debian_create_boot_directories

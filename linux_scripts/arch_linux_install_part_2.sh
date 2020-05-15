@@ -15,7 +15,7 @@ device_hostname='MatthewLaptop'
 # Source functions
 source linux_scripts.sh
 source arch_linux_scripts.sh
-source temp_variables.sh
+source /tmp/temp_variables.sh
 
 # Prompts, uncomment to use
 
