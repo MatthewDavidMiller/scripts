@@ -328,6 +328,30 @@ function arch_install_move_to_script_part_2() {
     cp arch_linux_scripts.sh '/mnt/arch_linux_scripts.sh'
     wget -O '/mnt/arch_linux_install_part_2.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/arch_linux_install_part_2.sh'
     chmod +x '/mnt/arch_linux_install_part_2.sh'
+    cat <<EOF >'/mnt/temp_variables.sh'
+disk="${disk}"
+partition_number1="${partition_number1}"
+partition_number2="${partition_number2}"
+delete_partitions_response="${delete_partitions_response}"
+ucode_response="${ucode_response}"
+distro="${distro}"
+device_hostname="${device_hostname}"
+user_name="${user_name}"
+partition1="${partition1}"
+partition2="${partition2}"
+ucode="${ucode}"
+interface="${interface}"
+uuid="${uuid}"
+uuid2="${uuid2}"
+wifi_response="${wifi_response}"
+windows_response="${windows_response}"
+wifi_interface="${wifi_interface}"
+ssid="${ssid}"
+root_partition_size="${root_partition_size}"
+home_partition_size="${home_partition_size}"
+lvm_name="${lvm_name}"
+disk_password="${disk_password}"
+EOF
     cat <<EOF | arch-chroot /mnt
 source 'arch_linux_install_part_2.sh'
 EOF
