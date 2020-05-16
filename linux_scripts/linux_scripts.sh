@@ -174,7 +174,6 @@ function configure_i3_sway_base() {
 PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
 
 termite &
-nm-applet &
 picom &
 xsetroot -solid "#000000"
 
@@ -893,6 +892,10 @@ function configure_i3_blueman_applet_autostart() {
 
 function configure_i3_pasystray_autostart() {
     grep -q ".*pasystray" '/usr/local/bin/i3_autostart.sh' && sed -i "s,.*pasystray.*,pasystray &," '/usr/local/bin/i3_autostart.sh' || printf '%s\n' 'pasystray &' >>'/usr/local/bin/i3_autostart.sh'
+}
+
+function configure_i3_network_manager_applet_autostart() {
+    grep -q ".*nm-applet" '/usr/local/bin/i3_autostart.sh' && sed -i "s,.*nm-applet.*,nm-applet &," '/usr/local/bin/i3_autostart.sh' || printf '%s\n' 'nm-applet &' >>'/usr/local/bin/i3_autostart.sh'
 }
 
 function configure_i3_config_file() {
