@@ -405,7 +405,7 @@ function arch_setup_systemd_boot_luks_lvm() {
         printf '%s\n' '# config for systemd-boot'
         printf '%s\n' '# file location is /boot/loader/loader.conf'
         printf '%s\n' ''
-        printf '%s\n' 'default  arch_linux'
+        printf '%s\n' 'default  arch_linux.conf'
         printf '%s\n' 'auto-entries 1'
         printf '%s\n' ''
     } >>'/boot/loader/loader.conf'
