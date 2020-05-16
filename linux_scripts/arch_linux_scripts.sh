@@ -89,7 +89,7 @@ function install_arch_packages() {
     fi
 
     if [[ "${wireshark_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        pacman -S --noconfirm --needed wireshark-cli wireshark-qt
+        pacman -S --noconfirm --needed wireshark-cli
     fi
 
     if [[ "${ntop_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
@@ -105,7 +105,7 @@ function install_arch_packages() {
     fi
 
     if [[ "${clamav_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-        pacman -S --noconfirm --needed clamav clamtk
+        pacman -S --noconfirm --needed clamav
     fi
 
     if [[ "${vim_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
@@ -320,7 +320,7 @@ function arch_install_base_packages_pacstrap() {
 }
 
 function arch_install_extra_packages() {
-    pacman -S --noconfirm --needed ${ucode} efibootmgr pacman-contrib sudo networkmanager nm-connection-editor networkmanager-openvpn ufw wget xorg xorg-xinit xorg-drivers xorg-server xorg-apps bluez bluez-utils pulseaudio pulseaudio-bluetooth pavucontrol libinput xf86-input-libinput firefox gnome-keyring termite htop cron || echo 'Error installing packages.'
+    pacman -S --noconfirm --needed ${ucode} efibootmgr pacman-contrib sudo networkmanager networkmanager-openvpn ufw wget xorg xorg-xinit xorg-drivers xorg-server xorg-apps bluez bluez-utils pulseaudio pulseaudio-bluetooth pulsemixer libinput xf86-input-libinput firefox gnome-keyring termite htop cron || echo 'Error installing packages.'
 }
 
 function arch_install_move_to_script_part_2() {
