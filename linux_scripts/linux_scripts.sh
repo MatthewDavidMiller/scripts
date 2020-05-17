@@ -575,10 +575,10 @@ function configure_git() {
     git config --global user.email "${email}"
 
     # Setup ssh key
-    mkdir "/home/${user_name}/ssh_keys"
-    cp "${key_location}" "/home/${user_name}/ssh_keys/${key}"
-    git config --global core.sshCommand "ssh -i ""/home/${user_name}/ssh_keys/${key}"" -F /dev/null"
-    chmod 400 -R "/home/${user_name}/ssh_keys"
+    mkdir -p "/home/${user_name}/.ssh"
+    chmod 700 "/home/${user_name}/.ssh"
+    cp "${key_location}" "/home/${user_name}/.ssh/${key}"
+    git config --global core.sshCommand "ssh -i ""/home/${user_name}/.ssh/${key}"" -F /dev/null"
 }
 
 function configure_serial() {
