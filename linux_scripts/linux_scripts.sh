@@ -197,6 +197,9 @@ EOF
 }
 
 function connect_smb() {
+    # Parameters
+    local user_name=${1}
+
     # Make /mnt directory
     mkdir '/mnt'
 
@@ -209,7 +212,7 @@ function connect_smb() {
         # Mount point location
         read -r -p "Specify mount location. Example'/mnt/matt_files': " mount_location
         # Username
-        read -r -p "Specify Username. Example'matthew': " username
+        read -r -p "Specify Username. Example'matthew': " samba_username
         # Password
         read -r -p "Specify Password. Example'password': " password
 
@@ -217,7 +220,7 @@ function connect_smb() {
         mkdir "${mount_location}"
 
         # Automount smb share
-        printf '%s\n' "${share} ${mount_location} cifs rw,noauto,x-systemd.automount,_netdev,user,username=${username},password=${password} 0 0" >>'/etc/fstab'
+        printf '%s\n' "${share} ${mount_location} cifs rw,noauto,x-systemd.automount,_netdev,uid=${user_name},user,username=${samba_username},password=${password} 0 0" >>'/etc/fstab'
 
         # Mount another disk
         read -r -p "Do you want to mount another samba share? [y/N] " response
@@ -1287,4 +1290,10 @@ function apt_clear_cache() {
 
 function lock_root() {
     passwd --lock root
+}
+
+function configure_neovim() {
+    # Parameters
+    local user_name=${1}
+
 }

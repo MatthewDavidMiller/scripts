@@ -61,7 +61,7 @@ fi
 if [[ "${connect_smb_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     # Install samba
     pacman -S --noconfirm --needed samba || echo 'Error installing packages.'
-    connect_smb
+    connect_smb "${user_name}"
 fi
 
 if [[ "${configure_gdm_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
