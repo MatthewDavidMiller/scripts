@@ -473,20 +473,18 @@ function InstallApplications {
     $InstallUplay = Read-Host 'Install uplay? y/n '
     $InstallMicrosoftOffice = Read-Host 'Install Microsoft Office? y/n '
     $InstallLocaleEmulator = Read-Host 'Install Locale Emulator? y/n '
+    $InstallWireguard = Read-Host 'Install Wireguard? y/n '
 
-    # Install chocolatey
     if ($InstallChocolatey -eq 'y') {
         Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
         # Reload PATH
         $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
     }
 
-    # Install shellcheck
     if ($InstallShellCheck -eq 'y') {
         choco 'install' 'shellcheck' '-y'
     }
 
-    # Install notepad++
     if ($InstallNotepadPlusPlus -eq 'y') {
         Read-Host 'A web browser will be opened.  Download notepad++ into the downloads folder. Press enter to begin '
         Start-Process 'https://notepad-plus-plus.org/downloads/' 
@@ -499,7 +497,6 @@ function InstallApplications {
         }
     }
 
-    # Install 7zip
     if ($Install7Zip -eq 'y') {
         Read-Host 'A web browser will be opened.  Download 7zip 32 bit and 64 bit into the downloads folder. Press enter to begin '
         Start-Process 'https://www.7-zip.org/download.html' 
@@ -510,7 +507,6 @@ function InstallApplications {
         Start-Process -FilePath "$HOME\Downloads\7zip_64_bit\7z*x64.exe" -Wait
     }
 
-    # Install nmap
     if ($InstallNMap -eq 'y') {
         Read-Host 'A web browser will be opened.  Download nmap into the downloads folder. Press enter to begin '
         Start-Process 'https://nmap.org/download.html' 
@@ -523,7 +519,6 @@ function InstallApplications {
         }
     }
 
-    # Install qbittorrent
     if ($InstallQBittorent -eq 'y') {
         Read-Host 'A web browser will be opened.  Download qbittorrent into the downloads folder. Press enter to begin '
         Start-Process 'https://www.qbittorrent.org/download.php' 
@@ -531,7 +526,6 @@ function InstallApplications {
         Start-Process -FilePath "$HOME\Downloads\qbittorrent*.exe" -Wait
     }
 
-    # Install rufus
     if ($InstallRufus -eq 'y') {
         Read-Host 'A web browser will be opened.  Download rufus into the downloads folder. Press enter to begin '
         Start-Process 'https://rufus.ie/' 
@@ -547,7 +541,6 @@ function InstallApplications {
         $Shortcut.Save()
     }
 
-    # Install etcher
     if ($InstallEtcher -eq 'y') {
         Read-Host 'A web browser will be opened.  Download etcher into the downloads folder. Press enter to begin '
         Start-Process 'https://www.balena.io/etcher/' 
@@ -560,7 +553,6 @@ function InstallApplications {
         }
     }
 
-    # Install gimp
     if ($InstallGimp -eq 'y') {
         Read-Host 'A web browser will be opened.  Download gimp into the downloads folder. Press enter to begin '
         Start-Process 'https://www.gimp.org/downloads/' 
@@ -573,7 +565,6 @@ function InstallApplications {
         }
     }
 
-    # Install git
     if ($InstallGit -eq 'y') {
         Read-Host 'A web browser will be opened.  Download git into the downloads folder. Press enter to begin '
         Start-Process 'https://git-scm.com/downloads' 
@@ -588,7 +579,6 @@ function InstallApplications {
         Copy-Item 'N:\SSHConfigs\github\github_ssh' -Destination "$HOME\.ssh\id_rsa"
     }
 
-    # Install vlc
     if ($InstallVlc -eq 'y') {
         Read-Host 'A web browser will be opened.  Download vlc into the downloads folder. Press enter to begin '
         Start-Process 'https://www.videolan.org/vlc/download-windows.html' 
@@ -601,7 +591,6 @@ function InstallApplications {
         }
     }
 
-    # Install blender
     if ($InstallBlender -eq 'y') {
         Read-Host 'A web browser will be opened.  Download blender into the downloads folder. Press enter to begin '
         Start-Process 'https://www.blender.org/download/' 
@@ -614,7 +603,6 @@ function InstallApplications {
         }
     }
 
-    # Install bitwarden
     if ($InstallBitwarden -eq 'y') {
         Invoke-WebRequest 'https://vault.bitwarden.com/download/?app=desktop&platform=windows' -OutFile "$HOME\Downloads\bitwarden_installer.exe"
         if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\bitwarden_installer.exe" | Where-Object { $_.Status -eq "Valid" }) {
@@ -625,7 +613,6 @@ function InstallApplications {
         }
     }
 
-    # Install winscp
     if ($InstallWinSCP -eq 'y') {
         Read-Host 'A web browser will be opened.  Download winscp into the downloads folder. Press enter to begin '
         Start-Process 'https://winscp.net/eng/download.php' 
@@ -638,7 +625,6 @@ function InstallApplications {
         }
     }
 
-    # Install putty
     if ($InstallPutty -eq 'y') {
         Read-Host 'A web browser will be opened.  Download putty into the downloads folder. Press enter to begin '
         Start-Process 'https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html' 
@@ -651,7 +637,6 @@ function InstallApplications {
         }
     }
 
-    # Install python
     if ($InstallPython -eq 'y') {
         Read-Host 'A web browser will be opened.  Download python into the downloads folder. Press enter to begin '
         Start-Process 'https://www.python.org/downloads/windows/' 
@@ -672,7 +657,6 @@ function InstallApplications {
         }
     }
 
-    # Install libreoffice
     if ($InstallLibreoffice -eq 'y') {
         Read-Host 'A web browser will be opened.  Download libreoffice fresh into the downloads folder. Press enter to begin '
         Start-Process 'https://www.libreoffice.org/download/download/' 
@@ -685,7 +669,6 @@ function InstallApplications {
         }
     }
 
-    # Install java
     if ($InstallJava -eq 'y') {
         Read-Host 'A web browser will be opened.  Download java 64 bit into the downloads folder. Press enter to begin '
         Start-Process 'https://www.java.com/en/download/manual.jsp' 
@@ -698,7 +681,6 @@ function InstallApplications {
         }
     }
 
-    # Install sysinternals
     if ($InstallSysinternals -eq 'y') {
         Invoke-WebRequest 'https://download.sysinternals.com/files/SysinternalsSuite.zip' -OutFile "$HOME\Downloads\SysinternalsSuite.zip"
         # Extract zip folder
@@ -711,7 +693,6 @@ function InstallApplications {
         $Shortcut.Save()
     }
 
-    # Install vscode
     if ($InstallVSCode -eq 'y') {
         Invoke-WebRequest 'https://aka.ms/win32-x64-user-stable' -OutFile "$HOME\Downloads\vscode_installer.exe"
         if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\vscode_installer.exe" | Where-Object { $_.Status -eq "Valid" }) {
@@ -722,7 +703,6 @@ function InstallApplications {
         }
     }
 
-    # Install wireshark
     if ($InstallWireshark -eq 'y') {
         Read-Host 'A web browser will be opened.  Download wireshark into the downloads folder. Press enter to begin '
         Start-Process 'https://www.wireshark.org/#download' 
@@ -735,7 +715,6 @@ function InstallApplications {
         }
     }
 
-    # Install openjdk
     if ($InstallOpenJDK -eq 'y') {
         Read-Host 'A web browser will be opened.  Download openjdk into the downloads folder. Press enter to begin '
         Start-Process 'https://adoptopenjdk.net/' 
@@ -748,7 +727,6 @@ function InstallApplications {
         }
     }
 
-    # Install tinynvidiaupdater
     if ($InstallTinyNvidiaUpdater -eq 'y') {
         Read-Host 'A web browser will be opened.  Download tinynvidiaupdater and the dll file into the downloads folder. Press enter to begin '
         Start-Process 'https://github.com/ElPumpo/TinyNvidiaUpdateChecker/releases' 
@@ -765,7 +743,6 @@ function InstallApplications {
         $Shortcut.Save()
     }
 
-    # Install firefox
     if ($InstallFirefox -eq 'y') {
         Invoke-WebRequest 'https://download.mozilla.org/?product=firefox-msi-latest-ssl&os=win64&lang=en-US' -OutFile "$HOME\Downloads\firefox.msi"
         if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\firefox.msi" | Where-Object { $_.Status -eq "Valid" }) {
@@ -776,7 +753,6 @@ function InstallApplications {
         }
     }
 
-    # Install chrome
     if ($InstallChrome -eq 'y') {
         Invoke-WebRequest 'https://dl.google.com/chrome/install/latest/chrome_installer.exe' -OutFile "$HOME\Downloads\chrome_installer.exe"
         if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\chrome_installer.exe" | Where-Object { $_.Status -eq "Valid" }) {
@@ -787,7 +763,6 @@ function InstallApplications {
         }
     }
 
-    # Install freefilesync
     if ($InstallFreeFileSync -eq 'y') {
         Read-Host 'A web browser will be opened.  Download freefilesync into the downloads folder. Press enter to begin '
         Start-Process 'https://freefilesync.org/download.php' 
@@ -800,7 +775,6 @@ function InstallApplications {
         }
     }
 
-    # Install vmware player
     if ($InstallVmwarePlayer -eq 'y') {
         Invoke-WebRequest 'https://www.vmware.com/go/getplayer-win' -OutFile "$HOME\Downloads\vmware_player_setup.exe"
         if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\vmware_player_setup.exe" | Where-Object { $_.Status -eq "Valid" }) {
@@ -811,7 +785,6 @@ function InstallApplications {
         }
     }
 
-    # Install nvidiaprofileinspector
     if ($InstallNvidiaProfileInspector -eq 'y') {
         Read-Host 'A web browser will be opened.  Download nvidiaprofileinspector into the downloads folder. Press enter to begin '
         Start-Process 'https://github.com/Orbmu2k/nvidiaProfileInspector/releases' 
@@ -826,7 +799,6 @@ function InstallApplications {
         $Shortcut.Save()
     }
 
-    # Install steam
     if ($InstallSteam -eq 'y') {
         Invoke-WebRequest 'https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe' -OutFile "$HOME\Downloads\steam_setup.exe"
         if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\steam_setup.exe" | Where-Object { $_.Status -eq "Valid" }) {
@@ -837,7 +809,6 @@ function InstallApplications {
         }
     }
 
-    # Install origin
     if ($InstallOrigin -eq 'y') {
         Invoke-WebRequest 'https://www.dm.origin.com/download' -OutFile "$HOME\Downloads\origin_setup.exe"
         if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\origin_setup.exe" | Where-Object { $_.Status -eq "Valid" }) {
@@ -848,7 +819,6 @@ function InstallApplications {
         }
     }
 
-    # Install gog
     if ($InstallGOG -eq 'y') {
         Read-Host 'A web browser will be opened.  Download gog into the downloads folder. Press enter to begin '
         Start-Process 'https://www.gog.com/galaxy' 
@@ -861,7 +831,6 @@ function InstallApplications {
         }
     }
 
-    # Install epicstore
     if ($InstallEpicStore -eq 'y') {
         Read-Host 'A web browser will be opened.  Download epic launcher into the downloads folder. Press enter to begin '
         Start-Process 'https://www.epicgames.com/store/en-US/' 
@@ -874,7 +843,6 @@ function InstallApplications {
         }
     }
 
-    # Install bethesdalauncher
     if ($InstallBethesdaLauncher -eq 'y') {
         Invoke-WebRequest 'https://download.cdp.bethesda.net/BethesdaNetLauncher_Setup.exe' -OutFile "$HOME\Downloads\bethesda_setup.exe"
         if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\bethesda_setup.exe" | Where-Object { $_.Status -eq "Valid" }) {
@@ -885,7 +853,6 @@ function InstallApplications {
         }
     }
 
-    # Install BorderlessGaming
     if ($InstallBorderlessGaming -eq 'y') {
         Read-Host 'A web browser will be opened.  Download borderlessgaming into the downloads folder. Press enter to begin '
         Start-Process 'https://github.com/Codeusa/Borderless-Gaming/releases' 
@@ -898,7 +865,6 @@ function InstallApplications {
         }
     }
 
-    # Install Discord
     if ($InstallDiscord -eq 'y') {
         Invoke-WebRequest 'https://discordapp.com/api/download?platform=win' -OutFile "$HOME\Downloads\discord_setup.exe"
         if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\discord_setup.exe" | Where-Object { $_.Status -eq "Valid" }) {
@@ -909,7 +875,6 @@ function InstallApplications {
         }
     }
 
-    # Install FedoraMediaWriter
     if ($InstallFedoraMediaWriter -eq 'y') {
         Read-Host 'A web browser will be opened.  Download fedoramediawriter into the downloads folder. Press enter to begin '
         Start-Process 'https://getfedora.org/en/workstation/download/' 
@@ -922,7 +887,6 @@ function InstallApplications {
         }
     }
 
-    # Install Visual Studio Community
     if ($InstallVisualStudioCommunity -eq 'y') {
         Read-Host 'A web browser will be opened.  Download visual studio community into downloads folder. Press enter to begin '
         Start-Process 'https://visualstudio.microsoft.com/vs/community/' 
@@ -935,7 +899,6 @@ function InstallApplications {
         }
     }
 
-    # Install OpenVPN
     if ($InstallOpenVPN -eq 'y') {
         Read-Host 'A web browser will be opened.  Download openvpn into the downloads folder. Press enter to begin '
         Start-Process 'https://openvpn.net/community-downloads/' 
@@ -948,7 +911,6 @@ function InstallApplications {
         }
     }
 
-    # Install Twitch
     if ($InstallTwitch -eq 'y') {
         Invoke-WebRequest 'https://desktop.twitchsvc.net/installer/windows/TwitchSetup.exe' -OutFile "$HOME\Downloads\twitch_setup.exe"
         if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\twitch_setup.exe" | Where-Object { $_.Status -eq "Valid" }) {
@@ -959,7 +921,6 @@ function InstallApplications {
         }
     }
 
-    # Install Vortex
     if ($InstallVortex -eq 'y') {
         Read-Host 'A web browser will be opened.  Download vortex into the downloads folder. Press enter to begin '
         Start-Process 'https://github.com/Nexus-Mods/Vortex/releases' 
@@ -972,14 +933,12 @@ function InstallApplications {
         }
     }
 
-    # Install Visual C++ Redistributables
     if ($InstallVisualRedistributables -eq 'y') {
         Read-Host 'A web browser will be opened.  Download and install the Visual C++ Redistributables. Press enter to begin '
         Start-Process 'https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads' 
         Read-Host 'Press enter when finished installing '
     }
 
-    # Install RockstarLauncher
     if ($InstallRockstarLauncher -eq 'y') {
         Read-Host 'A web browser will be opened.  Download the rockstar game launcher into the downloads folder. Press enter to begin '
         Start-Process 'https://socialclub.rockstargames.com/rockstar-games-launcher' 
@@ -992,14 +951,12 @@ function InstallApplications {
         }
     }
 
-    # Install rpgmaker rtps
     if ($InstallRPGMakerRTPs -eq 'y') {
         Read-Host 'A web browser will be opened.  Download and install all of the RPGMaker RTPs into the downloads folder. Press enter to begin '
         Start-Process 'https://www.rpgmakerweb.com/download/additional/run-time-packages'
         Read-Host 'Press enter when finished installing '
     }
 
-    # Install Golang
     if ($InstallGolang -eq 'y') {
         Read-Host 'A web browser will be opened.  Download the Golang binary into the downloads folder. Press enter to begin '
         Start-Process 'https://golang.org/dl/'
@@ -1012,7 +969,6 @@ function InstallApplications {
         }
     }
 
-    # Install Microsoft Edge
     if ($InstallEdge -eq 'y') {
         Read-Host 'A web browser will be opened.  Download the edge binary into the downloads folder. Press enter to begin '
         Start-Process 'https://www.microsoft.com/en-us/edge'
@@ -1025,7 +981,6 @@ function InstallApplications {
         }
     }
 
-    # Install Reolink
     if ($InstallReolink -eq 'y') {
         Read-Host 'A web browser will be opened.  Download the reolink binary into the downloads folder. Press enter to begin '
         Start-Process 'https://reolink.com/software-and-manual/'
@@ -1040,7 +995,6 @@ function InstallApplications {
         }
     }
 
-    # Install Uplay
     if ($InstallUplay -eq 'y') {
         Read-Host 'A web browser will be opened.  Download the uplay binary into the downloads folder. Press enter to begin '
         Start-Process 'https://uplay.ubisoft.com/'
@@ -1053,7 +1007,6 @@ function InstallApplications {
         }
     }
 
-    # Install Microsoft Office
     if ($InstallMicrosoftOffice -eq 'y') {
         Read-Host 'A web browser will be opened.  Download the office binary into the downloads folder. Press enter to begin '
         Start-Process 'https://portal.office.com/account/'
@@ -1066,7 +1019,6 @@ function InstallApplications {
         }
     }
 
-    # Install Locale Emulator
     if ($InstallLocaleEmulator -eq 'y') {
         Read-Host 'A web browser will be opened.  Download the zip folder into the downloads folder. Press enter to begin '
         Start-Process 'https://github.com/xupefei/Locale-Emulator/releases'
@@ -1076,6 +1028,18 @@ function InstallApplications {
         # Move files to correct folder
         Get-ChildItem -Path "$HOME\Downloads\LocaleEmulator\*" -Recurse | Move-Item -Destination "$HOME\Downloads\LocaleEmulator"
         Start-Process -FilePath "$HOME\Downloads\LocaleEmulator\LEInstaller.exe" -Wait
+    }
+
+    if ($InstallWireguard -eq 'y') {
+        Read-Host 'A web browser will be opened.  Download the msi file into the downloads folder. Press enter to begin '
+        Start-Process 'https://www.wireguard.com/install/'
+        Read-Host 'Press enter when downloads are complete '
+        if (Get-AuthenticodeSignature -FilePath "$HOME\Downloads\*wireguard*.msi" | Where-Object { $_.Status -eq "Valid" }) {
+            Start-Process -FilePath "$HOME\Downloads\*wireguard*.msi" -Wait
+        }
+        else {
+            Read-Host "Signature is not valid, application will not be installed"
+        }
     }
 
     # Install windows store apps
