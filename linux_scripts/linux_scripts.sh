@@ -181,6 +181,8 @@ function configure_git() {
     mkdir -p "/home/${user_name}/.ssh"
     chmod 700 "/home/${user_name}/.ssh"
     cp "${key_location}" "/home/${user_name}/.ssh/${key}"
+    chmod 700 "/home/${user_name}/.ssh/${key}"
+    chown "${user_name}" "/home/${user_name}/.ssh/${key}"
     git config --global core.sshCommand "ssh -i ""/home/${user_name}/.ssh/${key}"" -F /dev/null"
 }
 
