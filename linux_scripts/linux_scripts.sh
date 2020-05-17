@@ -200,6 +200,10 @@ function get_username() {
     user_name=$(logname)
 }
 
+function get_username_second_method() {
+    user_name=$(whoami)
+}
+
 function get_interface_name() {
     interface="$(ip route get 8.8.8.8 | sed -nr 's/.*dev ([^\ ]+).*/\1/p')"
     echo "Interface name is ${interface}"
