@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
+# Copyright (c) Matthew David Miller. All rights reserved.
 # Licensed under the MIT License.
 
 # Compilation of functions that can be called for Arch Linux.
@@ -326,6 +326,7 @@ function arch_install_extra_packages() {
 function arch_install_move_to_script_part_2() {
     cp linux_scripts.sh '/mnt/linux_scripts.sh'
     cp arch_linux_scripts.sh '/mnt/arch_linux_scripts.sh'
+    cp linux_install_scripts.sh '/mnt/linux_install_scripts.sh'
     wget -O '/mnt/arch_linux_install_part_2.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/arch_linux_install_part_2.sh'
     chmod +x '/mnt/arch_linux_install_part_2.sh'
     cat <<EOF >'/mnt/tmp/temp_variables.sh'
@@ -414,4 +415,10 @@ function arch_setup_systemd_boot_luks_lvm() {
 function pacman_auto_clear_cache() {
     systemctl start paccache.timer
     systemctl enable paccache.timer
+}
+
+function arch_setup_locales() {
+    sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
+    # Generate locale
+    locale-gen
 }

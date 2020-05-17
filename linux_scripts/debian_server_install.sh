@@ -1,17 +1,21 @@
 #!/bin/bash
 
-# Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
+# Copyright (c) Matthew David Miller. All rights reserved.
 # Licensed under the MIT License.
 # Needs to be run as root.
 # Install script for a debian server. Use with Debian standard live installer. Run the script when in the live installer.
 
 # Get needed scripts
 wget -O 'linux_scripts.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/linux_scripts.sh'
+wget -O 'linux_install_scripts.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/linux_install_scripts.sh'
 wget -O 'debian_scripts.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/debian_scripts.sh'
+wget -O 'bash_config_scripts.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/bash_config_scripts.sh'
 
 # Source functions
 source linux_scripts.sh
+source linux_install_scripts.sh
 source debian_scripts.sh
+source bash_config_scripts.sh
 
 # Default Variables
 disk='/dev/sda'

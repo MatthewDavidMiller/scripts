@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
+# Copyright (c) Matthew David Miller. All rights reserved.
 # Licensed under the MIT License.
 
 # Script is used to automatically restart interface if the device can't access the gateway.

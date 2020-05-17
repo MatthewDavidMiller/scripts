@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
+# Copyright (c) Matthew David Miller. All rights reserved.
 # Licensed under the MIT License.
 
 # Part 2 of install script for Arch Linux.
@@ -11,11 +11,12 @@
 # Default variables
 user_name='matthew'
 device_hostname='MatthewLaptop'
-swap_file_size='8192'
+swap_file_size='2048'
 
 # Source functions
 source linux_scripts.sh
 source arch_linux_scripts.sh
+source linux_install_scripts.sh
 source /tmp/temp_variables.sh
 
 # Prompts, uncomment to use

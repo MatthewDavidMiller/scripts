@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
+# Copyright (c) Matthew David Miller. All rights reserved.
 # Licensed under the MIT License.
 
 # Compilation of functions that can be called for Debian.
@@ -35,6 +35,8 @@ function debootstrap_install_base_packages() {
 function debian_install_move_to_script_part_2() {
     cp linux_scripts.sh '/mnt/linux_scripts.sh'
     cp debian_scripts.sh '/mnt/debian_scripts.sh'
+    cp linux_install_scripts.sh '/mnt/linux_install_scripts.sh'
+    cp bash_config_scripts.sh '/mnt/bash_config_scripts.sh'
     wget -O '/mnt/debian_server_install_part_2.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/debian_server_install_part_2.sh'
     chmod +x '/mnt/debian_server_install_part_2.sh'
     cat <<EOF >'/mnt/tmp/temp_variables.sh'

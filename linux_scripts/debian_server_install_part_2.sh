@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
+# Copyright (c) Matthew David Miller. All rights reserved.
 # Licensed under the MIT License.
 
 # Part 2 of install script for Debian.
@@ -11,6 +11,8 @@ swap_file_size='512'
 # Source functions
 source linux_scripts.sh
 source debian_scripts.sh
+source linux_install_scripts.sh
+source bash_config_scripts.sh
 source /tmp/temp_variables.sh
 
 # Call functions

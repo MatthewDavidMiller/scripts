@@ -1,7 +1,7 @@
 # Scripts
 This repository contains scripts I have created.
 
-Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
+Copyright (c) Matthew David Miller. All rights reserved.
 
 [Licensed under the MIT License.](LICENSE)
 
@@ -14,8 +14,6 @@ Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 [configure_wsl.sh](windows_scripts/configure_wsl.sh) - Bash script to configure WSL.
 
 [windows_server_configuration.ps1](windows_scripts/windows_server_configuration.ps1) - Powershell script to configure Windows Server.
-
-[windows_scripts.ps1](windows_scripts/windows_scripts.ps1) - A lot of smaller scripts configured as functions for use with Windows.
 
 ### Small Scripts:
 
@@ -37,59 +35,37 @@ Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
 
 ### Large Scripts:
 
-[arch_linux_install.sh](linux_scripts/arch_linux_install.sh) - Bash script to automate my install of Arch Linux.
+[arch_linux_install.sh](linux_scripts/arch_linux_install.sh) - Bash script to automate the install of Arch Linux.
 
-[arch_linux_install_part_2.sh](linux_scripts/arch_linux_install_part_2.sh) - Bash script to automate my install of Arch Linux. Second script.
-
-[arch_linux_configure.sh](linux_scripts/arch_linux_configure.sh) - Bash script to automate my configuration of Arch Linux.
-
-[arch_linux_scripts.sh](linux_scripts/arch_linux_scripts.sh) - A lot of smaller scripts configured as functions for use on Arch Linux.
-
-[debian_scripts.sh](linux_scripts/debian_scripts.sh) - A lot of smaller scripts configured as functions for use on Debian.
+[arch_linux_configure.sh](linux_scripts/arch_linux_configure.sh) - Bash script to automate the configuration of Arch Linux.
 
 [debian_server_install.sh](linux_scripts/debian_server_install.sh) - Bash script to automate the install of debian servers.
 
-[debian_server_install_part_2.sh](linux_scripts/debian_server_install_part_2.sh) - Bash script to automate the install of debian servers. Second script.
-
-[linux_scripts.sh](linux_scripts/linux_scripts.sh) - A lot of smaller scripts configured as functions for use on majority of the Linux distros.
-
-[nas_server_configure.sh](linux_scripts/nas_server_configure.sh) - Bash script to automate the configuration of my nas.
-
-[nas_server_scripts.sh](linux_scripts/nas_server_scripts.sh) - A lot of smaller scripts configured as functions for use on a nas.
+[nas_server_configure.sh](linux_scripts/nas_server_configure.sh) - Bash script to automate the configuration of a nas.
 
 [omada_controller_configure.sh](linux_scripts/omada_controller_configure.sh) - A bash script to configure TP Link Omada Controller.
 
-[omada_controller_scripts.sh](linux_scripts/omada_controller_scripts.sh) - A lot of smaller scripts configured as functions for use with the Omada Controller.
+[openwrt_configure.sh](linux_scripts/openwrt_configure.sh) - Bash script to automate the configuration of a router.
 
-[openwrt_configure.sh](linux_scripts/openwrt_configure.sh) - Bash script to automate the configuration of my router.
+[pihole_server_configure.sh](linux_scripts/pihole_server_configure.sh) - Bash script to automate the configuration of a pihole server.
 
-[openwrt_scripts.sh](linux_scripts/openwrt_scripts.sh) - A lot of smaller scripts configured as functions for use on OpenWrt.
+[proxmox_configure.sh](linux_scripts/proxmox_configure.sh) - Bash script to automate the configuration of a proxmox setup.
 
-[pihole_server_configure.sh](linux_scripts/pihole_server_configure.sh) - Bash script to automate the configuration of my pihole server.
-
-[pihole_server_scripts.sh](linux_scripts/pihole_server_scripts.sh) - A lot of smaller scripts configured as functions for use on a Pihole server.
-
-[proxmox_configure.sh](linux_scripts/proxmox_configure.sh) - Bash script to automate the configuration of my proxmox setup.
-
-[proxmox_scripts.sh](linux_scripts/proxmox_scripts.sh) - A lot of smaller scripts configured as functions for use on a Proxmox server.
-
-[vpn_server_configure.sh](linux_scripts/vpn_server_configure.sh) - Bash script to automate the configuration of my vpn server.
-
-[vpn_server_scripts.sh](linux_scripts/vpn_server_scripts.sh) - A lot of smaller scripts configured as functions for use on a VPN server.
+[vpn_server_configure.sh](linux_scripts/vpn_server_configure.sh) - Bash script to automate the configuration of a vpn server.
 
 ### Small Scripts:
 
 [apt_package_updates.sh](linux_scripts/apt_package_updates.sh) - A bash script to update the packages on Debian based distros.
 
-[backup_configs.sh](linux_scripts/backup_configs.sh) - A bash script I wrote to tar the /etc and /home directory.  Used to automate backing up config files.
+[backup_configs.sh](linux_scripts/backup_configs.sh) - A bash script to tar the /etc and /home directory.  Used to automate backing up config files.
 
 [delete_logs.py](linux_scripts/delete_logs.py) - Simple python script to delete some logs files after going over a certain size.
 
 [email_ip_address.py](linux_scripts/email_ip_address.py) - A simple python script to send an email with the ip address of the device that ran the script.
 
-[email_on_vpn_connections.py](linux_scripts/email_on_vpn_connections.py) - A python script that is paired with my bash script to send an email when there is a connection on my openvpn server.
+[email_on_vpn_connections.py](linux_scripts/email_on_vpn_connections.py) - Python script to send out an email.
 
-[email_on_vpn_connections.sh](linux_scripts/email_on_vpn_connections.sh) - A bash script that checks the openvpn log file for a certain keyword so I know if a vpn connection was established on my server.
+[email_on_vpn_connections.sh](linux_scripts/email_on_vpn_connections.sh) - A bash script that checks the openvpn log file for a certain keyword and sends out an email.
 
 [network_reconnect.sh](linux_scripts/network_reconnect.sh) - A bash script that restarts a network interface if it can't ping the gateway.
 

@@ -1,4 +1,4 @@
-# Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
+# Copyright (c) Matthew David Miller. All rights reserved.
 # Licensed under the MIT License.
 # Script to confgure settings in Windows 10
 

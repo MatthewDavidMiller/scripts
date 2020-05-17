@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
+# Copyright (c) Matthew David Miller. All rights reserved.
 # Licensed under the MIT License.
 # Run with sudo. Do not run while logged into root.
 # Configuration script for the TP Link Omada Controller.
@@ -8,10 +8,16 @@
 # Get needed scripts
 wget -O 'linux_scripts.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/linux_scripts.sh'
 wget -O 'omada_controller_scripts.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/omada_controller_scripts.sh'
+wget -O 'linux_install_scripts.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/linux_install_scripts.sh'
+wget -O 'ssh_scripts.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/ssh_scripts.sh'
+wget -O 'ufw_scripts.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/ufw_scripts.sh'
 
 # Source functions
 source linux_scripts.sh
 source omada_controller_scripts.sh
+source linux_install_scripts.sh
+source ssh_scripts.sh
+source ufw_scripts.sh
 
 # Default variables
 release_name='buster'

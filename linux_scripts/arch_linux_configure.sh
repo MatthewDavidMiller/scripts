@@ -1,12 +1,15 @@
 #!/bin/bash
 
-# Copyright (c) 2019-2020 Matthew David Miller. All rights reserved.
+# Copyright (c) Matthew David Miller. All rights reserved.
 # Licensed under the MIT License.
 
 # Configuration script for Arch Linux.  Run after installing. Run as root.
 
 # Get script location
 # script_location="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+
+# Default variables
+wifi_name='Miller Homelab'
 
 # Prompts
 read -r -p "Run arch_linux_packages script? [y/N] " install_arch_packages_var
@@ -30,10 +33,12 @@ read -r -p "Configure pasystray? [y/N] " configure_pasystray_var
 # Get needed scripts
 wget -O 'linux_scripts.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/linux_scripts.sh'
 wget -O 'arch_linux_scripts.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/arch_linux_scripts.sh'
+wget -O 'xorg_scripts.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/xorg_scripts.sh'
 
 # Source functions
 source linux_scripts.sh
 source arch_linux_scripts.sh
+source xorg_scripts.sh
 
 # Call functions
 get_username
@@ -51,8 +56,8 @@ fi
 
 if [[ "${configure_i3_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     # Install packages
-    pacman -S --noconfirm --needed i3-wm i3blocks i3lock i3status perl perl-anyevent-i3 perl-json-xs dmenu network-manager-applet paprefs picom xorg-xrandr || echo 'Error installing packages.'
-    configure_i3_sway_base "${user_name}"
+    pacman -S --noconfirm --needed i3-wm i3blocks i3lock i3status dmenu picom xorg-xrandr || echo 'Error installing packages.'
+    configure_i3_sway_base "${user_name}" "${wifi_name}" "i3"
     configure_i3_config_file "${user_name}"
     configure_xinit
     configure_xinit_i3
@@ -82,8 +87,8 @@ fi
 
 if [[ "${configure_sway_var}" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     # Install packages
-    pacman -S --noconfirm --needed sway swayidle swaylock i3status dmenu network-manager-applet paprefs xorg-server-xwayland polkit-gnome xorg-xrandr || echo 'Error installing packages.'
-    configure_i3_sway_base "${user_name}"
+    pacman -S --noconfirm --needed sway swayidle swaylock i3status dmenu xorg-server-xwayland polkit-gnome xorg-xrandr || echo 'Error installing packages.'
+    configure_i3_sway_base "${user_name}" "${wifi_name}" "sway"
     configure_sway_config_file "${user_name}"
 fi
 
