@@ -11,7 +11,7 @@ $AddLocalUserVar = Read-Host "Add a local user? y/n "
 $ConfigureSSHVar = Read-Host "Configure SSH? y/n "
 
 # Source functions
-. windows_scripts.ps1
+. "$PSScriptRoot\windows_scripts.ps1"
 
 # Call functions
 if ($ConfigureTimeVar -eq 'y') {

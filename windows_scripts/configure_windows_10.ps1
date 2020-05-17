@@ -17,7 +17,7 @@ $MapDrivesVar = Read-Host 'Map network drives? Requires running as a normal user
 $InstallApplicationsVar = Read-Host 'Install some applications? Requires running as admin. y/n '
 
 # Source Functions
-. windows_scripts.ps1
+. "$PSScriptRoot\windows_scripts.ps1"
 
 # Call Functions
 if ($ConfigureComputerNameVar -eq 'y') {
