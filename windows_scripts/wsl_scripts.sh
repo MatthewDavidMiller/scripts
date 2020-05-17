@@ -33,16 +33,23 @@ function wsl_mount_network_drives() {
 }
 
 function wsl_copy_ssh_keys() {
-    mkdir -p '.ssh'
-    cp '/mnt/matt_files/SSHConfigs/matt_homelab/nas_key' '.ssh/nas_key'
-    cp '/mnt/matt_files/SSHConfigs/matt_homelab/openwrt_key' '.ssh/openwrt_key'
-    cp '/mnt/matt_files/SSHConfigs/matt_homelab/proxmox_key' '.ssh/proxmox_key'
-    cp '/mnt/matt_files/SSHConfigs/matt_homelab/vpn_key' '.ssh/vpn_key'
-    cp '/mnt/matt_files/SSHConfigs/matt_homelab/pihole_key' '.ssh/pihole_key'
+    # Parameters
+    local user_name=${1}
+
+    mkdir -p "/home/${user_name}/.ssh"
+    chown "${user_name}" "/home/${user_name}/.ssh"
+    chmod 700 "/home/$user_name/.ssh"
+    touch "/home/$user_name/.ssh/authorized_keys"
+    chmod 600 "/home/$user_name/.ssh/authorized_keys"
+    cp '/mnt/matt_files/SSHConfigs/matt_homelab/nas_key' "/home/${user_name}/.ssh/nas_key"
+    cp '/mnt/matt_files/SSHConfigs/matt_homelab/openwrt_key' "/home/${user_name}/.ssh/openwrt_key"
+    cp '/mnt/matt_files/SSHConfigs/matt_homelab/proxmox_key' "/home/${user_name}/.ssh/proxmox_key"
+    cp '/mnt/matt_files/SSHConfigs/matt_homelab/vpn_key' "/home/${user_name}/.ssh/vpn_key"
+    cp '/mnt/matt_files/SSHConfigs/matt_homelab/pihole_key' "/home/${user_name}/.ssh/pihole_key"
 }
 
 function wsl_install_packages() {
     apt-get update
-    apt-get upgrade
-    apt-get install git ssh python3 python-pip wireshark nmap
+    apt-get upgrade -y
+    apt-get install -y git ssh python3 python-pip wireshark nmap wget
 }
