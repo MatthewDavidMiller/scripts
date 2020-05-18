@@ -8,7 +8,7 @@
 function install_vpn_server_packages() {
     apt-get update
     apt-get upgrade
-    apt-get install -y wget vim git ufw ntp ssh apt-transport-https openssh-server unattended-upgrades
+    apt-get install -y wget vim git ufw ntp ssh apt-transport-https openssh-server unattended-upgrades wireguard
 }
 
 function configure_vpn_scripts() {
@@ -40,17 +40,108 @@ EOF
     rm -f jobs.cron
 }
 
-function configure_vpn() {
-    # Setup vpn with PiVPN
-    wget 'https://raw.githubusercontent.com/pivpn/pivpn/master/auto_install/install.sh'
-    mv 'install.sh' '/usr/local/bin/pivn_installer.sh'
-    chmod +x '/usr/local/bin/pivn_installer.sh'
-    bash '/usr/local/bin/pivn_installer.sh'
+function setup_basic_wireguard_interface() {
+    # Parameters
+    local interface=${1}
+    local ip_address=${2}
 
-    # Add vpn users
-    read -r -p "Add a vpn user? [y/N] " vpn_user_response
-    while [[ "${vpn_user_response}" =~ ^([yY][eE][sS]|[yY])+$ ]]; do
-        pivpn add
-        read -r -p "Add another vpn user? [y/N] " vpn_user_response
-    done
+    # Create interface
+    ip link add dev "${interface}" type wireguard
+    # Set ip address
+    ip address add dev "${interface}" "${ip_address}/24"
+    # Activate interface
+    ip link set up dev "${interface}"
+}
+
+function generate_wireguard_key() {
+    # Parameters
+    local user_name=${1}
+    local key_name=${2}
+
+    mkdir -p "/home/${user_name}/.wireguard_keys"
+    umask 077
+    wg genkey | tee "/home/${user_name}/.wireguard_keys/${key_name}" | wg pubkey >"/home/${user_name}/.wireguard_keys/${key_name}.pub"
+    chmod -R 700 "/home/${user_name}/.wireguard_keys"
+    chown "${user_name}" "/home/${user_name}/.wireguard_keys"
+}
+
+function configure_wireguard_server_base() {
+    # Parameters
+    local interface=${1}
+    local user_name=${2}
+    local server_key_name=${3}
+    local ip_address=${4}
+    local listen_port=${5}
+
+    local private_key
+    private_key=$(cat "/home/${user_name}/.wireguard_keys/${server_key_name}")
+
+    cat <<EOF >"/etc/wireguard/${interface}.conf"
+[Interface]
+Address = ${ip_address}/24
+ListenPort = ${listen_port}
+PrivateKey = ${private_key}
+
+EOF
+
+}
+
+function add_wireguard_peer() {
+    # Parameters
+    local interface=${1}
+    local user_name=${2}
+    local server_key_name=${3}
+    local ip_address=${4}
+    local preshared_key=${5}
+
+    local public_key
+    public_key=$(cat "/home/${user_name}/.wireguard_keys/${server_key_name}.pub")
+
+    cat <<EOF >>"/etc/wireguard/${interface}.conf"
+# ${server_key_name}
+[Peer]
+PublicKey = ${public_key}
+PresharedKey = ${preshared_key}
+AllowedIPs = ${ip_address}/32
+
+EOF
+}
+
+function wireguard_create_client_config() {
+    # Parameters
+    local interface=${1}
+    local user_name=${2}
+    local client_key_name=${3}
+    local server_key_name=${4}
+    local ip_address=${5}
+    local preshared_key=${6}
+    local dns_server=${7}
+    local public_dns_ip_address=${8}
+    local listen_port=${9}
+
+    local private_key
+    private_key=$(cat "/home/${user_name}/.wireguard_keys/${client_key_name}")
+    local public_key
+    public_key=$(cat "/home/${user_name}/.wireguard_keys/${server_key_name}.pub")
+
+    mkdir -p "/home/${user_name}/.wireguard_client_configs"
+    cat <<EOF >>"/home/${user_name}/.wireguard_client_configs/${client_key_name}.conf"
+[Interface]
+Address = ${ip_address}
+PrivateKey = ${private_key}
+DNS = ${dns_server}
+
+[Peer]
+PublicKey = ${public_key}
+PresharedKey = ${preshared_key}
+AllowedIPs = 0.0.0.0/0, ::/0
+Endpoint = ${public_dns_ip_address}:${listen_port}
+EOF
+}
+
+function enable_wireguard_service() {
+    # Parameters
+    local interface=${1}
+    systemctl start "wg-quick@${interface}.service"
+    systemctl enable "wg-quick@${interface}.service"
 }

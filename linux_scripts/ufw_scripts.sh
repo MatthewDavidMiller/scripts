@@ -106,3 +106,13 @@ function ufw_configure_rules() {
     fi
 
 }
+
+function ufw_allow_default_forward() {
+    grep -q ".*DEFAULT_FORWARD_POLICY=" '/etc/default/ufw' && sed -i "s,.*DEFAULT_FORWARD_POLICY=.*,DEFAULT_FORWARD_POLICY=\"ACCEPT\"," '/etc/default/ufw' || printf '%s\n' 'DEFAULT_FORWARD_POLICY="ACCEPT"' >>'/etc/default/ufw'
+}
+
+function ufw_allow_ip_forwarding() {
+    grep -q ".*net/ipv4/ip_forward=" '/etc/ufw/sysctl.conf' && sed -i "s,.*net/ipv4/ip_forward=.*,net/ipv4/ip_forward=1," '/etc/ufw/sysctl.conf' || printf '%s\n' 'net/ipv4/ip_forward=1' >>'/etc/ufw/sysctl.conf'
+    grep -q ".*net/ipv6/conf/default/forwarding=" '/etc/ufw/sysctl.conf' && sed -i "s,.*net/ipv6/conf/default/forwarding=.*,net/ipv6/conf/default/forwarding=1," '/etc/ufw/sysctl.conf' || printf '%s\n' 'net/ipv6/conf/default/forwarding=1' >>'/etc/ufw/sysctl.conf'
+    grep -q ".*net/ipv6/conf/all/forwarding=" '/etc/ufw/sysctl.conf' && sed -i "s,.*net/ipv6/conf/all/forwarding=.*,net/ipv6/conf/all/forwarding=1," '/etc/ufw/sysctl.conf' || printf '%s\n' 'net/ipv6/conf/all/forwarding=1' >>'/etc/ufw/sysctl.conf'
+}
