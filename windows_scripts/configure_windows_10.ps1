@@ -2,6 +2,12 @@
 # Licensed under the MIT License.
 # Script to confgure settings in Windows 10
 
+# Get neeeded files
+Invoke-WebRequest 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/windows_scripts/windows_scripts.ps1' -OutFile "$PSScriptRoot\windows_scripts.ps1"
+
+# Source Functions
+. "$PSScriptRoot\windows_scripts.ps1"
+
 # Prompts
 $ConfigureComputerNameVar = Read-Host 'Configure computer hostname? Requires running as admin. y/n '
 $ConfigurePowerOptionsVar = Read-Host 'Configure power options? Requires running as admin. y/n '
@@ -15,9 +21,6 @@ $InstallFeaturesVar = Read-Host 'Install features? Requires running as admin. y/
 $RemoveFeaturesVar = Read-Host 'Remove features? Requires running as admin. y/n '
 $MapDrivesVar = Read-Host 'Map network drives? Requires running as a normal user. y/n '
 $InstallApplicationsVar = Read-Host 'Install some applications? Requires running as admin. y/n '
-
-# Source Functions
-. "$PSScriptRoot\windows_scripts.ps1"
 
 # Call Functions
 if ($ConfigureComputerNameVar -eq 'y') {
@@ -33,7 +36,9 @@ if ($DisableTelemetryVar -eq 'y') {
     DisableTelemetry
 }
 if ($ConfigureFirewallVar -eq 'y') {
-    ConfigureFirewall
+    ConfigureFirewallBase
+    ConfigureFirewallCoreNetworking
+    ConfigureFirewallNetworkDiscovery
 }
 if ($RemoveApplicationsVar -eq 'y') {
     RemoveApplications
