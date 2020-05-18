@@ -128,12 +128,10 @@ function ConfigureFirewallBase {
     }
 
     # Firewall Rules
-    if (!(Test-Path $FirewallRules)) {
-        New-Item -Path $FirewallRules -Force | Out-Null
+    if (Test-Path $FirewallRules) {
         FirewallRulesCreation
     }
     else {
-        Remove-Item -Path $FirewallRules -Force | Out-Null
         New-Item -Path $FirewallRules -Force | Out-Null
         FirewallRulesCreation
     }
@@ -256,12 +254,10 @@ function ConfigureFirewallNetworkDiscovery {
     }
 
     # Firewall Rules
-    if (!(Test-Path $FirewallRules)) {
-        New-Item -Path $FirewallRules -Force | Out-Null
+    if (Test-Path $FirewallRules) {
         CreateNetworkDiscoveryRules
     }
     else {
-        Remove-Item -Path $FirewallRules -Force | Out-Null
         New-Item -Path $FirewallRules -Force | Out-Null
         CreateNetworkDiscoveryRules
     }
@@ -271,7 +267,6 @@ function ConfigureFirewallNetworkDiscovery {
 function ConfigureFirewallCoreNetworking {
     $WindowsFirewall = "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall"
     $FirewallRules = "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\FirewallRules"
-
 
     function CreateCoreNetworkingRules {
         New-ItemProperty -Path $FirewallRules -Name "CoreNetworking - IPv6-In" -Value "v2.30|Action=Allow|Active=TRUE|Dir=In|Protocol=41|App=System|Name=@FirewallAPI.dll,-25351|Desc=@FirewallAPI.dll,-25357|EmbedCtxt=@FirewallAPI.dll,-25000|RA4=LocalSubnet|RA6=LocalSubnet|" -PropertyType String -Force | Out-Null
@@ -296,12 +291,10 @@ function ConfigureFirewallCoreNetworking {
     }
 
     # Firewall Rules
-    if (!(Test-Path $FirewallRules)) {
-        New-Item -Path $FirewallRules -Force | Out-Null
+    if (Test-Path $FirewallRules) {
         CreateCoreNetworkingRules
     }
     else {
-        Remove-Item -Path $FirewallRules -Force | Out-Null
         New-Item -Path $FirewallRules -Force | Out-Null
         CreateCoreNetworkingRules
     }
