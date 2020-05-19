@@ -139,6 +139,7 @@ EOF
 10.1.10.4 matt-nas.miller.lan
 10.1.10.5 matt-pihole.miller.lan
 10.1.10.6 matt-vpn.miller.lan
+10.1.20.213 mary-printer.miller.lan
 EOF
 
     echo 'Set pihole password'
