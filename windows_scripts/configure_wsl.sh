@@ -3,7 +3,7 @@
 
 # Get needed scripts
 apt-get update
-apt-get install wget
+apt-get install -y wget
 wget -O 'linux_scripts.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/linux_scripts/linux_scripts.sh'
 wget -O 'wsl_scripts.sh' 'https://raw.githubusercontent.com/MatthewDavidMiller/scripts/stable/windows_scripts/wsl_scripts.sh'
 
@@ -13,7 +13,7 @@ source linux_scripts.sh
 
 # Call functions
 wsl_install_packages
-get_username_second_method
+wsl_get_username
 wsl_setup_gui
 wsl_configure_bashrc
 wsl_mount_network_drives

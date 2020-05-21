@@ -53,3 +53,7 @@ function wsl_install_packages() {
     apt-get upgrade -y
     apt-get install -y git ssh python3 python-pip wireshark nmap wget
 }
+
+function wsl_get_username() {
+    echo $LOGNAME
+}
