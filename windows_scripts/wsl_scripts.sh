@@ -55,5 +55,5 @@ function wsl_install_packages() {
 }
 
 function wsl_get_username() {
-    echo $LOGNAME
+    user_name=$($LOGNAME)
 }
