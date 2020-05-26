@@ -35,8 +35,6 @@ Copyright (c) Matthew David Miller. All rights reserved.
 
 ### Large Scripts:
 
-[nas_server_configure.sh](linux_scripts/nas_server_configure.sh) - Bash script to automate the configuration of a nas.
-
 [omada_controller_configure.sh](linux_scripts/omada_controller_configure.sh) - A bash script to configure TP Link Omada Controller.
 
 [openwrt_configure.sh](linux_scripts/openwrt_configure.sh) - Bash script to automate the configuration of a router.
