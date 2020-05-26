@@ -37,8 +37,6 @@ Copyright (c) Matthew David Miller. All rights reserved.
 
 [omada_controller_configure.sh](linux_scripts/omada_controller_configure.sh) - A bash script to configure TP Link Omada Controller.
 
-[openwrt_configure.sh](linux_scripts/openwrt_configure.sh) - Bash script to automate the configuration of a router.
-
 [proxmox_configure.sh](linux_scripts/proxmox_configure.sh) - Bash script to automate the configuration of a proxmox setup.
 
 ### Small Scripts:
