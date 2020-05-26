@@ -33,14 +33,6 @@ Copyright (c) Matthew David Miller. All rights reserved.
 
 ## Linux Scripts:
 
-### Large Scripts:
-
-[omada_controller_configure.sh](linux_scripts/omada_controller_configure.sh) - A bash script to configure TP Link Omada Controller.
-
-[proxmox_configure.sh](linux_scripts/proxmox_configure.sh) - Bash script to automate the configuration of a proxmox setup.
-
-### Small Scripts:
-
 [Apt Package Updates](linux_scripts/apt_package_updates.sh) - A bash script to update the packages on Debian based distros.
 
 [Backup Configs](linux_scripts/backup_configs.sh) - A bash script to tar the /etc and /home directory.  Used to automate backing up config files.
