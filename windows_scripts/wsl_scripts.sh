@@ -57,3 +57,32 @@ function wsl_install_packages() {
 function wsl_get_username() {
     user_name=$LOGNAME
 }
+
+function configure_git() {
+    # Parameters
+    local user_name=${1}
+
+    # Variables
+    # Git username
+    git_name='MatthewDavidMiller'
+    # Email address
+    email='matthewdavidmiller1@gmail.com'
+    # SSH key location
+    key_location='/mnt/matt_files/SSHConfigs/github/github_ssh'
+    # SSH key filename
+    key='github_ssh'
+
+    # Setup username
+    git config --global user.name "${git_name}"
+
+    # Setup email
+    git config --global user.email "${email}"
+
+    # Setup ssh key
+    mkdir -p "/home/${user_name}/.ssh"
+    chmod 700 "/home/${user_name}/.ssh"
+    cp "${key_location}" "/home/${user_name}/.ssh/${key}"
+    chmod 700 "/home/${user_name}/.ssh/${key}"
+    chown "${user_name}" "/home/${user_name}/.ssh/${key}"
+    git config --global core.sshCommand "ssh -i ""/home/${user_name}/.ssh/${key}"" -F /dev/null"
+}
