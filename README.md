@@ -1,19 +1,11 @@
 # Scripts
-This repository contains scripts I have created.
+This repository contains small scripts I have created.
 
 Copyright (c) Matthew David Miller. All rights reserved.
 
 [Licensed under the MIT License.](LICENSE)
 
 ## Windows Scripts:
-
-### Large Scripts:
-
-[Configure WSL](windows_scripts/configure_wsl.sh) - Bash script to configure WSL.
-
-[Windows Server Configuration](windows_scripts/windows_server_configuration.ps1) - Powershell script to configure Windows Server.
-
-### Small Scripts:
 
 [7z Batch Compress](windows_scripts/7z_batch_compress.ps1) - Powershell script to batch compress files and folders to a 7z archive.
 
