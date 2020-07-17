@@ -17,7 +17,7 @@ function apt_update_packages() {
 
     apt-get update
     apt-get upgrade -y |& tee -a "${temp}"
-    if grep -qi "${words_to_look_for}" "${temp}"; then
+    if grep -q -i "${words_to_look_for}" "${temp}"; then
         printf '%s\n' 'No updates.' >>"${log}"
         rm -rf "${temp}"
     else
