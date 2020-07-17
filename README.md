@@ -37,6 +37,8 @@ Copyright (c) Matthew David Miller. All rights reserved.
 
 [Email on VPN Connections](linux_scripts/email_on_vpn_connections.sh) - A bash script that checks the openvpn log file for a certain keyword and sends out an email.
 
+[Log Rotate](linux_scripts/log_rotate_setup.sh) - A bash script to configure log rotate.
+
 [Network Reconnect](linux_scripts/network_reconnect.sh) - A bash script that restarts a network interface if it can't ping the gateway.
 
 [Rsync Backups](linux_scripts/rsync_backups.sh) - Bash script to backup files with rsync.
