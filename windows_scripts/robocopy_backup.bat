@@ -12,6 +12,6 @@ SET Backup3Source=""
 SET Backup3Destination=""
 
 rem Run the robocopy commands
-robocopy %Backup3Source% %Backup3Destination% /s /copyall /np /r:2 /w:5 /tee /log:%log_file%
-robocopy %Backup2Source% %Backup2Destination% /s /copyall /np /r:2 /w:5 /tee /log:%log_file%
-robocopy %MainBackupSource% %MainBackupDestination% /s /copyall /np /r:2 /w:5 /tee /mir /log:%log_file%
+robocopy %Backup3Source% %Backup3Destination% /s /copyall /np /r:2 /w:5 /tee /MT /log:%log_file%
+robocopy %Backup2Source% %Backup2Destination% /s /copyall /np /r:2 /w:5 /tee /MT /log:%log_file%
+robocopy %MainBackupSource% %MainBackupDestination% /s /copyall /np /r:2 /w:5 /tee /MT /mir /log:%log_file%
