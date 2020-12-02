@@ -17,7 +17,7 @@ Copyright (c) Matthew David Miller. All rights reserved.
 
 [Robocopy Backup](windows_scripts/robocopy_backup.bat) - Script to copy a directory to another location.
 
-[Run PowerShell Scripts](windows_scripts/run_powershell_scripts.bat) - Script to run a PowerShell script without modifying the execution policy of the device.
+[Run PowerShell Scripts](windows_scripts/run_powershell_script.bat) - Script to run a PowerShell script without modifying the execution policy of the device.
 
 [Tar Batch Process Files](windows_scripts/tar_batch_process_files.bat) - Places all folders in a tar archive from where the script is run from.
 
