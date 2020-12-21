@@ -1,74 +1,81 @@
 # Script to batch compress files with 7zip.
-
-# Prompts
-$CompressFilesVar = Read-Host 'Compress files? y/n '
-$CompressFoldersVar = Read-Host 'Compress folders? y/n '
+# Credits to Spc_555, https://stackoverflow.com/questions/25690038/how-do-i-properly-use-the-folderbrowserdialog-in-powershell
+# Credits to Microsoft, https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.folderbrowserdialog?view=net-5.0
 
 function CompressFolders {
-    $Source = Read-Host 'Specify source directory to batch compress '
-    $Destination = Read-Host 'Specify destination directory '
-    foreach ($item in (Get-ChildItem -Directory -Name $Source)) {
-        $7zJob = Start-Job -ScriptBlock { & "c:\Program Files\7-Zip\7z.exe" "-mx=9" "-ms=on" a "$using:Destination\$using:item.7z" "$using:Source\$using:item" }
+
+    function GetFolderBrowser {
+        Add-Type -AssemblyName System.Windows.Forms
+        $FolderBrowser = New-Object Windows.Forms.FolderBrowserDialog
+        $FolderBrowser.RootFolder = "MyComputer"
+        $FolderBrowser.Description = "Select folder to compress"
+        [void]$FolderBrowser.ShowDialog()
+        $SelectedFolder = $FolderBrowser.SelectedPath
+        return $SelectedFolder
+    }
+    $Source = GetFolderBrowser
+
+    foreach ($item in ($Source)) {
+        $7zJob = Start-Job -ScriptBlock { & "c:\Program Files\7-Zip\7z.exe" "-mx=9" "-ms=on" a "$using:item.7z" "$using:item" }
         Start-Sleep -s 12
         $7zProcess = Get-Process -Name "7z"
         $7zProcess.PriorityClass = 'Idle'
         Get-Job | Wait-Job
         Receive-Job -Job $7zJob
-    }
-    $AnotherTask = Read-Host 'Compress more folders? y/n '
-    if ($AnotherTask -eq 'y') {
-        DO {
-            $Source = Read-Host 'Specify source directory to batch compress '
-            $Destination = Read-Host 'Specify destination directory '
-            foreach ($item in (Get-ChildItem -Directory -Name $Source)) {
-                $7zJob = Start-Job -ScriptBlock { & "c:\Program Files\7-Zip\7z.exe" "-mx=9" "-ms=on" a "$using:Destination\$using:item.7z" "$using:Source\$using:item" }
-                Start-Sleep -s 12
-                $7zProcess = Get-Process -Name "7z"
-                $7zProcess.PriorityClass = 'Idle'
-                Get-Job | Wait-Job
-                Receive-Job -Job $7zJob
-            }
-            $AnotherTask = Read-Host 'Compress more folders? y/n '
-        } while ($AnotherTask -eq 'y')
     }
 }
 
 function CompressFiles {
-    $Source = Read-Host 'Specify source directory to batch compress '
-    $Destination = Read-Host 'Specify destination directory '
-    foreach ($item in (Get-ChildItem -File -Name $Source)) {
-        $7zJob = Start-Job -ScriptBlock { & "c:\Program Files\7-Zip\7z.exe" "-mx=9" "-ms=on" a "$using:Destination\$using:item.7z" "$using:Source\$using:item" }
+    function GetFileBrowser {
+        Add-Type -AssemblyName System.Windows.Forms
+        $FileBrowser = New-Object Windows.Forms.OpenFileDialog
+        $FileBrowser.InitialDirectory = Get-Location
+        $FileBrowser.Filter = "All Files (*.*)|*.*"
+        $FileBrowser.ShowHelp = $true
+        $FileBrowser.Multiselect = $true
+        [void]$FileBrowser.ShowDialog()
+        if ($FileBrowser.Multiselect) { $SelectedFiles = @($FileBrowser.FileNames) } else { $SelectedFiles = ($FileBrowser.FileName) }
+        return $SelectedFiles
+    }
+    $Source = GetFileBrowser
+
+    foreach ($item in ($Source)) {
+        $7zJob = Start-Job -ScriptBlock { & "c:\Program Files\7-Zip\7z.exe" "-mx=9" "-ms=on" a "$using:item.7z" "$using:item" }
         Start-Sleep -s 12
         $7zProcess = Get-Process -Name "7z"
         $7zProcess.PriorityClass = 'Idle'
         Get-Job | Wait-Job
         Receive-Job -Job $7zJob
     }
-    $AnotherTask = Read-Host 'Compress more files? y/n '
-    if ($AnotherTask -eq 'y') {
-        DO {
-            $Source = Read-Host 'Specify source directory to batch compress '
-            $Destination = Read-Host 'Specify destination directory '
-            foreach ($item in (Get-ChildItem -File -Name $Source)) {
-                $7zJob = Start-Job -ScriptBlock { & "c:\Program Files\7-Zip\7z.exe" "-mx=9" "-ms=on" a "$using:Destination\$using:item.7z" "$using:Source\$using:item" }
-                Start-Sleep -s 12
-                $7zProcess = Get-Process -Name "7z"
-                $7zProcess.PriorityClass = 'Idle'
-                Get-Job | Wait-Job
-                Receive-Job -Job $7zJob
-            }
-            $AnotherTask = Read-Host 'Compress more files? y/n '
-        } while ($AnotherTask -eq 'y')
+}
+
+function InteractiveMenu {
+    function Show-Menu {
+        param (
+            [string]$Title = 'Configuration Options'
+        )
+        Clear-Host
+        Write-Host "================ $Title ================"
+
+        Write-Host "1: Press '1' to compress files."
+        Write-Host "2: Press '2' to compress folders."
+        Write-Host "q: Press 'q' to quit."
     }
+    do {
+        Show-Menu
+        $selection = Read-Host "Select an option"
+        switch ($selection) {
+            '1' {
+                CompressFiles
+            }
+            '2' {
+                CompressFolders
+            }
+        }
+        Pause
+    }
+    until ($selection -eq 'q')
 }
 
 # Call functions
-if ($CompressFoldersVar -eq 'y') {
-    CompressFolders
-}
-
-if ($CompressFilesVar -eq 'y') {
-    CompressFiles
-}
-
-Read-Host -Prompt "Script finished.  Press enter to exit."
+InteractiveMenu
