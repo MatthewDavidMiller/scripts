@@ -3,6 +3,7 @@ import sys
 import subprocess
 import csv
 from datetime import datetime
+from io import BytesIO
 
 # Script saves large emails as pdfs, not including the attachments.
 # Original email then moved to trash.
@@ -17,10 +18,12 @@ def install_and_import(package_name, import_name=None):
         globals()[import_name] = __import__(import_name)
 
 install_and_import('imap-tools', 'imap_tools')
-install_and_import('fpdf')
+install_and_import('xhtml2pdf')
+install_and_import('beautifulsoup4', 'bs4')
 
 from imap_tools import MailBox, AND
-from fpdf import FPDF
+from xhtml2pdf import pisa
+from bs4 import BeautifulSoup
 
 # 📧 Configuration
 EMAIL = 'your_email@gmail.com'  # Replace with your Gmail address
@@ -28,6 +31,10 @@ PASSWORD = 'your_app_password'  # Use an App Password if 2FA is enabled
 ATTACHMENT_SIZE_MB = 5
 OUTPUT_FOLDER = 'saved_emails'
 LOG_FILE = 'processed_emails.csv'
+
+# 🗓️ Date range filter
+start_date = datetime(2025, 9, 12).date()
+end_date = datetime(2025, 9, 19).date()
 
 # 📁 Ensure output folder exists
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
@@ -41,7 +48,7 @@ if os.path.exists(LOG_FILE):
 
 # 📬 Connect to Gmail
 with MailBox('imap.gmail.com').login(EMAIL, PASSWORD, initial_folder='INBOX') as mailbox:
-    messages = mailbox.fetch(bulk=True)
+    messages = mailbox.fetch(AND(date_gte=start_date, date_lt=end_date), bulk=True)
 
     with open(LOG_FILE, 'a', newline='', encoding='utf-8') as log:
         writer = csv.writer(log)
@@ -49,6 +56,9 @@ with MailBox('imap.gmail.com').login(EMAIL, PASSWORD, initial_folder='INBOX') as
         for msg in messages:
             if str(msg.uid) in processed_uids:
                 continue  # Skip already processed
+
+            if not msg.attachments:
+                continue
 
             total_size = sum(len(att.payload) for att in msg.attachments)
             if total_size < ATTACHMENT_SIZE_MB * 1024 * 1024:
@@ -59,20 +69,55 @@ with MailBox('imap.gmail.com').login(EMAIL, PASSWORD, initial_folder='INBOX') as
             subject = msg.subject or 'No_Subject'
             clean_subject = ''.join(c for c in subject if c.isalnum() or c in (' ', '_')).strip()
             filename = f"{clean_subject}_{date_str}_{msg.uid}.pdf"
+            filepath = os.path.join(OUTPUT_FOLDER, filename)
 
-            # 📄 Create PDF
-            pdf = FPDF()
-            pdf.add_page()
-            pdf.set_auto_page_break(auto=True, margin=15)
-            pdf.set_font("Arial", size=12)
+            # 🖼️ Build full HTML content
+            raw_html = msg.html or f"<pre>{msg.text}</pre>"
 
-            # Prefer plain text to avoid rendering issues
-            content = msg.text or '[No content]'
-            header = f"From: {msg.from_}\nTo: {msg.to}\nCC: {msg.cc}\nDate: {msg.date}\nSubject: {msg.subject}\n\n"
-            pdf.multi_cell(0, 10, header + content)
+            # 🧼 Preprocess layout to flatten side-by-side elements
+            soup = BeautifulSoup(raw_html, 'html.parser')
+            for tag in soup.find_all(['table', 'div']):
+                style = tag.get('style', '')
+                style = style.replace('display:inline-block', '')
+                style = style.replace('float:left', '')
+                style = style.replace('float:right', '')
+                style = style.replace('width:48%', 'width:100%')
+                style = style.replace('width:50%', 'width:100%')
+                tag['style'] = style
+            html_content = str(soup)
 
-            # 💾 Save PDF
-            pdf.output(os.path.join(OUTPUT_FOLDER, filename))
+            header = f"""
+            <p><strong>From:</strong> {msg.from_}<br>
+            <strong>To:</strong> {msg.to}<br>
+            <strong>CC:</strong> {msg.cc}<br>
+            <strong>Date:</strong> {msg.date}<br>
+            <strong>Subject:</strong> {msg.subject}</p><hr>
+            """
+
+            full_html = f"""
+            <html>
+            <head>
+            <style>
+            body {{ font-family: Arial; font-size: 12px; }}
+            table {{ width: 100%; border-collapse: collapse; table-layout: fixed; word-wrap: break-word; }}
+            td, th {{ border: 1px solid #ccc; padding: 5px; vertical-align: top; }}
+            pre {{ white-space: pre-wrap; word-wrap: break-word; }}
+            </style>
+            </head>
+            <body>
+            {header}
+            {html_content}
+            </body>
+            </html>
+            """
+
+            # 💾 Save PDF using xhtml2pdf
+            try:
+                with open(filepath, "wb") as pdf_file:
+                    pisa.CreatePDF(BytesIO(full_html.encode("utf-8")), dest=pdf_file)
+            except Exception as e:
+                print(f"❌ PDF generation failed for UID {msg.uid}: {e}")
+                continue
 
             # 🗑️ Move to Trash
             mailbox.move(msg.uid, '[Gmail]/Trash')
@@ -80,4 +125,4 @@ with MailBox('imap.gmail.com').login(EMAIL, PASSWORD, initial_folder='INBOX') as
             # 🧾 Log UID
             writer.writerow([msg.uid, filename, msg.from_, msg.date])
 
-print("✅ Done: Saved PDFs, moved originals to Trash, and logged processed emails.")
+print("✅ Done: Saved cleaned PDFs, moved originals to Trash, and logged processed emails.")
