@@ -46,3 +46,7 @@ Copyright (c) Matthew David Miller. All rights reserved.
 [Rsync Backups](linux_scripts/rsync_backups.sh) - Bash script to backup files with rsync.
 
 [Updates](linux_scripts/updates.py) - Python script to update packages with the apt-get package manager.
+
+## Omarchy Scripts:
+
+[Controller 8bitdo Setup](linux_scripts/Omarchy/controller_8bitdo_setup.sh) - Script to setup 8 bitdo controller with D-input.
