@@ -85,5 +85,5 @@ fi
 echo -e "${GREEN}Setup complete!${NC}"
 echo -e "${YELLOW}Next steps:${NC}"
 echo "  - Launch OpenSnitch UI: opensnitch-ui"
-echo "  - For Bubblejail, edit profiles in ~/.config/bubblejail/ and run e.g., 'bubblejail --profile=default <app>'"
+echo "  - For Bubblejail, edit/create profiles in ~/.config/bubblejail/profiles or /etc/bubblejail/profiles and run e.g., 'bubblejail --profile=default <app>'"
 echo "  - Check UFW status: sudo ufw status verbose"
