@@ -50,3 +50,5 @@ Copyright (c) Matthew David Miller. All rights reserved.
 ## Omarchy Scripts:
 
 [Controller 8bitdo Setup](linux_scripts/Omarchy/controller_8bitdo_setup.sh) - Script to setup 8 bitdo controller with D-input.
+
+[Security Setup](linux_scripts/Omarchy/security_setup.sh) - Initial Setup Script for OpenSnitch, Bubblewrap, Bubblejail, and UFW
