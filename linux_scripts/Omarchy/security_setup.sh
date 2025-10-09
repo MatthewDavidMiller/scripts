@@ -27,8 +27,8 @@ fi
 
 # Enable and start OpenSnitch service
 echo -e "${YELLOW}Enabling and starting OpenSnitch service...${NC}"
-sudo systemctl enable --now opensnitch
-if systemctl is-active --quiet opensnitch; then
+sudo systemctl enable --now opensnitchd
+if systemctl is-active --quiet opensnitchd; then
     echo -e "${GREEN}OpenSnitch service is active.${NC}"
 else
     echo -e "${RED}Warning: OpenSnitch service failed to start. Check with 'systemctl status opensnitch'.${NC}"
