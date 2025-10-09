@@ -63,7 +63,7 @@ echo -e "${YELLOW}Configuring UFW: Resetting rules and setting defaults...${NC}"
 sudo ufw --force reset
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
-sudo ufw default deny forwarding
+sudo ufw default deny routed
 sudo ufw enable
 
 # Enable and start UFW systemd service
@@ -76,7 +76,7 @@ else
 fi
 
 if sudo ufw status | grep -q "Status: active"; then
-    echo -e "${GREEN}UFW is active with default deny incoming, allow outgoing, deny forwarding.${NC}"
+    echo -e "${GREEN}UFW is active with default deny incoming, allow outgoing, deny routed.${NC}"
 else
     echo -e "${RED}Warning: UFW failed to enable. Check with 'sudo ufw status verbose'.${NC}"
 fi
