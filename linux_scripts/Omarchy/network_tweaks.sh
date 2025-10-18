@@ -106,7 +106,6 @@ EOF
     if [[ $changes_made -eq 1 ]]; then
         log_info "Applying all sysctl changes..."
         sysctl --system
-        log_warn "For full effect on running connections, consider restarting NetworkManager or rebooting."
     else
         log_info "No changes needed; optimizations already applied."
     fi
