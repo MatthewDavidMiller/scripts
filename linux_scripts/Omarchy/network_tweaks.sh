@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# High-Bandwidth TCP Optimizations Script for Arch Linux
-# Enables BBR congestion control and tunes TCP buffers for gigabit+ connections.
+# High-Bandwidth TCP Optimizations Script for Arch Linux (2.5Gbps+ NICs)
+# Enables BBR, tunes TCP buffers to 64MB, sets FQ qdisc, and increases backlog.
 # Idempotent: Safe to run multiple times; only applies changes if needed.
 # Run as root or with sudo.
 
@@ -59,7 +59,7 @@ main() {
         exec sudo "$0" "$@"
     fi
 
-    log_info "Starting high-bandwidth TCP optimizations..."
+    log_info "Starting high-bandwidth TCP optimizations for 2.5Gbps+ NIC..."
 
     changes_made=0
 
@@ -78,27 +78,47 @@ main() {
     fi
 
     # 2. Tune TCP Buffers
-    log_info "Tuning TCP buffers for high-bandwidth..."
+    log_info "Tuning TCP buffers for 2.5Gbps+..."
     BUFFERS_FILE="/etc/sysctl.d/41-tcp-buffers.conf"
     BUFFERS_CONTENT=$(cat << 'EOF'
-# TCP Buffer Tuning for High-Bandwidth Connections
-net.core.rmem_max = 16777216
-net.core.wmem_max = 16777216
-net.ipv4.tcp_rmem = 4096 87380 16777216
-net.ipv4.tcp_wmem = 4096 65536 16777216
+# TCP Buffer Tuning for 2.5Gbps+ Connections
+net.core.rmem_max = 67108864
+net.core.wmem_max = 67108864
+net.ipv4.tcp_rmem = 4096 87380 67108864
+net.ipv4.tcp_wmem = 4096 65536 67108864
 EOF
 )
 
     # Check if all buffer settings match
-    if check_sysctl "net.core.rmem_max" "16777216" &&
-       check_sysctl "net.core.wmem_max" "16777216" &&
-       check_sysctl "net.ipv4.tcp_rmem" "4096 87380 16777216" &&
-       check_sysctl "net.ipv4.tcp_wmem" "4096 65536 16777216"; then
-        log_info "TCP buffers are already tuned."
+    if check_sysctl "net.core.rmem_max" "67108864" &&
+       check_sysctl "net.core.wmem_max" "67108864" &&
+       check_sysctl "net.ipv4.tcp_rmem" "4096 87380 67108864" &&
+       check_sysctl "net.ipv4.tcp_wmem" "4096 65536 67108864"; then
+        log_info "TCP buffers are already tuned for 2.5Gbps+."
     else
         if apply_sysctl_if_changed "$BUFFERS_FILE" "$BUFFERS_CONTENT"; then
             changes_made=1
-            log_info "TCP buffers tuned. Verify with: sysctl net.core.rmem_max net.core.wmem_max net.ipv4.tcp_rmem net.ipv4.tcp_wmem"
+            log_info "TCP buffers tuned to 64MB. Verify with: sysctl net.core.rmem_max net.core.wmem_max net.ipv4.tcp_rmem net.ipv4.tcp_wmem"
+        fi
+    fi
+
+    # 3. Set FQ Default Qdisc and Increase Backlog (New for Multi-Gig)
+    log_info "Configuring FQ qdisc and backlog for multi-gigabit..."
+    QDISC_FILE="/etc/sysctl.d/42-qdisc-backlog.conf"
+    QDISC_CONTENT=$(cat << 'EOF'
+# Qdisc and Backlog for 2.5Gbps+
+net.core.default_qdisc = fq
+net.core.netdev_max_backlog = 30000
+EOF
+)
+
+    if check_sysctl "net.core.default_qdisc" "fq" &&
+       check_sysctl "net.core.netdev_max_backlog" "30000"; then
+        log_info "FQ qdisc and backlog are already set."
+    else
+        if apply_sysctl_if_changed "$QDISC_FILE" "$QDISC_CONTENT"; then
+            changes_made=1
+            log_info "FQ qdisc and backlog enabled. Verify with: sysctl net.core.default_qdisc net.core.netdev_max_backlog"
         fi
     fi
 
