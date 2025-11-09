@@ -10,7 +10,7 @@ BACKUP_PATH="$BACKUP_DIR/opensnitch_backup_$TIMESTAMP"
 # Create the backup directory if it doesn't exist
 mkdir -p "$BACKUP_PATH"
 
-# Copy OpenSnitch rules (assuming default location)
-cp -r ~/.config/opensnitch/rules/* "$BACKUP_PATH"
+# Copy OpenSnitch rules from the correct location
+sudo cp -r /etc/opensnitchd/rules/* "$BACKUP_PATH"
 
 echo "OpenSnitch rules backed up to $BACKUP_PATH"
