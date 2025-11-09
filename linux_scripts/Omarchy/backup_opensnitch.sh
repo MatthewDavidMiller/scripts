@@ -28,4 +28,8 @@ if ! sudo cp -r /etc/opensnitchd/rules/* "$BACKUP_PATH"; then
     exit 1
 fi
 
+# Fix permissions and ownership to match the parent directory
+sudo chmod --reference="$BACKUP_DIR" "$BACKUP_PATH"
+sudo chown --reference="$BACKUP_DIR" "$BACKUP_PATH"
+
 echo "OpenSnitch rules backed up to $BACKUP_PATH"
