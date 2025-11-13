@@ -110,8 +110,15 @@ echo "[*] Enabling and starting Ollama service..."
 if ! systemctl is-enabled --quiet ollama; then
   sudo systemctl enable ollama
 fi
+echo "[*] Setting HSA_OVERRIDE_GFX_VERSION in Ollama systemd service..."
+sudo mkdir -p /etc/systemd/system/ollama.service.d
+sudo tee /etc/systemd/system/ollama.service.d/env.conf > /dev/null << EOF
+[Service]
+Environment="HSA_OVERRIDE_GFX_VERSION=10.3.0"
+EOF
 sudo systemctl daemon-reload
 sudo systemctl restart ollama
+echo "[=] Service env var set"
 
 # Wait and check service
 sleep 5
