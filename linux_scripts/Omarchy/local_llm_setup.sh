@@ -115,6 +115,7 @@ sudo mkdir -p /etc/systemd/system/ollama.service.d
 sudo tee /etc/systemd/system/ollama.service.d/env.conf > /dev/null << EOF
 [Service]
 Environment="HSA_OVERRIDE_GFX_VERSION=10.3.0"
+Environment="OLLAMA_CONTEXT_LENGTH=262144"
 EOF
 sudo systemctl daemon-reload
 sudo systemctl restart ollama
@@ -141,7 +142,7 @@ else
 fi
 
 # Pull Qwen2.5-Coder model
-readonly MODEL="qwen2.5-coder:32b-instruct-q4_K_M"
+readonly MODEL="qwen2.5-coder:7b-instruct-q4_K_M"
 echo "[*] Pulling model: $MODEL"
 if ! ollama list | grep -q "$MODEL"; then
   ollama pull "$MODEL"
@@ -164,12 +165,12 @@ readonly CONFIG_FILE="$CONFIG_DIR/config.json"
 echo "[*] Setting up Continue.dev config..."
 mkdir -p "$CONFIG_DIR"
 
-if [ ! -f "$CONFIG_FILE" ] || ! grep -q "qwen2.5-coder:32b-instruct-q4_K_M" "$CONFIG_FILE"; then
+if [ ! -f "$CONFIG_FILE" ] || ! grep -q "qwen2.5-coder:7b-instruct-q4_K_M" "$CONFIG_FILE"; then
   cat > "$CONFIG_FILE" << EOF
 {
   "models": [
     {
-      "title": "Qwen2.5-Coder-32B",
+      "title": "Qwen2.5-Coder-7B",
       "provider": "ollama",
       "model": "$MODEL",
       "contextLength": 262144,
@@ -177,7 +178,7 @@ if [ ! -f "$CONFIG_FILE" ] || ! grep -q "qwen2.5-coder:32b-instruct-q4_K_M" "$CO
     }
   ],
   "tabAutocompleteModel": {
-    "title": "Qwen2.5-Coder-32B",
+    "title": "Qwen2.5-Coder-7B",
     "provider": "ollama",
     "model": "$MODEL"
   },
