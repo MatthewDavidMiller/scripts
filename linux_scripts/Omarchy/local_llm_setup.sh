@@ -51,6 +51,15 @@ if ! grep -q "HSA_OVERRIDE_GFX_VERSION" ~/.bashrc; then
 fi
 export HSA_OVERRIDE_GFX_VERSION=10.3.0  # Apply immediately
 
+# Set Ollama context length env var (for 256k default)
+readonly OLLAMA_CTX_ENV="export OLLAMA_CONTEXT_LENGTH=262144"
+if ! grep -q "OLLAMA_CONTEXT_LENGTH" ~/.bashrc; then
+  echo "[*] Adding Ollama context length env var to ~/.bashrc..."
+  echo "$OLLAMA_CTX_ENV" >> ~/.bashrc
+else
+  echo "[=] Ollama context length env var already set"
+fi
+
 echo "[*] Verifying GPU support (with override)..."
 if HSA_OVERRIDE_GFX_VERSION=10.3.0 rocminfo | grep -q "gfx1031"; then
   echo "✔ RX 6700XT (gfx1031) detected and supported by ROCm (unofficial override)"
@@ -184,9 +193,10 @@ echo " Troubleshooting Notes:"
 echo " - ROCm gfx1031 is unofficial: Use env var for apps like Ollama."
 echo " - If Ollama still fails: Reboot, then 'HSA_OVERRIDE_GFX_VERSION=10.3.0 ollama serve'"
 echo " - Check ROCm full: HSA_OVERRIDE_GFX_VERSION=10.3.0 rocm-smi"
+echo " - Context length now defaulted to 256k via OLLAMA_CONTEXT_LENGTH env var."
 echo " Next steps:"
 echo " 1. Reboot for ROCm groups and modules."
-echo " 2. Run 'source ~/.bashrc' to load env var."
+echo " 2. Run 'source ~/.bashrc' to load env vars."
 echo " 3. Verify: HSA_OVERRIDE_GFX_VERSION=10.3.0 rocm-smi (should show RX 6700XT)."
 echo " 4. Open VSCode, Ctrl+Shift+P > 'Continue: Open'."
 echo " 5. Test Ollama: 'ollama run $MODEL' (add env var if GPU not used)."
