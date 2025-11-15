@@ -145,7 +145,7 @@ fi
 readonly MODELS=(
     "qwen2.5-coder:7b-instruct-q4_K_M"
     "qwen3:8b-q4_K_M"
-    "gemma3:4b-q4_K_M"
+    "gemma3:4b-it-qat"
 )
 for model in "${MODELS[@]}"; do
     echo "[*] Pulling model: $model"
@@ -204,7 +204,7 @@ if [ "$update_config" = true ]; then
     {
       "title": "Gemma3-4B",
       "provider": "ollama",
-      "model": "gemma3:4b-q4_K_M",
+      "model": "gemma3:4b-it-qat",
       "contextLength": 262144,
       "completionOptions": { "temperature": 0.2, "maxTokens": 4096 }
     }
