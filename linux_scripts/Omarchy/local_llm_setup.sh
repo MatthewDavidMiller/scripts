@@ -52,7 +52,7 @@ fi
 export HSA_OVERRIDE_GFX_VERSION=10.3.0  # Apply immediately
 
 # Set Ollama context length env var (for 256k default)
-readonly OLLAMA_CTX_ENV="export OLLAMA_CONTEXT_LENGTH=32768"
+readonly OLLAMA_CTX_ENV="export OLLAMA_CONTEXT_LENGTH=262144"
 if ! grep -q "OLLAMA_CONTEXT_LENGTH" ~/.bashrc; then
   echo "[*] Adding Ollama context length env var to ~/.bashrc..."
   echo "$OLLAMA_CTX_ENV" >> ~/.bashrc
@@ -115,7 +115,7 @@ sudo mkdir -p /etc/systemd/system/ollama.service.d
 sudo tee /etc/systemd/system/ollama.service.d/env.conf > /dev/null << EOF
 [Service]
 Environment="HSA_OVERRIDE_GFX_VERSION=10.3.0"
-Environment="OLLAMA_CONTEXT_LENGTH=32768"
+Environment="OLLAMA_CONTEXT_LENGTH=262144"
 EOF
 sudo systemctl daemon-reload
 sudo systemctl restart ollama
@@ -141,14 +141,20 @@ else
   echo "Common ROCm fix: Ensure HSA_OVERRIDE_GFX_VERSION=10.3.0 is set; reboot if needed."
 fi
 
-# Pull Qwen3 model
-readonly MODEL="qwen3:8b-q4_K_M"
-echo "[*] Pulling model: $MODEL"
-if ! ollama list | grep -q "$MODEL"; then
-  ollama pull "$MODEL"
-else
-  echo "[=] Model $MODEL already pulled"
-fi
+# Pull models
+readonly MODELS=(
+    "qwen2.5-coder:7b-instruct-q4_K_M"
+    "qwen3:8b-q4_K_M"
+    "gemma3:4b-q4_K_M"
+)
+for model in "${MODELS[@]}"; do
+    echo "[*] Pulling model: $model"
+    if ! ollama list | grep -q "$model"; then
+        ollama pull "$model"
+    else
+        echo "[=] Model $model already pulled"
+    fi
+done
 
 # Install Continue.dev VSCode extension (assumes 'code' CLI available)
 echo "[*] Installing Continue.dev VSCode extension..."
@@ -165,22 +171,48 @@ readonly CONFIG_FILE="$CONFIG_DIR/config.json"
 echo "[*] Setting up Continue.dev config..."
 mkdir -p "$CONFIG_DIR"
 
-if [ ! -f "$CONFIG_FILE" ] || ! grep -q "qwen3:8b-q4_K_M" "$CONFIG_FILE"; then
+update_config=false
+if [ ! -f "$CONFIG_FILE" ]; then
+    update_config=true
+else
+    for model in "${MODELS[@]}"; do
+        if ! grep -q "$model" "$CONFIG_FILE"; then
+            update_config=true
+            break
+        fi
+    done
+fi
+
+if [ "$update_config" = true ]; then
   cat > "$CONFIG_FILE" << EOF
 {
   "models": [
     {
+      "title": "Qwen2.5-Coder-7B-Instruct",
+      "provider": "ollama",
+      "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+      "contextLength": 262144,
+      "completionOptions": { "temperature": 0.2, "maxTokens": 4096 }
+    },
+    {
       "title": "Qwen3-8B",
       "provider": "ollama",
-      "model": "$MODEL",
-      "contextLength": 32768,
+      "model": "qwen3:8b-q4_K_M",
+      "contextLength": 262144,
+      "completionOptions": { "temperature": 0.2, "maxTokens": 4096 }
+    },
+    {
+      "title": "Gemma3-4B",
+      "provider": "ollama",
+      "model": "gemma3:4b-q4_K_M",
+      "contextLength": 262144,
       "completionOptions": { "temperature": 0.2, "maxTokens": 4096 }
     }
   ],
   "tabAutocompleteModel": {
     "title": "Qwen3-8B",
     "provider": "ollama",
-    "model": "$MODEL"
+    "model": "qwen3:8b-q4_K_M"
   },
   "tools": {
     "webSearch": {
@@ -207,6 +239,6 @@ echo " 1. Reboot for ROCm groups and modules."
 echo " 2. Run 'source ~/.bashrc' to load env vars."
 echo " 3. Verify: HSA_OVERRIDE_GFX_VERSION=10.3.0 rocm-smi (should show RX 6700XT)."
 echo " 4. Open VSCode, Ctrl+Shift+P > 'Continue: Open'."
-echo " 5. Test Ollama: 'ollama run $MODEL' (add env var if GPU not used)."
+echo " 5. Test Ollama: 'ollama run qwen3:8b-q4_K_M' (or other models like qwen2.5-coder:7b-instruct-q4_K_M, gemma3:4b-q4_K_M; add env var if GPU not used)."
 echo " 6. In Continue: Ask 'Write a Python hello world'."
 echo "===================================================="
