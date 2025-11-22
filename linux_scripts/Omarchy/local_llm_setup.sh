@@ -69,18 +69,6 @@ else
   echo "[=] yay already installed"
 fi
 
-echo "[*] Installing uv (official Arch package)..."
-install_pkg uv
-
-# === Install Void (VS Code fork) from AUR ===
-echo "[*] Installing Void (open-source AI code editor) from AUR..."
-if ! pacman -Qi void-editor-bin &>/dev/null; then
-  echo "[*] Installing void-editor-bin via yay..."
-  yay -S --noconfirm --needed void-bin
-else
-  echo "[=] Void already installed"
-fi
-
 # === Install ollama-rocm from AUR (best ROCm support for RX 6700 XT) ===
 echo "[*] Installing ollama-rocm from AUR..."
 yay_install ollama-rocm
@@ -110,10 +98,7 @@ fi
 
 echo "[*] Pulling models (will use ROCm automatically)..."
 readonly MODELS=(
-  "qwen2.5-coder:7b-instruct-q4_K_M"
-  "qwen2.5-coder:14b-instruct-q4_K_M"
-  "qwen3:8b-q4_K_M"
-  "gemma3:4b"
+  "gpt-oss:20b"
 )
 for model in "${MODELS[@]}"; do
   if ! ollama list | grep -q "$model"; then
@@ -124,11 +109,7 @@ for model in "${MODELS[@]}"; do
   fi
 done
 
-# Ensure ~/.local/bin is in PATH (needed for some tools)
-grep -q "$HOME/.local/bin" ~/.bashrc || echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
-export PATH="$HOME/.local/bin:$PATH"
-
 echo
 echo "===================================================="
-echo " Setup complete — Void + Ollama on ROCm"
+echo " Setup complete — Ollama on ROCm"
 echo "===================================================="
