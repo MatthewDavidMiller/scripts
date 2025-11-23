@@ -99,6 +99,8 @@ fi
 echo "[*] Pulling models (will use ROCm automatically)..."
 readonly MODELS=(
   "gpt-oss:20b"
+  "qwen2.5-coder:7b-instruct-q4_K_M"
+  "qwen2.5-coder:14b-instruct-q4_K_M"
 )
 for model in "${MODELS[@]}"; do
   if ! ollama list | grep -q "$model"; then
