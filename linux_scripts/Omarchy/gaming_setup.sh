@@ -1,74 +1,57 @@
 #!/bin/bash
-# Proton/Gaming Setup for Omarchy Linux (Arch-based)
-# RX 6700XT + 64 GB RAM + CachyOS kernel + Chaotic-AUR (zero compile time)
+# Proton/Gaming Setup for Arch Linux
+# RX 6700XT + 64 GB RAM + regular Arch repositories + normal AUR
 
 set -euo pipefail
 
-echo "Setting up gaming environment (RX 6700XT + CachyOS + Chaotic-AUR)..."
+echo "Setting up gaming environment (RX 6700XT + official repos + normal AUR)..."
 
 # Full system update
-sudo pacman -Syyu
+sudo pacman -Syyu --noconfirm
 
 # Enable multilib if needed
 if ! grep -q '^\[multilib\]' /etc/pacman.conf || grep -q '^#\[multilib\]' /etc/pacman.conf; then
     echo "Enabling multilib repository..."
     sudo sed -i '/#\[multilib\]/,/^#Include/ s/^#//' /etc/pacman.conf
-    sudo pacman -Syyu
+    sudo pacman -Syyu --noconfirm
 fi
 
 # Base tools
 sudo pacman -S --needed base-devel git mkinitcpio
 
-# Install yay (idempotent)
+# Install yay if missing (AUR helper)
 if ! command -v yay >/dev/null 2>&1; then
     echo "Installing yay..."
     git clone https://aur.archlinux.org/yay.git /tmp/yay
-    (cd /tmp/yay && makepkg -si)
+    (cd /tmp/yay && makepkg -si --noconfirm)
     rm -rf /tmp/yay
 fi
 
-# ────────────────────────────── Chaotic-AUR (idempotent) ──────────────────────────────
-echo "Adding Chaotic-AUR (pre-compiled mesa-tkg-git, linux-cachyos, etc.)..."
-
-sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
-sudo pacman-key --lsign-key 3056513887B78AEB
-
-sudo pacman -U --needed \
-    'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' \
-    'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
-
-# Fully idempotent repo addition (removes duplicates, places at end)
-add_chaotic_aur() {
-    local conf="/etc/pacman.conf"
-    sudo sed -i '/^\[chaotic-aur\]/,/Include/d' "$conf" 2>/dev/null || true
-    sudo sed -i '/^$/d' "$conf" 2>/dev/null || true
-    printf "\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist\n" | sudo tee -a "$conf" > /dev/null
-}
-add_chaotic_aur
-
-sudo pacman -Syyu
-
 # ────────────────────────────── Core Gaming Stack ──────────────────────────────
-echo "Installing drivers & kernel (mesa-tkg-git + linux-cachyos)..."
+echo "Installing AMD drivers, kernel, and gaming tools from official repos + normal AUR..."
 
+# Official AMD drivers (open-source, latest stable)
 sudo pacman -S --needed \
-    mesa-tkg-git lib32-mesa-tkg-git \
-    linux-cachyos linux-cachyos-headers \
-    proton-ge-custom-bin \
-    mangohud-git gamemode lib32-gamemode \
-    gamescope-git vkbasalt
+    mesa lib32-mesa \
+    vulkan-radeon lib32-vulkan-radeon \
+    gamemode lib32-gamemode \
+    mangohud lib32-mangohud \
+    gamescope
 
-# Tools
-yay -S --needed limine-entry-tool steamtinkerlaunch protonup-qt jq
+# AUR packages
+yay -S --needed \
+    proton-ge-custom \
+    steamtinkerlaunch \
+    protonup-qt \
+    vkbasalt lib32-vkbasalt \
+    jq ludusavi-bin
 
-sudo pacman -S --needed gawk unzip wget xdotool xorg-xprop xorg-xrandr vim xorg-xwininfo yad
+# Additional useful tools
+sudo pacman -S --needed \
+    gawk unzip wget xdotool xorg-xprop xorg-xrandr vim xorg-xwininfo yad
 
 # Enable GameMode daemon
-systemctl --user enable --now gamemoded 2>/dev/null || true
-
-# Regenerate initramfs + update Limine
-sudo mkinitcpio -P
-sudo limine-update
+systemctl --user enable --now gamemoded || true
 
 # ────────────────────────────── Sysctl & Hugepages (64 GB optimized) ──────────────────────────────
 echo "Applying gaming sysctl tweaks..."
@@ -77,8 +60,8 @@ sudo tee "$SYSCTL_CONF" > /dev/null << 'EOF'
 vm.swappiness=1
 vm.page-cluster=0
 vm.watermark_scale_factor=200
-vm.nr_hugepages=4096          # ~8 GB reserved
-vm.hugetlb_shm_group=0        # patched below
+vm.nr_hugepages=4096          # ~8 GB reserved for 64 GB RAM
+vm.hugetlb_shm_group=0
 kernel.pid_max=4194304
 vm.max_map_count=1048576
 kernel.sched_autogroup_enabled=0
@@ -87,7 +70,7 @@ kernel.sched_nr_migrate=128
 fs.file-max=1048576
 EOF
 
-# games group + hugetlb (idempotent)
+# Create games group + set correct GID for hugetlb
 getent group games >/dev/null || sudo groupadd games
 sudo usermod -aG games "$USER"
 GID=$(getent group games | cut -d: -f3)
@@ -104,11 +87,10 @@ sudo systemd-tmpfiles --create
 
 # ────────────────────────────── Done ──────────────────────────────
 echo "====================================================================="
-echo "Installation complete! Reboot now:"
+echo "Installation complete! Reboot recommended:"
 echo "    sudo reboot"
 echo ""
 echo "After reboot verify:"
-echo "    uname -r               → should contain 'cachyos'"
-echo "    glxinfo | grep renderer → should show RADV + TKG version"
+echo "    glxinfo | grep renderer → should show RADV ACO + Mesa version"
 echo "    mangohud glxgears      → test overlay"
 echo "====================================================================="
